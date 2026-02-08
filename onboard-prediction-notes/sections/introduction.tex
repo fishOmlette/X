@@ -21,6 +21,13 @@ age of the newest available update grows with every hop \cite{kaul2012aoi},
 while estimators such as the Kalman filter assume that a measurement is
 processed at the time it describes \cite{kalman1960}.
 
+\Cref{fig:systems-pipeline} sketches the command path that the notes follow.
+Shared functions turn intent into a joint task and forecast; each robot then
+grounds its part physically, exchanges state with its peers, and passes a
+command through a safety layer before acting.
+
+\input{figures/command_path}
+
 Three questions guide the notes:
 \begin{enumerate}
   \item Where along the command path should a prediction be computed: on board,

@@ -3,6 +3,9 @@
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
 \usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{cite}
 \usepackage{url}
@@ -18,6 +21,7 @@
   pdfauthor={Adil Farooq}
 }
 
+\hyphenation{multi-robot middle-ware Physics-NeMo}
 \title{On-Board Prediction in Multi-Robot Systems:\\
   Working Notes on the Command Path}
 
@@ -28,6 +32,7 @@
 \maketitle
 
 \input{sections/introduction}
+\input{sections/command_path}
 
 \bibliographystyle{IEEEtran}
 \bibliography{references/references}

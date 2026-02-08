@@ -1,0 +1,46 @@
+\section{Layers of the Command Path}
+\label{sec:layers}
+
+This section collects the learned components that currently produce predictions
+at each layer of \cref{fig:systems-pipeline}, starting from the operator.
+
+\subsection{Semantic Task Formation}
+
+Language models now turn open-ended instructions into multi-robot plans.  RoCo
+coordinates robot arms through dialogue among language-model agents and checks
+their proposals against environment feedback \cite{mandi2023roco}.  LiP-LLM
+combines a language model with a predefined skill set, a dependency graph, and a
+linear program to allocate tasks \cite{obata2024lipllm}, and conversational
+language models can keep a human in the loop of multi-robot coordination
+\cite{hunt2024conversational}.  These planners usually run on shared
+infrastructure, and their outputs reach the robots as task assignments whose
+feasibility is checked, if at all, further down the path.
+
+\subsection{Learned Prediction and World Models}
+
+World models learn to predict how an environment responds to actions.  DreamerV3
+learns a world model and trains behavior inside it across diverse control tasks
+\cite{hafner2023dreamerv3}.  Genie learns an interactive environment model from
+unlabeled video \cite{bruce2024genie}, and Cosmos provides pretrained world
+foundation models for physical AI \cite{nvidia2025cosmos}.  Vision-language-action
+models predict actions directly from images and instructions: RT-2 transfers
+web-scale knowledge to robot control \cite{brohan2023rt2}, RoboCat improves
+itself across manipulation tasks \cite{bousmalis2023robocat}, OpenVLA is an
+open-source model of this kind \cite{kim2024openvla}, and $\pi_0$ generates
+actions with a flow-matching model \cite{black2024pi0}.  Many of these models
+need accelerators that robots do not carry, which places a network hop between
+the prediction and the robot that acts on it.
+
+\subsection{Physics-Informed Prediction}
+
+Physics-informed neural networks embed differential equations in the training
+loss \cite{raissi2019pinn}, although they can fail to train when convection or
+reaction terms dominate \cite{krishnapriyan2021pinn}.  Operator learning
+approximates the solution operator of a whole family of equations: DeepONet
+\cite{lu2021deeponet}, the Fourier neural operator \cite{li2021fno}, and the
+broader neural-operator framework \cite{kovachki2023neuraloperator}.
+Differentiable simulators such as DiffTaichi expose gradients of physical
+simulations \cite{hu2020difftaichi}, and frameworks such as PhysicsNeMo package
+these methods for training and deployment \cite{nvidia2026physicsnemo}.  Such
+surrogates can be small and fast enough to run on board, which makes them
+candidates for the latency-critical end of the command path.
