@@ -44,3 +44,38 @@ simulations \cite{hu2020difftaichi}, and frameworks such as PhysicsNeMo package
 these methods for training and deployment \cite{nvidia2026physicsnemo}.  Such
 surrogates can be small and fast enough to run on board, which makes them
 candidates for the latency-critical end of the command path.
+
+\subsection{State Estimation and Digital Twins}
+
+Predictions are only as current as the state they start from.  The Kalman filter
+fuses a dynamic model with measurements under Gaussian assumptions
+\cite{kalman1960}, and the ensemble Kalman filter extends the idea to nonlinear
+models by propagating samples \cite{evensen1994enkf}.  Digital twins keep a
+continuously updated model of a physical asset \cite{glaessgen2012digitaltwin}.
+Kalman filtering can drive the monitoring and state estimation of such a twin
+\cite{feng2023dtkf}, and robotic digital twins have been used to support
+resilient operation where people cannot intervene directly
+\cite{harper2023digitaltwin}.  A twin that runs off board inherits the latency
+of every update it receives.
+
+\subsection{Distributed Runtime}
+
+ROS~2 moves state and commands between nodes and robots, usually over DDS
+\cite{macenski2022ros2,omg2015dds}; Zenoh offers an alternative protocol that
+spans devices from microcontrollers to the cloud \cite{corsaro2023zenoh}.
+Measurements of ROS~2 show that the middleware implementation, the executor, and
+the process layout all change end-to-end latency
+\cite{maruyama2016ros2,kronauer2021latency}.  Age of information measures how old
+the newest available update is at the receiver \cite{kaul2012aoi}; it is the
+quantity that a prediction loses as it crosses the runtime.
+
+\subsection{Runtime Safety}
+
+Safety layers sit closest to the actuators.  Control barrier functions filter a
+nominal input through a quadratic program that keeps a safe set invariant
+\cite{ames2017cbf}, and barrier certificates extend this to collision avoidance
+in robot teams \cite{wang2017barrier}.  SOTER switches between an advanced and a
+safe controller when a monitor predicts a violation \cite{desai2019soter}, and
+SOTER on ROS applies the pattern to multi-robot surveillance
+\cite{shivakumar2020soterros}.  These guarantees assume that the state they use
+is current, which ties them back to the age of the predictions upstream.
