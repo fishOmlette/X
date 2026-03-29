@@ -1,0 +1,58 @@
+\section{Interfaces as Contracts}
+\label{sec:contracts}
+
+Every layer in \cref{sec:layers} makes a claim about its output under
+assumptions about its input.  An assume--guarantee contract separates an
+environment assumption $A$ from a component guarantee $G$
+\cite{benveniste2007contracts}.  A contract theory may also define satisfaction,
+compatibility, refinement, composition, and quotient for a chosen behavioral
+model.  Robotics uses this idea at several levels: a mission contract can
+describe temporal goals and contexts; a component contract can specify software
+behavior; a dynamical contract can constrain input and output trajectories; and
+a runtime-assurance specification can govern transfer of control authority.
+
+Here, a \emph{contract} states obligations, \emph{verification} checks a stated
+property, and \emph{assurance} is the broader argument and evidence supporting
+confidence in system behavior.  An interface schema is not automatically a
+contract.  Names, types, timestamps, and version fields become contractual only
+when they participate in explicit assumptions or guarantees, are checked by a
+defined validator, and have a specified consequence when the check fails.
+
+\subsection{Mission Contracts}
+
+CROME represents contextual robotic missions as hierarchical assume--guarantee
+contracts and synthesizes sub-mission controllers
+\cite{mallozzi2020crome,mallozzi2023contextual}.  Contract algebra can also
+refine a mission against a component library or compute a repair when the
+original specification is unrealizable \cite{mallozzi2022repair}.  These methods
+make goals, contexts, refinement, and realizability explicit at the mission
+boundary.  They focus on the mission specification; data age, provenance, and
+implementation identity remain outside their scope.
+
+\subsection{Component Contracts}
+
+Luckcuck \emph{et al.} specify ROS nodes with first-order-logic contracts,
+derive system properties with composition rules, and translate a ROS Contract
+Language into executable monitors \cite{luckcuck2022compositional}.  This work
+connects behavioral contracts to node implementations and demonstrates that
+component assumptions can be made executable.  Its primary object is node
+behavior; cross-robot state age, team membership, and heterogeneous deployment
+compatibility are not the central object of the calculus.
+
+\subsection{Dynamical and Multi-Agent Contracts}
+
+Contracts for dynamical systems place assumptions on input trajectories and
+guarantees on outputs.  Sharf \emph{et al.} provide satisfaction and refinement
+tools for linear contracts and illustrate them with two vehicles
+\cite{sharf2021dynamical}.  Chen \emph{et al.} use parameterized temporal-logic
+contracts to compute invariant sets compositionally in networked systems
+\cite{chen2019invariance}.  Liu \emph{et al.} synthesize decentralized
+controllers for interconnected nonlinear systems from signal-temporal-logic
+contracts \cite{liu2022stlcontracts}.
+
+Assume--guarantee reinforcement learning instead represents neighboring-agent
+behavior through regular-language abstractions and combines local satisfaction
+probabilities into a global lower bound \cite{kazemi2024agrl}.  These approaches
+directly address interaction and decomposition, but typically assume that the
+declared neighbor abstraction, labels, communication observations, dynamics,
+and timing semantics are available as modeled.

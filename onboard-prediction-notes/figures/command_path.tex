@@ -69,26 +69,27 @@
       at (4.40,-5.18) {Robot $r_2$ execution lane};
 
     \draw[flow] (ground1.south) -- node[edgelabel]
-      {vertical interface $e^{\mathrm v}_{r_1}$} (runtime1.north);
+      {vertical contract $e^{\mathrm v}_{r_1}$} (runtime1.north);
     \draw[flow] (runtime1.south) -- (safety1.north);
     \draw[flow] (safety1.south) -- (robot1.north);
 
     \draw[flow] (ground2.south) -- node[edgelabel]
-      {vertical interface $e^{\mathrm v}_{r_2}$} (runtime2.north);
+      {vertical contract $e^{\mathrm v}_{r_2}$} (runtime2.north);
     \draw[flow] (runtime2.south) -- (safety2.north);
     \draw[flow] (safety2.south) -- (robot2.north);
 
     % Only this edge is bidirectional: peer state and coordination evidence.
     \draw[peer] (runtime1.east) -- node[edgelabel,font=\scriptsize\bfseries,
       text=MidnightBlue,text width=29mm]
-      {peer interface $e^{\mathrm h}$\\(bidirectional)} (runtime2.west);
+      {peer contract $e^{\mathrm h}$\\(bidirectional)} (runtime2.west);
 
     \node[obligation,fill=white] at (0,-11.65)
-      {Every interface passes a prediction or command together with its time,
-       uncertainty, and origin, or loses them.};
+      {Every admitted edge carries a typed payload plus semantic/physical,
+       temporal, uncertainty/evidence, compatibility/lifecycle, and
+       authority/recovery obligations.};
   \end{tikzpicture}
-  \caption{Multi-robot command path.  Downward arrows are producer--consumer
-  transfers; the double-headed horizontal edge exchanges peer state between
-  robots.}
+  \caption{Cross-layer multi-robot command path.  Downward arrows are
+  producer--consumer transfers; the double-headed horizontal edge exchanges
+  peer state and coordination obligations between robots.}
   \label{fig:systems-pipeline}
 \end{figure}

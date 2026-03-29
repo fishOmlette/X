@@ -1,0 +1,48 @@
+\section{Edge Contracts}
+\label{sec:edge-contracts}
+
+Represent the deployed system as a directed graph.  A vertical edge
+$e^{\mathrm v}_{r,i}:(r,i)\rightarrow(r,i+1)$ connects functions associated with
+robot $r$, while a horizontal edge
+$e^{\mathrm h}_{r,i\rightarrow s,j}:(r,i)\rightarrow(s,j)$ connects robots or
+distributed components.  A horizontal edge is not merely another message path:
+its consumer can act on behalf of a different robot and thereby change joint
+feasibility, resource ownership, or a peer's safety margin.
+
+For a producer--consumer edge $e=(p,c)$, define the contract
+\begin{equation}
+  C_e=(P_e,M_e;\,A_e,G_e,V_e,E_e,R_e),
+  \label{eq:contract}
+\end{equation}
+where $P_e$ is a typed payload, $M_e$ is typed metadata, $A_e$ is the
+consumer's assumption, and $G_e$ is the producer's guarantee.  $V_e$ contains
+validators or monitor references, $E_e$ supplies supporting evidence such as a
+solver result, proof, calibration report, monitor record, or test identifier,
+and $R_e$ defines the response to rejection or unresolved validity.  For a
+prediction, the metadata must at least say when the predicted state was
+observed, which horizon it covers, and what its uncertainty means.
+
+At an edge, local compatibility requires the producer guarantee to imply the
+consumer assumption,
+\begin{equation}
+  G_e\Longrightarrow A_e.
+  \label{eq:contract-composition}
+\end{equation}
+A consumer with several peer inputs must additionally check joint assumptions,
+such as a common team epoch, consistent frames, and unique resource ownership.
+Per-message checks cannot establish these relations independently, so
+\eqref{eq:contract-composition} is a local condition, not proof that the team
+satisfies a global mission property.
+
+\subsection{Failure Attribution}
+
+The same physical outcome can have several origins.  A collision may begin with
+an incorrect semantic relation, a biased prediction, a missing physical
+constraint, stale peer state, or a hardware fault.  Conversely, downstream
+checks can turn the same originating fault into a rejection, degraded mission,
+or safe stop.  The taxonomy in \cref{tab:failure-propagation} therefore records
+origin, contract concern, first observation, effect, and recovery authority
+separately.
+
+\FloatBarrier
+\input{tables/failure_taxonomy}

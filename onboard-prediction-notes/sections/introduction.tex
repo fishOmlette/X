@@ -28,6 +28,13 @@ command through a safety layer before acting.
 
 \input{figures/command_path}
 
+Every layer makes a claim about its output under assumptions about its input,
+whether or not the claim is written down.  The notes therefore treat each
+producer--consumer interface as a contract.  \Cref{sec:layers} surveys the
+learned components along the path, \cref{sec:contracts} collects the contract
+techniques that already exist for robots, and \cref{sec:edge-contracts} sketches
+what a contract on a single edge of the path would have to contain.
+
 Three questions guide the notes:
 \begin{enumerate}
   \item Where along the command path should a prediction be computed: on board,

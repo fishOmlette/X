@@ -1,0 +1,19 @@
+\begin{table}[!t]
+  \centering
+  \caption{Proposed cross-layer failure taxonomy.  First observation denotes the earliest boundary where fault evidence can become available}
+  \label{tab:failure-propagation}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{@{}P{0.10\textwidth}P{0.14\textwidth}P{0.14\textwidth}Y P{0.15\textwidth}P{0.14\textwidth}@{}}
+    \toprule
+    Origin & Local fault & Contract concern & First observation & Possible effect & Recovery authority \\
+    \midrule
+    Perception / estimation & Misassociation, bias, or clock error & Payload, frame, time, uncertainty & Estimator innovation, semantic grounding, or controller residual & Wrong referent, localization drift, or unsafe state & Re-estimation, sensor fallback, or stop \\
+    Semantic planning & Invented relation, capability, or priority & Intent, assumptions, guarantees & Task-model validator or downstream feasibility check & Wrong or impossible assignment; repeated replanning & Clarify, repair, or replan \\
+    World model & Biased or overconfident rollout & Horizon, uncertainty type, validity evidence & Online correction, twin residual, or physics validator & Coordination failure or poor recovery & Re-estimate, shorten horizon, or choose robust plan \\
+    Physical model & Missing constraint or inaccurate contact & Feasibility claim and supporting solver evidence & Optimizer, controller residual, or contact event & Slip, saturation, collision, or damage & Re-optimize, fallback controller, or stop \\
+    Runtime / network & Delay, loss, partition, version, or lifecycle fault & Age, clock, protocol, implementation, assumptions & Consumer monitor, missed update, exception, or teardown & Inconsistent team state, abort, deadlock, or collision & Degrade, reconnect, reallocate, or restart \\
+    Safety function & Local or unreported intervention & Authority, intervention evidence, recovery & Safety monitor or upstream acknowledgement & Safe local motion but failed mission or new conflict & Coordinated replan or human escalation \\
+    Hardware & Sensor, actuator, energy, or compute fault & Capability and health guarantee & Health monitor, tracking residual, or peer timeout & Task abandonment or unsafe peer compensation & Isolate robot and dynamically reallocate \\
+    \bottomrule
+  \end{tabularx}
+\end{table}

@@ -3,12 +3,14 @@
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
 \usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx,array,multirow}
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,calc}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{cite}
 \usepackage{url}
+\usepackage{placeins}
 \usepackage{hyperref}
 \usepackage[nameinlink,capitalise,noabbrev]{cleveref}
 
@@ -17,13 +19,15 @@
   linkcolor=MidnightBlue,
   citecolor=ForestGreen,
   urlcolor=BrickRed,
-  pdftitle={On-Board Prediction in Multi-Robot Systems: Working Notes on the Command Path},
+  pdftitle={Edge Contracts Along the Multi-Robot Command Path: Working Notes},
   pdfauthor={Adil Farooq}
 }
 
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 \hyphenation{multi-robot middle-ware Physics-NeMo}
-\title{On-Board Prediction in Multi-Robot Systems:\\
-  Working Notes on the Command Path}
+\title{Edge Contracts Along the Multi-Robot Command Path:\\
+  Working Notes}
 
 \author{Adil~Farooq\thanks{Independent researcher, India
   (e-mail: \texttt{mdadilfarooq@gmail.com}).}}
@@ -33,7 +37,10 @@
 
 \input{sections/introduction}
 \input{sections/command_path}
+\input{sections/contracts}
+\input{sections/edge_contracts}
 
+\FloatBarrier
 \bibliographystyle{IEEEtran}
 \bibliography{references/references}
 
