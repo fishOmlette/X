@@ -1,0 +1,29 @@
+\section{Problem Setup}\label{sec:setup}
+
+Let a scalar margin $M(t)\in\mathbb{R}$ summarize remaining mission feasibility, with $M(t)\ge 0$ defining the monitored feasible set and $M(t)=0$ its boundary. During the degradation phase of interest, a fault drives the margin downward, and
+\[
+  t_0=\inf\{t:M(t)\le 0\}
+\]
+denotes expiry of the positive margin, by first contact with or crossing of the boundary. All infima are over the monitored time domain, with $\inf\varnothing=+\infty$; for the timing analysis we assume that $t_0$ is finite and attained. Let $t_f$ be the physical deadline by which a recovery must have taken effect. We assume here that the monitored margin is conservative enough that $t_f\ge t_0$, and define the post-expiry slack $\delta=t_f-t_0\ge0$.
+
+A recovery triggered at $t_{\mathrm{trig}}$ requires duration $\tau_r>0$ and succeeds if
+\begin{equation}\label{eq:success}
+  t_{\mathrm{trig}}+\tau_r\le t_f.
+\end{equation}
+Equivalently, $t_{\mathrm{pnr}}=t_f-\tau_r$ is the latest safe trigger time, or point of no return for that recovery.
+
+We compare two trigger policies. A fixed-margin reactive policy fires when
+\[
+  t_{\mathrm{trig}}=\inf\{t:M(t)\le\rho\},
+\]
+where $\rho\ge0$ is a fixed pad, in the same units as $M$. The predictive policy estimates the degradation rate $\hat r(t)=-\widehat{\dot M}(t)$ and, when that estimate is positive, fires when projected time-to-expiry is at most a time horizon $T_h\ge0$:
+\begin{equation}\label{eq:pred}
+\begin{aligned}
+  t_{\mathrm{trig}}
+  &=\inf\Bigl\{t:M(t)\le0\ \lor \\
+  &\qquad [\hat r(t)>0\ \land\ M(t)/\hat r(t)\le T_h]\Bigr\} \\
+  &=\inf\Bigl\{t:M(t)\le0\ \lor \\
+  &\qquad [\hat r(t)>0\ \land\ M(t)\le T_h\hat r(t)]\Bigr\}.
+\end{aligned}
+\end{equation}
+An unavailable or non-positive rate estimate therefore leaves only the unpadded current-margin condition $M(t)\le0$.

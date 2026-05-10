@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{cite}
+\usepackage[hidelinks]{hyperref}
+\usepackage{authblk}
+
+\graphicspath{{figures/}}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+
+\hypersetup{
+  pdftitle={When Does Predicting Failure Help? Predictive versus Reactive Runtime Assurance},
+  pdfauthor={Mohammed Adil Farooq}
+}
+
+\title{\textbf{When Does Predicting Failure Help?\\
+  Predictive versus Reactive Runtime Assurance}}
+\author[1]{Mohammed Adil Farooq}
+\affil[1]{\small Independent Researcher ---
+  \href{mailto:mdadilfarooq@gmail.com}{\texttt{mdadilfarooq@gmail.com}}}
+\date{Working draft}
+
+\begin{document}
+\maketitle
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/problem_setup}
+\input{sections/analysis}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references/references}
+
+\end{document}
