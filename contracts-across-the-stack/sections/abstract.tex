@@ -1,0 +1,27 @@
+\begin{abstract}
+Multi-robot systems connect mission planning to physical action through
+software, communication, and runtime safety mechanisms.  Existing contract and
+assurance techniques address different parts of this path, so information needed
+to judge an upstream result may be lost before another component or robot uses
+it.  This paper presents a focused survey of contract-based and
+runtime-assurance approaches relevant to multi-robot execution.  I organize the
+literature into six areas of concern: mission intent, component behavior,
+dynamical interaction, distributed state, runtime authority, and embodied
+execution.  I compare each class's mechanism, evidence, and scope.  Five
+integration gaps recur within the reviewed corpus: semantic and physical
+validity; temporal validity of distributed state; uncertainty, provenance, and
+evidence; implementation and lifecycle compatibility; and intervention and
+recovery authority.  I synthesize these observations into an edge-contract
+reference framework.  It distinguishes interfaces within a robot from those
+between robots and associates an admitted transfer with a typed payload,
+assumptions, guarantees, validators, evidence, and recovery behavior.  A failure
+taxonomy separately records fault origin, first observation, downstream effect,
+and recovery authority.  The framework unifies obligations drawn from the
+survey; it is neither a new contract calculus nor a validated reliability
+mechanism.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Multi-robot systems, contract-based design, assume--guarantee reasoning,
+distributed execution, runtime verification, runtime assurance.
+\end{IEEEkeywords}

@@ -1,0 +1,50 @@
+\definecolor{ContractBlue}{HTML}{DCEBFA}
+\definecolor{ValidatorGreen}{HTML}{DDEFD8}
+\definecolor{RecoveryOrange}{HTML}{F9E4C8}
+\definecolor{RejectRed}{HTML}{F7D8D5}
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[
+    box/.style={draw,rounded corners=2pt,minimum height=7.5mm,
+      minimum width=41mm,align=center,font=\footnotesize,inner sep=3pt},
+    arrow/.style={->,>=latex,line width=1.05pt},
+    label/.style={fill=white,inner xsep=3pt,inner ysep=1.5pt,
+      font=\scriptsize,align=center}
+  ]
+    \node[box,fill=ContractBlue] (producer) at (0,0)
+      {Producer output};
+    \node[box,fill=ContractBlue] (contract) at (0,-1.10)
+      {Edge contract $C_e$\\payload, assumptions, evidence};
+    \node[box,fill=ValidatorGreen,minimum width=66mm] (validators) at (0,-2.40)
+      {Required validators $V_{e,q}$\\syntax, time, uncertainty, compatibility,
+       $A_e$, $G_e$, provenance};
+
+    \node[box,fill=ValidatorGreen] (consumer) at (-4.0,-3.85)
+      {Admit to consumer};
+    \node[box,fill=RejectRed] (reject) at (4.0,-3.85)
+      {Reject and record failed predicate};
+    \node[box,fill=RecoveryOrange,minimum width=54mm] (recovery) at (4.0,-5.05)
+      {Invoke $R_e$\\refresh, re-estimate, replan, degrade, stop};
+    \node[box,fill=ContractBlue] (repair) at (4.0,-6.20)
+      {New contract instance\\with new lineage};
+
+    \draw[arrow] (producer) -- (contract);
+    \draw[arrow] (contract) -- (validators);
+    \coordinate (branch) at (0,-3.10);
+    \draw[arrow] (validators.south) -- (branch) -| (consumer.north);
+    \draw[arrow] (branch) -| (reject.north);
+    \node[label] at (-2.15,-3.10)
+      {all required checks $=\textsc{true}$};
+    \node[label] at (2.15,-3.10)
+      {$\textsc{false}$ or required $\textsc{unknown}$};
+    \draw[arrow] (reject) -- (recovery);
+    \draw[arrow] (recovery) -- (repair);
+    \draw[arrow] (repair.east) -- ++(1.15,0) |-
+      node[label,pos=0.62] {repair succeeds} (contract.east);
+  \end{tikzpicture}
+  \caption{Admission and recovery lifecycle for one edge contract.  A repair
+  creates a new contract instance and provenance record while preserving the
+  rejected claim.}
+  \label{fig:contract-lifecycle}
+\end{figure}

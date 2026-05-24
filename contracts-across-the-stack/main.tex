@@ -14,20 +14,25 @@
 \usepackage{hyperref}
 \usepackage[nameinlink,capitalise,noabbrev]{cleveref}
 
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@dblfptop}{0pt}
+\makeatother
+
 \hypersetup{
   colorlinks=true,
   linkcolor=MidnightBlue,
   citecolor=ForestGreen,
   urlcolor=BrickRed,
-  pdftitle={Edge Contracts Along the Multi-Robot Command Path: Working Notes},
+  pdftitle={Contracts Across the Multi-Robot Execution Stack: A Cross-Layer Survey and Reference Framework},
   pdfauthor={Adil Farooq}
 }
 
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 \hyphenation{multi-robot middle-ware Physics-NeMo}
-\title{Edge Contracts Along the Multi-Robot Command Path:\\
-  Working Notes}
+\title{Contracts Across the Multi-Robot Execution Stack:\\
+  A Cross-Layer Survey and Reference Framework}
 
 \author{Adil~Farooq\thanks{Independent researcher, India
   (e-mail: \texttt{mdadilfarooq@gmail.com}).}}
@@ -35,13 +40,18 @@
 \begin{document}
 \maketitle
 
+\input{sections/abstract}
 \input{sections/introduction}
-\input{sections/command_path}
-\input{sections/contracts}
-\input{sections/gaps}
-\input{sections/edge_contracts}
+\input{sections/scope_and_sources}
+\input{sections/background}
+\input{sections/related_work}
+\input{sections/cross_layer_gaps}
+\input{sections/edge_contract_framework}
+\input{sections/discussion_and_evaluation}
+\input{sections/conclusion}
 
 \FloatBarrier
+\flushbottom
 \bibliographystyle{IEEEtran}
 \bibliography{references/references}
 

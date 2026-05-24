@@ -1,0 +1,24 @@
+\begin{table}[t]
+  \centering
+  \caption{Cross-layer taxonomy of selected assurance approaches}
+  \label{tab:related-work}
+  \scriptsize
+  \setlength{\tabcolsep}{1.4pt}
+  \renewcommand{\arraystretch}{1.03}
+  \begin{tabularx}{\textwidth}{@{}P{0.105\textwidth}P{0.16\textwidth}P{0.14\textwidth}P{0.21\textwidth}P{0.16\textwidth}Y@{}}
+    \toprule
+    Class & Representative work & Protected object & Mechanism and assurance evidence & Deployment / MRS evidence & Underemphasized or external obligations \\
+    \midrule
+    Mission and intent & CROME; contextual missions; specification repair \cite{mallozzi2020crome,mallozzi2023contextual,mallozzi2022repair} & Goals, contexts, and component libraries & Contract algebra, synthesis, refinement, switching, and repair & Mission examples and synthesized controllers; no physical team evaluation & Physical validity, event-time state, implementation identity, and peer reconciliation \\
+    Coordinated-autonomy assurance & Quantitative assurance, probabilistic mission verification, and reliability estimation \cite{chaki2013assurance,chaki2013probabilistic,porter2013reliability,stancliff2006missionreliability} & Mission phases, coordination commitments, utility, and team reliability & DTMC model checking, compositional probabilistic verification, and conditional performance estimation & Initial robot-validation results, atomistic behavior measurements, and repairable-team analyses & Interface-carried uncertainty, provenance, software identity, lifecycle state, and recovery evidence \\
+    Learned task planning & RoCo; LiP-LLM \cite{mandi2023roco,obata2024lipllm} & Language-conditioned tasks, roles, dependencies, and plans & Environment feedback or optimization provides external feasibility checks & Multi-robot benchmarks, simulation, and selected real-world execution & Calibrated uncertainty, timing, compatibility, and deployment assurance \\
+    Component behavior & ROS contracts \cite{luckcuck2022compositional} & ROS node assumptions and guarantees & First-order contracts, inference rules, RCL, and generated runtime monitors & Rover and component examples; no robot-team study & Team epoch, ownership, state age, and evidence lineage \\
+    Distributed programming and design & Koord; ATLAS \cite{ghosh2020koord,harbin2023design} & Coordination code, proof obligations, team architecture, mission, and collective intelligence & Executable semantics, modular verification, generated infrastructure, simulation, and robustness analysis & Three Koord applications and three simulated ATLAS case studies & Runtime freshness, evidence lineage, heterogeneous implementation identity, and recovery authority \\
+    Dynamical systems & Linear and temporal contracts \cite{sharf2021dynamical,chen2019invariance,liu2022stlcontracts} & Input/output trajectories, temporal tasks, and coupled dynamics & Satisfaction, refinement, invariant-set computation, and decentralized synthesis & Two-vehicle and interconnected-system simulations & Runtime message age, lifecycle, implementation, and recovery semantics \\
+    Multi-agent learning & Assume--guarantee RL \cite{kazemi2024agrl} & Neighbor abstractions, labels, and local policies & Local learning with a lower bound on global satisfaction probability & Grid-world, building, and traffic-control studies & Physical and middleware validation of the assumed abstractions \\
+    Distributed state & ROS~2, DDS, communication studies, and age of information \cite{macenski2022ros2,omg2015dds,gielis2022communications,kronauer2021latency,kaul2012aoi,silva2026probabilistic} & Data-stream semantics, delivery status, freshness, and intermittent connectivity & QoS compatibility/status, timing measurements, and communication-aware planning & Standards, multi-node benchmarks, and multi-robot planning simulations & Physical decision validity, evidence lineage, and coordinated recovery \\
+    Runtime assurance & ROSMonitoring; SOTER; barrier certificates; field-testing and safe-control surveys \cite{ghaffari2024rosmonitoring,shivakumar2020soterros,wang2017barrier,caldas2024rvft,garg2024safecontrol} & Events, safety properties, and controller authority & Event monitors, safe-control sets, controller switching, instrumentation, and reporting & UAV case, simulated surveillance, physical multi-robot safety, and practitioner evidence & Semantic evidence, implementation compatibility, and upstream intervention feedback \\
+    Cross-layer guardrails & Modular safety guardrails \cite{kim2026guardrails} & Action, decision, and human-centered safety & Layered monitoring and intervention & Position paper & Common composition semantics across heterogeneous peer-robot edges \\
+    \bottomrule
+  \end{tabularx}
+\end{table}

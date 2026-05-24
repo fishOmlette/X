@@ -1,0 +1,77 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Multi-robot systems are assembled from components whose correctness claims are
+made under different assumptions.  A mission synthesizer may guarantee a
+temporal goal under a declared context; a planner may report feasibility for a
+particular state and model; middleware may report a quality-of-service event;
+and a safety filter may guarantee local invariance under a dynamics and timing
+model.  Mission success depends on each claim and on whether its assumptions
+remain satisfied when another component or robot consumes its output.
+
+The practical requirement is simple: a result should cross an interface with
+enough context for the receiver to decide whether it remains valid.
+
+This interface problem is becoming more important as multi-robot stacks combine
+classical task allocation and motion coordination
+\cite{gerkey2004mrta,choi2009cbba,sharon2015cbs} with language-conditioned
+planning and learned prediction
+\cite{mandi2023roco,obata2024lipllm}.  These learned components
+expand capability, but they do not replace explicit physical, temporal, or
+deployment assumptions.  At lower layers, ROS~2 and DDS transport state and
+commands, while runtime assurance and barrier-based controllers may alter a
+nominal decision before actuation
+\cite{macenski2022ros2,omg2015dds,desai2019soter,wang2017barrier}.  A complete
+execution argument must therefore cross semantic, physical, software,
+communication, and safety boundaries.
+
+Multi-robot coupling makes this problem distinct from ordinary component
+integration.  Stale or ambiguous state at robot $r_i$ can cause a locally
+admissible decision that invalidates robot $r_j$'s route, resource claim, or
+safety margin.  Join, leave, restart, and network partition events can change
+the set of valid assignments even when every message remains syntactically
+well-formed.  The relevant interfaces are both vertical, between functions in
+one robot, and horizontal, between robots or distributed components.
+
+Existing work addresses parts of this problem through quantitative mission
+assurance, contract-based mission design, ROS component contracts,
+compositional reasoning for interconnected dynamics, runtime monitoring, and
+safety-controller switching
+\cite{chaki2013assurance,chaki2013probabilistic,porter2013reliability,
+street2023formal,garg2024safecontrol}.  The approaches protect different objects
+and produce different evidence.  This survey asks whether their combined
+coverage supports the full multi-robot command-to-action path.  More
+specifically, I ask:
+
+\begin{enumerate}
+  \item Which objects, assumptions, and guarantees are represented by existing
+    contract-based and runtime-assurance approaches?
+  \item How are those claims composed, monitored, enforced, or repaired, and
+    what evidence supports them?
+  \item Which obligations remain implicit when information crosses semantic,
+    physical, distributed, and inter-robot boundaries?
+\end{enumerate}
+
+\Cref{fig:systems-pipeline} illustrates the command path and the distinction
+between intra-robot and inter-robot interfaces.
+
+\input{figures/command_path}
+
+The paper makes three contributions:
+
+\begin{enumerate}
+  \item a cross-layer taxonomy of contract-based assurance organized by the
+    object of reasoning, enforcement mechanism, and reported evidence;
+  \item a coverage analysis of recurring gaps in temporal validity,
+    uncertainty and provenance, implementation and lifecycle compatibility, and
+    distributed authority; and
+  \item an edge-contract reference framework and failure-attribution taxonomy
+    synthesized from those gaps.
+\end{enumerate}
+
+The proposed framework is a reference model; the paper does not claim a new
+contract algebra or a demonstrated reliability improvement.  \Cref{sec:scope}
+defines the review method, \cref{sec:background} states the interface problem,
+and \cref{sec:related-work} surveys the literature.  \Cref{sec:gaps} derives the
+cross-layer gaps, after which \cref{sec:synthesis} presents the reference
+framework.  \Cref{sec:discussion} discusses limitations and open problems.

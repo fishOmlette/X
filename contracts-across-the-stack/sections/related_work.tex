@@ -1,0 +1,175 @@
+\section{Contract-Based Assurance in Robotics}
+\label{sec:related-work}
+
+The reviewed literature is organized by its \emph{protected object}: the
+property or artifact that each approach is designed to preserve.  The classes
+overlap, and one system can contribute to more than one class.
+
+\subsection{Related Surveys and Scope}
+
+Recent surveys use several organizing lenses.  Street \emph{et al.} review formal models for robot teams
+under uncertainty, while Gielis \emph{et al.} analyze the interaction between
+robotic applications and communication systems
+\cite{street2023formal,gielis2022communications}.  Garg \emph{et al.} organize
+learning-based safe control by safety notions, control methods, and verification
+tools \cite{garg2024safecontrol}.
+
+Those surveys clarify capabilities, models, communication, or intervention
+layers.  The present survey uses a different unit of comparison: the protected
+object and the information required when its guarantee becomes another
+component's assumption.  This narrower lens motivates the interface-focused
+taxonomy and reference framework below.
+
+\subsection{Mission and Intent Contracts}
+
+CROME represents contextual robotic missions as hierarchical assume--guarantee
+contracts and synthesizes sub-mission controllers
+\cite{mallozzi2020crome,mallozzi2023contextual}.  Contract algebra can also
+refine a mission against a component library or compute a repair when the
+original specification is unrealizable \cite{mallozzi2022repair}.  These methods
+make goals, contexts, refinement, and realizability explicit at the mission
+boundary.  They focus on the mission specification; data age, provenance, and
+implementation identity remain outside their scope.
+
+Language-conditioned multi-robot planners address an adjacent problem: turning
+open-ended instructions into plans, role assignments, or optimization models.
+RoCo uses dialogue among language-model agents, while LiP-LLM combines a
+language model with a predefined skill set, dependency graph, and linear
+program \cite{mandi2023roco,obata2024lipllm}.  These systems provide planning
+capability evidence, but their collision models, skill definitions, and
+feasibility solvers remain external assurance mechanisms.  Expressing an
+intent is therefore not equivalent to certifying its physical or distributed
+execution.
+
+\subsection{Quantitative Assurance of Coordinated Autonomy}
+
+Chaki, Dolan, and Giampapa frame assurance of coordinated autonomy as the
+management of quantitative performance expectations.  Their approach combines
+a characterization of coordination phenomena, phases of a coordinated mission,
+and discrete-time Markov-chain models evaluated through probabilistic model
+checking \cite{chaki2013assurance}.  Related work formalizes multi-robot mission
+utility as temporal or reward properties and derives compositional results for
+probabilistic verification \cite{chaki2013probabilistic}.
+
+Complementary reliability studies estimate the performance of sequentially
+coordinated missions from measured atomistic robot behavior, or compare
+repairable robot-team configurations at the mission level
+\cite{porter2013reliability,stancliff2006missionreliability}.  Within the
+reviewed corpus, this line is the closest mission-level predecessor to the
+present survey's multi-robot assurance question: it connects coordination
+structure to quantitative mission evidence.  Its primary object is mission or
+team reliability, whereas the present coverage analysis asks which semantic,
+physical, temporal, compatibility, provenance, lifecycle, and recovery
+obligations must cross the heterogeneous interfaces that realize such a
+mission.  The two views are complementary.
+
+\subsection{Software-Component Contracts}
+
+Luckcuck \emph{et al.} specify ROS nodes with first-order-logic contracts,
+derive system properties with composition rules, and translate a ROS Contract
+Language into executable monitors \cite{luckcuck2022compositional}.  This work
+connects behavioral contracts to node implementations and demonstrates that
+component assumptions can be made executable.  Its primary object is node
+behavior; cross-robot state age, team membership, and heterogeneous deployment
+compatibility are not the central object of the calculus.
+
+ROSMonitoring~2.0 instruments topics and services and monitors event order,
+including partial ROS~2 support \cite{ghaffari2024rosmonitoring}.  Caldas
+\emph{et al.} complement specification work with guidelines for runtime
+verification and field-based testing, emphasizing observability,
+instrumentation, environment, and reporting \cite{caldas2024rvft}.  These
+approaches show that specification, instrumentation, and evidence collection
+are separate engineering concerns.
+
+\subsection{Distributed Multi-Robot Programming and Design}
+
+Koord provides platform-independent abstractions for distributed shared state,
+robot coordination, sensing, and control.  Its executable semantics expose
+proof obligations that can be discharged using symbolic and physics-based
+verification tools \cite{ghosh2020koord}.  ATLAS takes a model-driven approach:
+it represents team architecture, mission requirements, and collective
+intelligence, then uses simulation to explore design choices and robustness
+\cite{harbin2023design}.  Both connect software structure to multi-robot
+behavior more directly than a message-level monitor.  Their analyses remain
+tied to their languages, models, generated infrastructure, and declared
+simulation settings; they do not define a general evidence envelope for every
+interface in a heterogeneous deployed stack.
+
+\subsection{Dynamical and Multi-Agent Contracts}
+
+Contracts for dynamical systems place assumptions on input trajectories and
+guarantees on outputs.  Sharf \emph{et al.} provide satisfaction and refinement
+tools for linear contracts and illustrate them with two vehicles
+\cite{sharf2021dynamical}.  Chen \emph{et al.} use parameterized temporal-logic
+contracts to compute invariant sets compositionally in networked systems
+\cite{chen2019invariance}.  Liu \emph{et al.} synthesize decentralized
+controllers for interconnected nonlinear systems from signal-temporal-logic
+contracts \cite{liu2022stlcontracts}.
+
+Assume--guarantee reinforcement learning instead represents neighboring-agent
+behavior through regular-language abstractions and combines local satisfaction
+probabilities into a global lower bound \cite{kazemi2024agrl}.  These approaches
+directly address interaction and decomposition, but typically assume that the
+declared neighbor abstraction, labels, communication observations, dynamics,
+and timing semantics are available as modeled.
+
+\subsection{Distributed State and Communication}
+
+ROS~2 provides modular robotics communication commonly through DDS
+\cite{macenski2022ros2,omg2015dds}.  DDS quality-of-service policies govern such
+properties as reliability, history, durability, liveliness, deadline, and
+lifespan.  These transport and data-stream mechanisms do not prove
+application-level freshness or mission validity.  For example, the DDS
+\emph{Deadline} policy concerns expected sample cadence; it does not establish
+the age of the physical event represented by an arriving sample.
+
+ROS~2 latency studies show that process structure, executor behavior, and DDS
+implementation affect end-to-end timing
+\cite{maruyama2016ros2,kronauer2021latency}.  Communication surveys likewise
+show that coordination and networking assumptions are often designed and
+evaluated separately \cite{gielis2022communications}.  Recent planning work
+incorporates temporal communication constraints and intermittent connectivity
+directly into stochastic multi-robot planning \cite{silva2026probabilistic}.
+Age-of-information research
+separately characterizes how fresh the newest available update is
+\cite{kaul2012aoi}.  These works provide deployment semantics and measurements,
+not a compositional robot contract.  They nevertheless expose a necessary
+bridge: a dynamical or safety guarantee that assumes current peer state needs an
+application-level rule relating event time, clock uncertainty, delivery, and
+the physical decision.
+
+\subsection{Runtime Assurance and Safety}
+
+SOTER pairs an advanced controller with a safety controller and a decision
+module that transfers authority when a monitor predicts a violation
+\cite{desai2019soter}.  SOTER on ROS evaluates this pattern in simulated
+multi-robot surveillance \cite{shivakumar2020soterros}.  Control barrier
+functions and multi-robot barrier certificates instead constrain the admissible
+control set to preserve a modeled safe set
+\cite{ames2017cbf,wang2017barrier}.  Both approaches provide strong conditional
+safety mechanisms.  Their guarantees still depend on dynamics, state
+estimation, update rate, feasibility, and the prompt availability of the
+required peer state.  A local intervention can also preserve one robot's safety
+while invalidating a team plan unless the intervention is reported upstream.
+
+\subsection{Cross-Layer Guardrails}
+
+Modular safety guardrails motivate monitoring and intervention across action,
+decision, and human-centered safety \cite{kim2026guardrails}.  The position
+leaves open how monitors in different layers and robots share evidence.
+Within the reviewed works, I did not find one composition model that jointly
+represents temporal validity, ownership, provenance, and recovery across
+cross-layer and peer-robot interfaces.
+
+\input{tables/related_work}
+
+\subsection{Survey Synthesis}
+
+The reviewed literature provides mechanisms for mission realizability, node
+behavior, dynamical composition, communication observation, and runtime safety.
+Coverage becomes discontinuous where these mechanisms meet.  A mission
+guarantee may end before physical
+feasibility; a dynamics guarantee may assume current neighbor signals; a
+middleware status may omit the physical event time; and a safety intervention
+may not return to task allocation.  \Cref{sec:gaps} converts these discontinuities
+into a compact set of cross-layer coverage gaps.
