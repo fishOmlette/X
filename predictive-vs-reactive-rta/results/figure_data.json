@@ -1,0 +1,375 @@
+{
+  "boundary": {
+    "degradation_shape": [
+      {
+        "degradation_exponent": 0.3,
+        "finish_time_difference_s": null,
+        "fixed_mean_successful_elapsed_s": null,
+        "predictive_collision_count": 98,
+        "predictive_mean_successful_elapsed_s": 31.28888888888889,
+        "selected_fixed_pad": null
+      },
+      {
+        "degradation_exponent": 0.5,
+        "finish_time_difference_s": null,
+        "fixed_mean_successful_elapsed_s": null,
+        "predictive_collision_count": 67,
+        "predictive_mean_successful_elapsed_s": 26.794827586206896,
+        "selected_fixed_pad": null
+      },
+      {
+        "degradation_exponent": 0.7,
+        "finish_time_difference_s": 1.2295999999999907,
+        "fixed_mean_successful_elapsed_s": 26.3024,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 25.072800000000008,
+        "selected_fixed_pad": 2.5
+      },
+      {
+        "degradation_exponent": 0.9,
+        "finish_time_difference_s": -0.08720000000000994,
+        "fixed_mean_successful_elapsed_s": 25.648799999999994,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 25.736000000000004,
+        "selected_fixed_pad": 1.5
+      },
+      {
+        "degradation_exponent": 1.1,
+        "finish_time_difference_s": -0.6703999999999937,
+        "fixed_mean_successful_elapsed_s": 25.586400000000005,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 26.2568,
+        "selected_fixed_pad": 1.0
+      },
+      {
+        "degradation_exponent": 1.4,
+        "finish_time_difference_s": -1.484800000000007,
+        "fixed_mean_successful_elapsed_s": 25.620799999999996,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 27.105600000000003,
+        "selected_fixed_pad": 0.5
+      }
+    ],
+    "pads": [
+      0.0,
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      4.0
+    ],
+    "prediction_horizon_s": 2.0,
+    "recovery_capability": [
+      {
+        "a_max": 0.5,
+        "finish_time_difference_s": 0.5567999999999991,
+        "fixed_mean_successful_elapsed_s": 26.551200000000005,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 25.994400000000006,
+        "selected_fixed_pad": 2.0
+      },
+      {
+        "a_max": 0.7,
+        "finish_time_difference_s": -0.049600000000005195,
+        "fixed_mean_successful_elapsed_s": 25.9448,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 25.994400000000006,
+        "selected_fixed_pad": 1.5
+      },
+      {
+        "a_max": 0.9,
+        "finish_time_difference_s": -0.049600000000005195,
+        "fixed_mean_successful_elapsed_s": 25.9448,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 25.994400000000006,
+        "selected_fixed_pad": 1.5
+      },
+      {
+        "a_max": 1.2,
+        "finish_time_difference_s": -0.673600000000004,
+        "fixed_mean_successful_elapsed_s": 25.320800000000002,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 25.994400000000006,
+        "selected_fixed_pad": 1.0
+      },
+      {
+        "a_max": 1.6,
+        "finish_time_difference_s": -0.673600000000004,
+        "fixed_mean_successful_elapsed_s": 25.320800000000002,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 25.994400000000006,
+        "selected_fixed_pad": 1.0
+      },
+      {
+        "a_max": 2.2,
+        "finish_time_difference_s": -0.673600000000004,
+        "fixed_mean_successful_elapsed_s": 25.320800000000002,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 25.994400000000006,
+        "selected_fixed_pad": 1.0
+      },
+      {
+        "a_max": 3.0,
+        "finish_time_difference_s": -1.3064000000000142,
+        "fixed_mean_successful_elapsed_s": 24.68799999999999,
+        "predictive_collision_count": 0,
+        "predictive_mean_successful_elapsed_s": 25.994400000000006,
+        "selected_fixed_pad": 0.5
+      }
+    ],
+    "seeds_per_severity": 25,
+    "selection": "Within each displayed setting, choose the tested fixed pad with all episodes successful and minimum mean successful elapsed time.",
+    "severities": [
+      1,
+      4,
+      7,
+      10,
+      13
+    ],
+    "source": "code/single_margin_simulator.py"
+  },
+  "dose_response": {
+    "fault_severity_s": [
+      0,
+      2,
+      4,
+      5,
+      6,
+      8,
+      10
+    ],
+    "methods": {
+      "B0": [
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 31.3,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 23.8,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 22.5,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 40,
+          "collision_rate": 1.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": null,
+          "successful_count": 0,
+          "successful_rate": 0.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 40,
+          "collision_rate": 1.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": null,
+          "successful_count": 0,
+          "successful_rate": 0.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 40,
+          "collision_rate": 1.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": null,
+          "successful_count": 0,
+          "successful_rate": 0.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 40,
+          "collision_rate": 1.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": null,
+          "successful_count": 0,
+          "successful_rate": 0.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        }
+      ],
+      "P": [
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 31.3,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 30.220000000000006,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 25.7875,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 25.222500000000004,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 24.972500000000004,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 24.222500000000004,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 23.9875,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        }
+      ],
+      "fixed_pad": [
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 31.3,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 25.660000000000004,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 23.135,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 0,
+          "collision_rate": 0.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 22.7275,
+          "successful_count": 40,
+          "successful_rate": 1.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 28,
+          "collision_rate": 0.7,
+          "episodes": 40,
+          "mean_successful_elapsed_s": 22.53333333333333,
+          "successful_count": 12,
+          "successful_rate": 0.3,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 40,
+          "collision_rate": 1.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": null,
+          "successful_count": 0,
+          "successful_rate": 0.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        },
+        {
+          "collision_count": 40,
+          "collision_rate": 1.0,
+          "episodes": 40,
+          "mean_successful_elapsed_s": null,
+          "successful_count": 0,
+          "successful_rate": 0.0,
+          "yield_count": 40,
+          "yield_rate": 1.0
+        }
+      ]
+    },
+    "prediction_horizon_s": 2.0,
+    "seeds_per_severity": 40,
+    "source": "code/single_margin_simulator.py"
+  },
+  "mechanism": {
+    "latest_safe_trigger_time_s": 6.5,
+    "margin_intercept": 3.0,
+    "margin_zero_time_s": 7.0,
+    "physical_deadline_s": 9.0,
+    "predictive_trigger_time_s": 5.0,
+    "reactive_trigger_time_s": 7.0,
+    "recovery_time_s": 2.5
+  },
+  "schema_version": 2
+}

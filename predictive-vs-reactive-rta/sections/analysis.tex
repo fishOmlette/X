@@ -22,3 +22,12 @@ By \eqref{eq:success}, the unpadded rule succeeds exactly when $t_0+\tau_r\le t_
 \begin{corollary}[Necessary conditions for an advantage over fixed pads]\label{cor:factors}
 Within the deadline-only model of Proposition~\ref{prop:boundary}, an earlier predictive trigger turns a recovery failure into success only in the middle band, which requires positive lead. Within the affine, exact-rate model of Proposition~\ref{prop:reduction}, a positive-horizon predictor can have a structural advantage over a \emph{single fixed pad across cases} only if the degradation rates vary: at one known constant rate, an equivalent fixed pad exists. These conditions are necessary within the stated models, not sufficient; estimation error and the joint distribution of rates, slack, and recovery times can still make a fixed pad preferable.
 \end{corollary}
+
+Figure~\ref{fig:mech} illustrates the timing argument.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.72\linewidth]{fig_mechanism.pdf}
+\caption{The unpadded reactive rule fires at margin expiry, while the predictive rule fires $L$ seconds earlier. The earlier trigger changes the recovery outcome only when $\delta<\tau_r\le\delta+L$.}
+\label{fig:mech}
+\end{figure}

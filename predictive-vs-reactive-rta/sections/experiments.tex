@@ -1,0 +1,21 @@
+\section{Experiments}\label{sec:exp}
+
+\paragraph{Untuned baselines favor early triggering (Figure~\ref{fig:dose}).}
+Against an uncertainty-blind current-gap rule and an unpadded current-margin rule, the $T_h=2.0$\,s predictive rule appears strong. With rate-limited recovery ($a_{\max}=1.0$), the uncertainty-blind rule fails first as fault severity grows, the unpadded rule collides in many moderate- and high-severity episodes, and the predictive rule records no collisions on this exploratory seed grid. This shows that earlier action can matter in the simulator, but not that prediction is needed; a padded current-margin rule can also act early.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{fig_dose.pdf}
+\caption{Exploratory single-margin dose response with $T_h=2.0$\,s and rate-limited recovery. Results are observed rates over 40 paired noise seeds per severity. Figure~\ref{fig:boundary} adds an in-sample fixed-pad comparison.}
+\label{fig:dose}
+\end{figure}
+
+\paragraph{Exploratory sweeps locate a narrow observed boundary (Figure~\ref{fig:boundary}).}
+The plotted difference is the selected fixed-pad mean elapsed time minus the predictive mean, so positive values favor prediction. The fixed pad is selected in-sample at every setting. Under the slowest recovery ($a_{\max}=0.5$), the predictive rule finishes about $0.56$\,s sooner; the sign changes as recovery becomes faster, reaching $-1.31$\,s at $a_{\max}=3.0$. In the degradation-shape sweep at slow recovery, the predictor records collisions at $p=0.3$ and $p=0.5$, is about $1.23$\,s faster at $p=0.7$, and is slower than the selected fixed pad from $p=0.9$ onward. These differences are small relative to missions of roughly 25--30\,s, and the selection procedure does not support inferential claims.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{fig_boundary.pdf}
+\caption{Exploratory elapsed-time difference between the $T_h=2.0$\,s predictive rule and the fixed pad selected on the same runs. Positive values favor prediction. Crosses replace timing comparisons where the predictive rule records a collision.}
+\label{fig:boundary}
+\end{figure}
