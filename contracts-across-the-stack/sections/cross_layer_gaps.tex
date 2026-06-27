@@ -26,10 +26,35 @@ chaki2013probabilistic}.
 Distributed execution introduces several non-equivalent times: the time of the
 physical event, publication time, arrival time, consumer-availability time,
 forecast target time, and validity interval.  Replacing the event time with a
-reception timestamp hides producer and network delay.  Age of information
-measures how old the newest available update is at the consumer
-\cite{kaul2012aoi}.  Transport reliability or a cadence notification does not
-establish that a state is recent enough for the current decision.  A cross-robot interface therefore needs
+reception timestamp hides producer and network delay.  For state updates, age of
+information is
+\begin{equation}
+  \Delta(t)=t-u(t),
+  \label{eq:aoi}
+\end{equation}
+where $u(t)$ is the event time of the newest update available to the consumer.
+Under bounded-speed and bounded-estimation-error assumptions, suppose the
+available position estimates $\hat p_i$ and $\hat p_j$ are at most $\Delta$ old,
+their errors are bounded by $\epsilon_i$ and $\epsilon_j$, and the robot speeds
+are bounded by $v_i^{\max}$ and $v_j^{\max}$.  The triangle inequality gives the
+conservative pairwise bound
+\begin{align}
+  \lVert p_i(t)-p_j(t)\rVert
+  &\ge \lVert\hat p_i-\hat p_j\rVert
+     -(v_i^{\max}+v_j^{\max})\Delta-\epsilon_i-\epsilon_j,
+     \notag\\
+  \lVert\hat p_i-\hat p_j\rVert
+  &\ge d_{\min}+(v_i^{\max}+v_j^{\max})\Delta
+     +\epsilon_i+\epsilon_j
+     \quad\Longrightarrow\quad
+     \lVert p_i(t)-p_j(t)\rVert\ge d_{\min}.
+  \label{eq:freshness-separation}
+\end{align}
+The second line is a sufficient, not necessary, admission margin.  It connects
+state age and estimation uncertainty directly to the pairwise safe set in
+\cref{eq:coupled-dynamics} \cite{kaul2012aoi,wang2017barrier}.  Transport
+reliability or a cadence notification does not establish that this margin is
+available for the current decision.  A cross-robot interface therefore needs
 event-time semantics, clock-domain and clock-error information, an
 application-specific age or validity bound, and a response to stale or
 incomparable state \cite{omg2015dds,kronauer2021latency}.
@@ -49,7 +74,7 @@ identifier, and deployment measurement.  Provenance links the payload and its
 evidence to the model, configuration, observation, and transformation that
 produced them.  Without this lineage, downstream rejection may reveal that a
 claim failed but not which assumption or artifact should be repaired
-\cite{w3c2013prov}.
+\cite{kim2026safeembodied,w3c2013prov}.
 
 \subsection{Implementation and Lifecycle Compatibility}
 
