@@ -7,7 +7,10 @@ overlap, and one system can contribute to more than one class.
 
 \subsection{Related Surveys and Scope}
 
-Recent surveys use several organizing lenses.  Street \emph{et al.} review formal models for robot teams
+Recent surveys use several organizing lenses.  Li \emph{et al.} classify
+language-model research in multi-robot systems by functions such as task
+planning, motion planning, action generation, and human intervention
+\cite{li2026llmmrs}.  Street \emph{et al.} review formal models for robot teams
 under uncertainty, while Gielis \emph{et al.} analyze the interaction between
 robotic applications and communication systems
 \cite{street2023formal,gielis2022communications}.  Garg \emph{et al.} organize
@@ -69,7 +72,7 @@ mission.  The two views are complementary.
 
 Luckcuck \emph{et al.} specify ROS nodes with first-order-logic contracts,
 derive system properties with composition rules, and translate a ROS Contract
-Language into executable monitors \cite{luckcuck2022compositional}.  This work
+Language into executable monitors \cite{luckcuck2026compositional}.  This work
 connects behavioral contracts to node implementations and demonstrates that
 component assumptions can be made executable.  Its primary object is node
 behavior; cross-robot state age, team membership, and heterogeneous deployment
@@ -154,14 +157,19 @@ estimation, update rate, feasibility, and the prompt availability of the
 required peer state.  A local intervention can also preserve one robot's safety
 while invalidating a team plan unless the intervention is reported upstream.
 
-\subsection{Cross-Layer Guardrails}
+\subsection{Cross-Layer Guardrails and Runtimes}
 
 Modular safety guardrails motivate monitoring and intervention across action,
-decision, and human-centered safety \cite{kim2026guardrails}.  The position
-leaves open how monitors in different layers and robots share evidence.
+decision, and human-centered safety \cite{kim2026guardrails}.  PhyAgentOS
+separates cognitive planning from physical execution and provides compatibility
+preflight, execution sessions, verification, safety, heartbeat, and evidence
+services \cite{liu2026phyagentos}.  It is therefore the closest reviewed runtime
+architecture to several obligations synthesized here.  PhyAgentOS defines an
+embodied-agent runtime; the proposed framework is an architecture-independent
+classification of obligations on both cross-layer and peer-robot interfaces.
 Within the reviewed works, I did not find one composition model that jointly
-represents temporal validity, ownership, provenance, and recovery across
-cross-layer and peer-robot interfaces.
+represents temporal validity, ownership, provenance, and recovery across those
+interfaces.
 
 \input{tables/related_work}
 

@@ -1,7 +1,8 @@
 \section{Review Scope and Method}
 \label{sec:scope}
 
-I conducted a purposive narrative review.  The review focuses on how contract-based and runtime-assurance
+I conducted a purposive narrative review and finalized the source set in
+July~2026.  The review focuses on how contract-based and runtime-assurance
 approaches represent, compose, monitor, enforce, or repair assumptions that
 cross robot-software and inter-robot interfaces.  Sources were compared using
 four questions:
@@ -40,13 +41,21 @@ did not expose an interface-assurance question.  Representative planning and
 middleware sources were retained only where they clarify what an interface must
 carry.
 
-For each source, I recorded the protected
+The final cited corpus contains 40 sources spanning primary research, surveys,
+foundational work, and standards.  For each source, I recorded the protected
 object, mechanism, reported evidence, deployment setting, and obligations left
 to adjacent components.  I then grouped sources by their main focus.
+The Appendix codes these classes conservatively: ``E'' requires a property to be
+explicit and central in the representative mechanisms; ``P'' covers mixed,
+conditional, or model-internal treatment; and ``--'' marks a property outside
+the stated mechanism.  When sources within one class differ, the class receives
+``P'' unless the table separates the mechanisms.
 
 I distinguish \emph{capability evidence}, showing that a system performs a
 task; \emph{assurance evidence}, supporting a stated property under declared
 assumptions; and \emph{deployment evidence}, measuring behavior on a stated
 platform, configuration, workload, or fault condition.  The search evolved
 through snowballing, so PRISMA-style candidate and exclusion counts
-were not retained.  I make no prevalence or effect-size claim.
+were not retained.  I make no prevalence or effect-size claim.  The evidence map
+in Appendix~\ref{app:evidence-map} records qualitative coverage and keeps each
+claim within the cited mechanism's scope.
