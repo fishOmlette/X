@@ -1,7 +1,17 @@
 \section{Introduction}
 
-Autonomous systems increasingly use runtime layers to monitor safety, performance, or mission properties and intervene during execution. Existing work includes mission-level runtime assurance for autonomous driving~\cite{missionrta_ad}, modular runtime assurance for robotics~\cite{soter}, and predictive runtime verification, enforcement, and monitoring~\cite{pinisetty_re,pinisetty_rv,sankar_prm,radics}. Prediction is attractive because the extra lead may permit a completion-preserving recovery instead of an emergency stop.
+Autonomous systems increasingly use runtime layers to monitor safety, performance, or mission properties and intervene during execution. Existing work includes mission-level runtime assurance for autonomous driving~\cite{missionrta_ad}, compositional runtime verification for robot swarms~\cite{swarmrta}, modular runtime assurance for robotics~\cite{soter}, and predictive runtime verification, enforcement, and monitoring~\cite{pinisetty_re,pinisetty_rv,sankar_prm,radics}. Prediction is attractive because the extra lead may permit a completion-preserving recovery instead of an emergency stop.
 
 We ask: \emph{when does predicting loss of feasibility actually outperform reacting to it?} A predictive assurance layer must be built, tuned, and certified. Comparing it only with an unpadded reactive trigger does not show that prediction is necessary, because a fixed trigger margin is a simpler way to intervene early. The fixed margin should therefore receive a comparable tuning budget.
 
-The analysis in Section~\ref{sec:analysis} shows that a projected time-to-infeasibility trigger is a reactive trigger with a rate-scaled margin. It identifies the lead-time band in which an earlier trigger can change a recovery outcome and the rate variation needed to distinguish that trigger from one fixed margin across cases. Sections~\ref{sec:method}--\ref{sec:exp} examine these conditions in a two-robot kinematic simulation. Exploratory sweeps against a fixed pad selected on the same runs locate a narrow boundary; a seed-disjoint evaluation with equal tuning budgets is planned.
+The analysis in Section~\ref{sec:analysis} shows that a projected time-to-infeasibility trigger is a reactive trigger with a rate-scaled margin. It identifies the lead-time band in which an earlier trigger can change a recovery outcome and the rate variation needed to distinguish that trigger from one fixed margin across cases. Sections~\ref{sec:method}--\ref{sec:exp} examine these conditions in controlled simulations. Exploratory sweeps locate the boundary, and a further evaluation separates tuning from test noise. In the held-out single-margin comparison, the tuned fixed rule records $0/6750$ conflict collisions and the tuned predictive rule records $2/6750$; those outcomes do not support an efficiency comparison.
+
+\paragraph{Contributions.}
+\begin{itemize}
+  \item A reduction showing that the studied horizon-based predictive trigger is a rate-adaptive current-margin threshold (Proposition~\ref{prop:reduction}).
+  \item A boundary condition for when added lead can change recovery success, stated in terms of recovery duration and deadline slack, together with a necessary rate-variation condition for an advantage over one fixed pad (Proposition~\ref{prop:boundary} and Corollary~\ref{cor:factors}).
+  \item A reproducible evaluation that distinguishes exploratory, in-sample sweeps from seed-disjoint tuning and testing, reports failure counts before timing, and withholds timing inference when outcomes differ.
+\end{itemize}
+
+\paragraph{Scope.}
+The paper characterizes a trigger mechanism rather than proposing a new controller. The experiments are stylized two-dimensional kinematic simulations chosen to isolate that mechanism, and the results apply only to the tested models. Localization, communication, and navigation-stack experiments using ROS~2/Nav2 are reserved for v2.

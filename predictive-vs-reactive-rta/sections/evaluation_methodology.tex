@@ -11,3 +11,13 @@ The dose-response experiment compares an uncertainty-blind arrival-gap trigger, 
   \rho\in\{0,0.5,1.0,1.5,2.0,2.5,3.0,4.0\}.
 \]
 The displayed comparator is the candidate with the lowest mean successful elapsed time among those for which every episode succeeds on that same setting and seed grid. Selection and reporting therefore use the same simulations. These figures are exploratory mechanism checks, not out-of-sample performance estimates.
+
+\paragraph{Seed-disjoint single-margin evaluation.}
+The follow-up evaluation crosses three recovery capabilities $a_{\max}\in\{0.5,1.0,2.5\}$, three degradation exponents $p\in\{0.7,1.0,1.5\}$, and five severities in $\{2,4,6,8,10\}$, giving 45 conflict scenarios. Both the fixed pad and predictive horizon are searched over $0$ to $4$ in increments of $0.25$. Each candidate receives 25 tuning replicates per scenario (1,125 episodes). Among candidates with no tuning collisions, selection minimizes mean conflict elapsed time and breaks ties toward the smaller parameter. Testing then uses 150 new replicates per scenario (6,750 episodes per conflict arm). Clear-path behavior is evaluated at $a_{\max}=1.0$ over the 15 exponent--severity combinations, for 2,250 episodes per arm. A yield in this clear condition is counted as a false yield.
+
+The 10,125 split--scenario--replicate tuples have distinct deterministic seeds. Tuning and test seeds are disjoint, while a tuple's seed is shared across candidates and methods to preserve pairing. This split holds out noise realizations only: the simulator family and scenario grid remain fixed. The original $T_h=2.0$ rule is retained as a diagnostic test arm, but the primary held-out comparison uses the separately tuned horizon.
+
+Collision counts are reported directly. For each exact scenario, we compute a two-sided 95\% Wilson score interval. We report the largest upper endpoint across the 45 pointwise intervals; this maximum is neither a simultaneous confidence bound nor an estimate for a random population of scenarios. Pooled counts summarize the fixed factorial rather than one homogeneous binomial experiment. Elapsed time is summarized only for successful episodes. A paired bootstrap interval is used only when every compared pair succeeds; if failure outcomes differ, we report descriptive successful-only means and suppress the inferential timing comparison.
+
+\paragraph{Connection to the timing model.}
+The recovery-capability sweep varies $a_{\max}$ as a proxy for recovery duration, but v1 does not estimate episode-level distributions of $\tau_r$, $\delta$, and $L$. The simulations test behavior consistent with the timing argument; they do not validate Proposition~\ref{prop:boundary} by independently measuring all of its variables.
