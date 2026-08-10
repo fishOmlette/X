@@ -1,0 +1,290 @@
+{
+  "schema_version": 2,
+  "source": "code/heldout_evaluation.py",
+  "simulator": "code/single_margin_simulator.py",
+  "python_version": "3.13.12",
+  "numpy_version": "2.4.4",
+  "runtime_seconds": 286.5995564000914,
+  "design": {
+    "a_max_values": [
+      0.5,
+      1.0,
+      2.5
+    ],
+    "degradation_exponents": [
+      0.7,
+      1.0,
+      1.5
+    ],
+    "severities": [
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0
+    ],
+    "fine_parameter_grid": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0,
+      1.25,
+      1.5,
+      1.75,
+      2.0,
+      2.25,
+      2.5,
+      2.75,
+      3.0,
+      3.25,
+      3.5,
+      3.75,
+      4.0
+    ],
+    "original_pad_grid": [
+      0.0,
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      4.0
+    ],
+    "bootstrap_replicates": 20000,
+    "bootstrap_seed": 73190,
+    "selection_rule": "Choose the fastest candidate with zero tuning collisions; break ties toward the smaller parameter.",
+    "seed_derivation": "Pack the split, condition, a_max index, exponent index, severity index, and replicate into a seed below 2^32. Each combination gets a distinct seed, shared across methods and candidates. Check for duplicates before saving."
+  },
+  "replicates": {
+    "tuning": {
+      "first": 0,
+      "last": 24,
+      "count": 25
+    },
+    "test": {
+      "first": 0,
+      "last": 149,
+      "count": 150
+    }
+  },
+  "selection": {
+    "fixed_pad_fine": {
+      "method": "B2p",
+      "parameter": 2.5,
+      "n": 1125,
+      "collision_count": 0,
+      "collision_rate": 0.0,
+      "collision_ci95_low": 0.0,
+      "collision_ci95_high": 0.003403010042444149,
+      "successful_count": 1125,
+      "successful_rate": 1.0,
+      "mean_elapsed_time_s": 27.68702222222222,
+      "sd_elapsed_time_s": 2.7577697621254815,
+      "split": "tuning",
+      "parameter_name": "pad",
+      "zero_collision_candidates": 7
+    },
+    "fixed_pad_original_grid": {
+      "method": "B2p",
+      "parameter": 2.5,
+      "n": 1125,
+      "collision_count": 0,
+      "collision_rate": 0.0,
+      "collision_ci95_low": 0.0,
+      "collision_ci95_high": 0.003403010042444149,
+      "successful_count": 1125,
+      "successful_rate": 1.0,
+      "mean_elapsed_time_s": 27.68702222222222,
+      "sd_elapsed_time_s": 2.7577697621254815,
+      "split": "tuning",
+      "parameter_name": "pad",
+      "zero_collision_candidates": 3
+    },
+    "predictive_horizon": {
+      "method": "P",
+      "parameter": 2.5,
+      "n": 1125,
+      "collision_count": 0,
+      "collision_rate": 0.0,
+      "collision_ci95_low": 0.0,
+      "collision_ci95_high": 0.003403010042444149,
+      "successful_count": 1125,
+      "successful_rate": 1.0,
+      "mean_elapsed_time_s": 26.56097777777778,
+      "sd_elapsed_time_s": 2.6714846067222875,
+      "split": "tuning",
+      "parameter_name": "horizon_s",
+      "zero_collision_candidates": 7
+    }
+  },
+  "primary_arms": {
+    "fixed": "fixed_pad_tuned",
+    "predictive": "predictive_horizon_tuned"
+  },
+  "test_arms": {
+    "fixed_pad_tuned": {
+      "method": "B2p",
+      "parameter": 2.5
+    },
+    "predictive_horizon_tuned": {
+      "method": "P",
+      "parameter": 2.5
+    },
+    "predictive_horizon_default_2s": {
+      "method": "P",
+      "parameter": 2.0
+    }
+  },
+  "headline_results": {
+    "fixed_conflict": {
+      "arm": "fixed_pad_tuned",
+      "condition": "conflict",
+      "a_max": "ALL",
+      "conv_p": "ALL",
+      "severity": "ALL",
+      "n": 6750,
+      "collision_count": 0,
+      "collision_rate": 0.0,
+      "collision_ci95_low": 0.0,
+      "collision_ci95_high": 0.0005687813141774418,
+      "reached_goal_count": 6750,
+      "reached_goal_rate": 1.0,
+      "timed_out_count": 0,
+      "timed_out_rate": 0.0,
+      "successful_count": 6750,
+      "successful_rate": 1.0,
+      "yield_count": 6750,
+      "yield_rate": 1.0,
+      "yield_ci95_low": 0.9994312186858225,
+      "yield_ci95_high": 1.0,
+      "mean_elapsed_time_s": 27.68954074074074,
+      "sd_elapsed_time_s": 2.752489452988441,
+      "mean_successful_elapsed_time_s": 27.68954074074074,
+      "sd_successful_elapsed_time_s": 2.752489452988441
+    },
+    "fixed_max_scenario_collision_wilson_upper": {
+      "upper": 0.0249702443680766,
+      "n_per_scenario": 150,
+      "scenario": {
+        "a_max": 0.5,
+        "conv_p": 0.7,
+        "severity": 10.0,
+        "collision_count": 0,
+        "collision_rate": 0.0
+      }
+    },
+    "predictive_conflict": {
+      "arm": "predictive_horizon_tuned",
+      "condition": "conflict",
+      "a_max": "ALL",
+      "conv_p": "ALL",
+      "severity": "ALL",
+      "n": 6750,
+      "collision_count": 2,
+      "collision_rate": 0.0002962962962962963,
+      "collision_ci95_low": 8.125889246888478e-05,
+      "collision_ci95_high": 0.001079777958707563,
+      "reached_goal_count": 6750,
+      "reached_goal_rate": 1.0,
+      "timed_out_count": 0,
+      "timed_out_rate": 0.0,
+      "successful_count": 6748,
+      "successful_rate": 0.9997037037037036,
+      "yield_count": 6750,
+      "yield_rate": 1.0,
+      "yield_ci95_low": 0.9994312186858225,
+      "yield_ci95_high": 1.0,
+      "mean_elapsed_time_s": 26.57623703703704,
+      "sd_elapsed_time_s": 2.6714430842577612,
+      "mean_successful_elapsed_time_s": 26.57731179608773,
+      "sd_successful_elapsed_time_s": 2.671109102628996
+    },
+    "predictive_max_scenario_collision_wilson_upper": {
+      "upper": 0.03679283977481815,
+      "n_per_scenario": 150,
+      "scenario": {
+        "a_max": 0.5,
+        "conv_p": 0.7,
+        "severity": 10.0,
+        "collision_count": 1,
+        "collision_rate": 0.006666666666666667
+      }
+    },
+    "fixed_clear": {
+      "arm": "fixed_pad_tuned",
+      "condition": "clear",
+      "a_max": "ALL",
+      "conv_p": "ALL",
+      "severity": "ALL",
+      "n": 2250,
+      "collision_count": 0,
+      "collision_rate": 0.0,
+      "collision_ci95_low": 0.0,
+      "collision_ci95_high": 0.0017044050750154099,
+      "reached_goal_count": 2250,
+      "reached_goal_rate": 1.0,
+      "timed_out_count": 0,
+      "timed_out_rate": 0.0,
+      "successful_count": 2250,
+      "successful_rate": 1.0,
+      "yield_count": 1800,
+      "yield_rate": 0.8,
+      "yield_ci95_low": 0.7829669878345303,
+      "yield_ci95_high": 0.8160103691204607,
+      "mean_elapsed_time_s": 23.299955555555552,
+      "sd_elapsed_time_s": 1.6003348354003852,
+      "mean_successful_elapsed_time_s": 23.299955555555552,
+      "sd_successful_elapsed_time_s": 1.6003348354003852
+    },
+    "predictive_clear": {
+      "arm": "predictive_horizon_tuned",
+      "condition": "clear",
+      "a_max": "ALL",
+      "conv_p": "ALL",
+      "severity": "ALL",
+      "n": 2250,
+      "collision_count": 0,
+      "collision_rate": 0.0,
+      "collision_ci95_low": 0.0,
+      "collision_ci95_high": 0.0017044050750154099,
+      "reached_goal_count": 2250,
+      "reached_goal_rate": 1.0,
+      "timed_out_count": 0,
+      "timed_out_rate": 0.0,
+      "successful_count": 2250,
+      "successful_rate": 1.0,
+      "yield_count": 1358,
+      "yield_rate": 0.6035555555555555,
+      "yield_ci95_low": 0.5831836395693822,
+      "yield_ci95_high": 0.6235744703128588,
+      "mean_elapsed_time_s": 22.47302222222222,
+      "sd_elapsed_time_s": 1.924055258796181,
+      "mean_successful_elapsed_time_s": 22.47302222222222,
+      "sd_successful_elapsed_time_s": 1.924055258796181
+    },
+    "paired_elapsed_time": {
+      "scope": "pooled_clustered_by_replicate",
+      "a_max": "ALL",
+      "conv_p": "ALL",
+      "severity": "ALL",
+      "n_pairs": 6750,
+      "n_replicate_clusters": 150,
+      "fixed_collision_count": 0,
+      "predictive_collision_count": 2,
+      "mean_fixed_minus_predictive_elapsed_time_s": 1.1133037037037032,
+      "bootstrap_ci95_low": null,
+      "bootstrap_ci95_high": null,
+      "meaningful_equal_observed_collision_status": false,
+      "interpretation": "at least one rule recorded a collision, so the timing difference is descriptive"
+    }
+  },
+  "limitations": [
+    "Testing uses new noise seeds with the same simulator and scenario grid.",
+    "Collision counts describe the simulated runs.",
+    "These are Python simulations; ROS 2, Nav2, and hardware tests are next steps.",
+    "Report a timing interval only when both rules have zero collisions in the runs being compared.",
+    "The overall timing interval measures variation across noise replicates on this fixed grid."
+  ]
+}
