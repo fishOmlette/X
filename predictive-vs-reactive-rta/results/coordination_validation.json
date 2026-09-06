@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "source": "code/coordination_experiment.py",
+  "simulator": "code/coordination_simulator.py",
+  "python_version": "3.13.12",
+  "numpy_version": "2.4.4",
+  "runtime_seconds": 352.7938121999614,
+  "configuration": {
+    "dt": 0.1,
+    "max_time_s": 45.0,
+    "robot_count": 3,
+    "conflict_distances": [
+      12.0,
+      12.5,
+      13.0
+    ],
+    "clear_distances": [
+      12.0,
+      14.0,
+      16.0
+    ],
+    "nominal_speed": 1.2,
+    "max_acceleration": 1.0,
+    "zone_radius": 0.5,
+    "exit_distance": 8.0,
+    "required_headway_s": 0.8333333333333334,
+    "uncertainty_near_s": 0.05,
+    "uncertainty_range_s": 0.15,
+    "uncertainty_multiplier": 1.0,
+    "measurement_noise_s": 0.05,
+    "prediction_horizon_s": 2.0,
+    "slope_window": 8,
+    "speed_floor": 0.05,
+    "bias_pattern": [
+      0.0,
+      1.0,
+      2.0
+    ]
+  },
+  "geometry_note": "Conflict start distances produce overlapping nominal zone occupancy; clear distances do not. required_headway_s equals nominal_zone_occupancy_s, while collision is measured from interpolated physical zone-entry and zone-exit intervals.",
+  "outcome_definitions": {
+    "reached_goal": "all robots reached the configured exit distance",
+    "collision": "at least two interpolated physical zone-occupancy intervals overlap",
+    "headway_violation": "entry-time separation is below required_headway_s",
+    "timed_out": "not all robots reached the exit distance by max_time_s",
+    "successful": "reached_goal with no collision and no headway violation",
+    "successful_makespan_s": "elapsed time only for successful episodes; null otherwise"
+  },
+  "design": {
+    "tuning_replicates_per_scenario": 20,
+    "test_replicates_per_scenario": 60,
+    "max_accelerations": [
+      0.5,
+      1.0,
+      2.5
+    ],
+    "degradation_exponents": [
+      0.7,
+      1.0,
+      1.5
+    ],
+    "severities_s": [
+      2.0,
+      6.0,
+      10.0
+    ],
+    "parameter_grid": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0,
+      1.25,
+      1.5,
+      1.75,
+      2.0,
+      2.25,
+      2.5,
+      2.75,
+      3.0,
+      3.25,
+      3.5,
+      3.75,
+      4.0
+    ],
+    "selection_rule": "Among candidates with 100% successful tuning episodes and no serialization breaches, minimize successful makespan. If none qualify, explicitly select by maximum success count before secondary criteria.",
+    "held_out_scope": "noise replicates only; the scenario grid is fixed",
+    "bootstrap_replicates": 20000,
+    "bootstrap_seed": 81377
+  },
+  "seed_audit": {
+    "tuple_count": 3780,
+    "unique_seed_count": 3780,
+    "duplicate_seed_count": 0,
+    "tuning_test_overlap_count": 0
+  },
+  "selections": {
+    "fixed_pad": {
+      "arm": "fixed_pad_1.75",
+      "condition": "conflict",
+      "n": 540,
+      "reached_goal_count": 540,
+      "collision_count": 0,
+      "headway_violation_count": 0,
+      "timeout_count": 0,
+      "successful_count": 540,
+      "successful_rate": 1.0,
+      "mean_successful_makespan_s": 29.81740740740741,
+      "mean_reached_goal_makespan_s": 29.81740740740741,
+      "serialization_count": 540,
+      "serialization_rate": 1.0,
+      "serialization_breach_count": 0,
+      "repeat_yield_episode_count": 0,
+      "mean_trigger_time_s": 4.531666666666667,
+      "method": "fixed_pad",
+      "parameter": 1.75,
+      "selected_from_full_success_pool": true
+    },
+    "predictive_horizon_s": {
+      "arm": "predictive_1.50",
+      "condition": "conflict",
+      "n": 540,
+      "reached_goal_count": 540,
+      "collision_count": 0,
+      "headway_violation_count": 0,
+      "timeout_count": 0,
+      "successful_count": 540,
+      "successful_rate": 1.0,
+      "mean_successful_makespan_s": 26.935555555555556,
+      "mean_reached_goal_makespan_s": 26.935555555555556,
+      "serialization_count": 540,
+      "serialization_rate": 1.0,
+      "serialization_breach_count": 0,
+      "repeat_yield_episode_count": 0,
+      "mean_trigger_time_s": 5.9651851851851845,
+      "method": "predictive",
+      "parameter": 1.5,
+      "selected_from_full_success_pool": true
+    }
+  },
+  "test_arms": {
+    "no_intervention": {
+      "method": "no_intervention",
+      "parameter": 0.0
+    },
+    "fixed_pad_tuned": {
+      "method": "fixed_pad",
+      "parameter": 1.75
+    },
+    "predictive_tuned": {
+      "method": "predictive",
+      "parameter": 1.5
+    }
+  },
+  "test_summaries": [
+    {
+      "arm": "no_intervention",
+      "condition": "conflict",
+      "n": 1620,
+      "reached_goal_count": 1620,
+      "collision_count": 1620,
+      "headway_violation_count": 1620,
+      "timeout_count": 0,
+      "successful_count": 0,
+      "successful_rate": 0.0,
+      "mean_successful_makespan_s": null,
+      "mean_reached_goal_makespan_s": 17.5,
+      "serialization_count": 0,
+      "serialization_rate": 0.0,
+      "serialization_breach_count": 0,
+      "repeat_yield_episode_count": 0,
+      "mean_trigger_time_s": null
+    },
+    {
+      "arm": "no_intervention",
+      "condition": "clear",
+      "n": 1620,
+      "reached_goal_count": 1620,
+      "collision_count": 0,
+      "headway_violation_count": 0,
+      "timeout_count": 0,
+      "successful_count": 1620,
+      "successful_rate": 1.0,
+      "mean_successful_makespan_s": 20.0,
+      "mean_reached_goal_makespan_s": 20.0,
+      "serialization_count": 0,
+      "serialization_rate": 0.0,
+      "serialization_breach_count": 0,
+      "repeat_yield_episode_count": 0,
+      "mean_trigger_time_s": null
+    },
+    {
+      "arm": "fixed_pad_tuned",
+      "condition": "conflict",
+      "n": 1620,
+      "reached_goal_count": 1620,
+      "collision_count": 0,
+      "headway_violation_count": 0,
+      "timeout_count": 0,
+      "successful_count": 1620,
+      "successful_rate": 1.0,
+      "mean_successful_makespan_s": 29.812777777777775,
+      "mean_reached_goal_makespan_s": 29.812777777777775,
+      "serialization_count": 1620,
+      "serialization_rate": 1.0,
+      "serialization_breach_count": 0,
+      "repeat_yield_episode_count": 0,
+      "mean_trigger_time_s": 4.534012345679012
+    },
+    {
+      "arm": "fixed_pad_tuned",
+      "condition": "clear",
+      "n": 1620,
+      "reached_goal_count": 1620,
+      "collision_count": 0,
+      "headway_violation_count": 0,
+      "timeout_count": 0,
+      "successful_count": 1620,
+      "successful_rate": 1.0,
+      "mean_successful_makespan_s": 26.33728395061728,
+      "mean_reached_goal_makespan_s": 26.33728395061728,
+      "serialization_count": 1080,
+      "serialization_rate": 0.6666666666666666,
+      "serialization_breach_count": 0,
+      "repeat_yield_episode_count": 0,
+      "mean_trigger_time_s": 6.517407407407409
+    },
+    {
+      "arm": "predictive_tuned",
+      "condition": "conflict",
+      "n": 1620,
+      "reached_goal_count": 1620,
+      "collision_count": 0,
+      "headway_violation_count": 0,
+      "timeout_count": 0,
+      "successful_count": 1620,
+      "successful_rate": 1.0,
+      "mean_successful_makespan_s": 27.034135802469137,
+      "mean_reached_goal_makespan_s": 27.034135802469137,
+      "serialization_count": 1620,
+      "serialization_rate": 1.0,
+      "serialization_breach_count": 0,
+      "repeat_yield_episode_count": 0,
+      "mean_trigger_time_s": 5.916975308641975
+    },
+    {
+      "arm": "predictive_tuned",
+      "condition": "clear",
+      "n": 1620,
+      "reached_goal_count": 1620,
+      "collision_count": 0,
+      "headway_violation_count": 0,
+      "timeout_count": 0,
+      "successful_count": 1620,
+      "successful_rate": 1.0,
+      "mean_successful_makespan_s": 20.278456790123457,
+      "mean_reached_goal_makespan_s": 20.278456790123457,
+      "serialization_count": 21,
+      "serialization_rate": 0.012962962962962963,
+      "serialization_breach_count": 0,
+      "repeat_yield_episode_count": 0,
+      "mean_trigger_time_s": 0.5476190476190476
+    }
+  ],
+  "paired_conflict_comparison": {
+    "n_pairs": 1620,
+    "n_replicate_clusters": 60,
+    "both_successful_count": 1620,
+    "fixed_success_predictive_failure_count": 0,
+    "predictive_success_fixed_failure_count": 0,
+    "all_pairs_successful": true,
+    "mean_fixed_minus_predictive_successful_makespan_s": 2.778641975308643,
+    "descriptive_mean_among_both_successful_pairs_s": 2.7786419753086427,
+    "paired_bootstrap_ci95_low": 2.659316358024693,
+    "paired_bootstrap_ci95_high": 2.901976851851853,
+    "inference_note": "paired interval clusters the fixed scenario grid by test replicate because every pair succeeded"
+  },
+  "interpretation_caveats": [
+    "When both selected parameters are zero, predictive and fixed-pad triggering are the same M <= 0 rule. A zero paired difference is then an algebraic identity, not evidence that two distinct mechanisms are statistically equivalent.",
+    "No-intervention trajectories do not consume measurement noise, so repetitions within a fixed physical scenario are deterministic duplicates; their counts are grid coverage, not independent safety evidence.",
+    "This validation holds out noise only and must not be interpreted as generalization to unseen geometries, dynamics, or degradation families.",
+    "The controller commits one immutable total crossing order at its first trigger. The result does not evaluate dynamic replanning or general multi-robot coordination."
+  ]
+}

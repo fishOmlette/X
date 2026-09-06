@@ -185,7 +185,7 @@ def main():
     seeds = DEFAULT_SEEDS
 
     print("=" * 72)
-    print("COORDINATION PROTOTYPE (3 robots, shared intersection)")
+    print("LEGACY COORDINATION PROTOTYPE (3 robots, shared intersection)")
     print("P vs the BEST tuned fixed pad.  advantage = best_safe_pad_finish - P_finish")
     print("(>0 = lower mean finish time for P; compare collision rates separately)")
     print("=" * 72)

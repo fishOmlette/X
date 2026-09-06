@@ -40,3 +40,17 @@ Predictive, retained & $T_h=2.0$ & $172/6750$ & $6578/6750$ & $25.990$ \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\paragraph{Prediction improves one-shot serialization at matched outcomes (Figure~\ref{fig:coord}).}
+The redesigned coordination geometry first passes a basic falsification check: without intervention, all 1,620 held-out conflict runs reach the exit but contain both an occupancy collision and a headway violation, so none is successful. These runs are deterministic repeats within each physical scenario because no measurement is consumed; their count verifies coverage of the grid, not 1,620 independent safety trials.
+
+The searches select $\rho=1.75$ and $T_h=1.50$\,s; each selection has $540/540$ successful tuning episodes and no serialization breach. Each selected arm then succeeds in $1620/1620$ held-out conflict episodes, with no collision, headway violation, timeout, repeat yield, or serialization breach. The fixed rule's mean successful makespan is $29.813$\,s and the predictive rule's is $27.034$\,s. The predictive rule's mean first-trigger time is later ($5.917$ versus $4.534$\,s), avoiding some waiting without changing the observed success count. The paired fixed-minus-predictive makespan difference is $2.779$\,s; a bootstrap that clusters the fixed 27-scenario grid by the 60 test replicates gives a 95\% interval of $[2.659,2.902]$\,s. This is an efficiency comparison at matched observed outcomes, conditional on the modeled scenarios and noise distribution.
+
+Without intervention, all $1620/1620$ clear runs succeed in $20.000$\,s. Both selected rules also succeed in $1620/1620$ clear episodes. The fixed rule unnecessarily commits a serialization in $1080/1620$ episodes (66.67\%) and has a mean successful makespan of $26.337$\,s. The predictive rule serializes $21/1620$ (1.296\%) and has a mean of $20.278$\,s. No interval was calculated for this clear-path difference, so it remains descriptive. Together, the results show a benefit from rate adaptation for this immutable-order recovery; they do not test dynamic re-planning.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.82\linewidth]{fig_coord.pdf}
+\caption{Held-out coordination results for genuine-conflict and clear geometry. The no-intervention arm has no successful conflict episode. Both tuned policies succeed in every conflict and clear episode, while prediction has the shorter mean successful conflict makespan.}
+\label{fig:coord}
+\end{figure}
