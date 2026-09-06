@@ -1,0 +1,7 @@
+arm,condition,n,reached_goal_count,collision_count,headway_violation_count,timeout_count,successful_count,successful_rate,mean_successful_makespan_s,mean_reached_goal_makespan_s,serialization_count,serialization_rate,serialization_breach_count,repeat_yield_episode_count,mean_trigger_time_s
+no_intervention,conflict,1620,1620,1620,1620,0,0,0.0,,17.5,0,0.0,0,0,
+no_intervention,clear,1620,1620,0,0,0,1620,1.0,20.0,20.0,0,0.0,0,0,
+fixed_pad_tuned,conflict,1620,1620,0,0,0,1620,1.0,29.812777777777775,29.812777777777775,1620,1.0,0,0,4.534012345679012
+fixed_pad_tuned,clear,1620,1620,0,0,0,1620,1.0,26.33728395061728,26.33728395061728,1080,0.6666666666666666,0,0,6.517407407407409
+predictive_tuned,conflict,1620,1620,0,0,0,1620,1.0,27.034135802469137,27.034135802469137,1620,1.0,0,0,5.916975308641975
+predictive_tuned,clear,1620,1620,0,0,0,1620,1.0,20.278456790123457,20.278456790123457,21,0.012962962962962963,0,0,0.5476190476190476

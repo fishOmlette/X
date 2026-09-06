@@ -10,6 +10,7 @@ import numpy as np
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.ticker import PercentFormatter
 
 from single_margin_simulator import Cfg, run_episode
 
@@ -17,6 +18,7 @@ from single_margin_simulator import Cfg, run_episode
 ROOT = Path(__file__).resolve().parent.parent
 FIGURES_DIR = ROOT / "figures"
 RESULTS_DIR = ROOT / "results"
+COORDINATION_RESULTS = RESULTS_DIR / "coordination_validation.json"
 COLORS = {
     "blind": "#6c757d",
     "fixed": "#d55e00",
@@ -506,11 +508,148 @@ def dose_figure(figure_data: dict) -> None:
     save_figure(figure, "fig_dose")
 
 
+def coordination_figure(figure_data: dict) -> None:
+    if not COORDINATION_RESULTS.exists():
+        raise FileNotFoundError(
+            f"Run code/coordination_experiment.py first: {COORDINATION_RESULTS} is missing"
+        )
+    payload = json.loads(COORDINATION_RESULTS.read_text(encoding="utf-8"))
+    rows = {(row["arm"], row["condition"]): row for row in payload["test_summaries"]}
+    arms = (
+        ("no_intervention", "no intervention", "control", "D"),
+        ("fixed_pad_tuned", "selected fixed pad", "fixed", "s"),
+        ("predictive_tuned", "selected predictive horizon", "predictive", "o"),
+    )
+    missing = [
+        (arm, condition)
+        for arm, _, _, _ in arms
+        for condition in ("conflict", "clear")
+        if (arm, condition) not in rows
+    ]
+    if missing:
+        raise RuntimeError(f"coordination result rows are missing: {missing}")
+
+    figure_data["coordination"] = {
+        "source": "results/coordination_validation.json",
+        "selections": payload["selections"],
+        "paired_conflict_comparison": payload["paired_conflict_comparison"],
+        "test_summaries": payload["test_summaries"],
+    }
+
+    y = np.arange(len(arms))[::-1]
+    figure, axes = plt.subplots(
+        1,
+        2,
+        figsize=(7.25, 3.65),
+        sharey=True,
+        gridspec_kw={"width_ratios": (1.05, 1.25)},
+    )
+    for position, (arm, label, color_key, marker) in zip(y, arms):
+        conflict = rows[(arm, "conflict")]
+        clear = rows[(arm, "clear")]
+        axes[0].scatter(
+            conflict["successful_rate"],
+            position + 0.10,
+            marker=marker,
+            s=45,
+            color=COLORS[color_key],
+            zorder=3,
+        )
+        axes[0].scatter(
+            clear["successful_rate"],
+            position - 0.10,
+            marker=marker,
+            s=42,
+            facecolor="white",
+            edgecolor=COLORS[color_key],
+            linewidth=1.4,
+            zorder=3,
+        )
+        makespan = conflict["mean_successful_makespan_s"]
+        if makespan is None:
+            axes[1].text(
+                0.03,
+                position,
+                "no successful conflict episodes",
+                transform=axes[1].get_yaxis_transform(),
+                verticalalignment="center",
+                fontsize=8,
+                color=COLORS[color_key],
+                bbox=NOTE_BOX,
+            )
+        else:
+            axes[1].scatter(
+                makespan,
+                position,
+                marker=marker,
+                s=45,
+                color=COLORS[color_key],
+                zorder=3,
+            )
+            axes[1].text(
+                makespan + 0.15,
+                position,
+                f"{makespan:.2f} s",
+                verticalalignment="center",
+                fontsize=8,
+                bbox=NOTE_BOX,
+            )
+
+    axes[0].set_xlim(-0.05, 1.08)
+    axes[0].xaxis.set_major_formatter(PercentFormatter(xmax=1, decimals=0))
+    axes[0].set_xlabel("successful completion rate")
+    axes[0].set_title("(a) Conflict and clear trials")
+    axes[0].set_yticks(y)
+    axes[0].set_yticklabels([label for _, label, _, _ in arms])
+
+    successful_times = [
+        rows[(arm, "conflict")]["mean_successful_makespan_s"]
+        for arm, _, _, _ in arms
+        if rows[(arm, "conflict")]["mean_successful_makespan_s"] is not None
+    ]
+    axes[1].set_xlim(min(successful_times) - 0.6, max(successful_times) + 1.8)
+    axes[1].set_xlabel("mean successful conflict makespan (s)")
+    axes[1].set_title("(b) Successful conflict trials only")
+
+    handles = [
+        plt.Line2D(
+            [],
+            [],
+            marker="o",
+            linestyle="none",
+            markerfacecolor="0.35",
+            markeredgecolor="0.35",
+            label="conflict",
+        ),
+        plt.Line2D(
+            [],
+            [],
+            marker="o",
+            linestyle="none",
+            markerfacecolor="white",
+            markeredgecolor="0.35",
+            label="clear",
+        ),
+    ]
+    figure.suptitle("Held-out shared-zone coordination outcomes", fontsize=11.5)
+    figure.legend(
+        handles=handles,
+        loc="lower center",
+        bbox_to_anchor=(0.5, 0.015),
+        ncol=2,
+        frameon=True,
+        framealpha=1.0,
+        edgecolor="0.8",
+    )
+    figure.subplots_adjust(left=0.25, right=0.98, top=0.80, bottom=0.24, wspace=0.16)
+    save_figure(figure, "fig_coord")
+
+
 def parse_args():
-    parser = argparse.ArgumentParser(description="Regenerate the paper figures.")
+    parser = argparse.ArgumentParser(description="Regenerate the four paper figures.")
     parser.add_argument(
         "--only",
-        choices=("all", "mechanism", "boundary", "dose"),
+        choices=("all", "mechanism", "boundary", "dose", "coordination"),
         default="all",
     )
     return parser.parse_args()
@@ -522,6 +661,7 @@ def main() -> None:
         "mechanism": mechanism_figure,
         "boundary": boundary_figure,
         "dose": dose_figure,
+        "coordination": coordination_figure,
     }
     figure_data = {"schema_version": 2}
     selected = generators if args.only == "all" else {args.only: generators[args.only]}
