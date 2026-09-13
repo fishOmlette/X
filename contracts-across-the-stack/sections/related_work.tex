@@ -78,6 +78,12 @@ component assumptions can be made executable.  Its primary object is node
 behavior; cross-robot state age, team membership, and heterogeneous deployment
 compatibility are not the central object of the calculus.
 
+The distinction from the reference framework in \cref{sec:synthesis} is direct.
+The ROS Contract Language gives behavioral contracts formal semantics and
+generates monitors.  The edge-contract framework does neither; it is a common
+inventory of payload, validity, evidence, compatibility, admission, and recovery
+obligations that can be instantiated using RCL or another formalism.
+
 ROSMonitoring~2.0 instruments topics and services and monitors event order,
 including partial ROS~2 support \cite{ghaffari2024rosmonitoring}.  Caldas
 \emph{et al.} complement specification work with guidelines for runtime
