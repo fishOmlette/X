@@ -1,12 +1,32 @@
 # LaTeX build products
 *.aux
 *.bbl
+*.bcf
 *.blg
 *.fdb_latexmk
 *.fls
 *.log
 *.out
+*.run.xml
 *.synctex.gz
+*.synctex(busy)
 *.toc
+*.xdv
 /*/main.pdf
-/*/paper.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Packaging and previews
+dist/
+.preview/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
