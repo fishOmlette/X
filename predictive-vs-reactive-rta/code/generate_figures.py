@@ -10,7 +10,6 @@ import numpy as np
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.ticker import PercentFormatter
 
 from single_margin_simulator import Cfg, run_episode
 
@@ -18,35 +17,32 @@ from single_margin_simulator import Cfg, run_episode
 ROOT = Path(__file__).resolve().parent.parent
 FIGURES_DIR = ROOT / "figures"
 RESULTS_DIR = ROOT / "results"
-COORDINATION_RESULTS = RESULTS_DIR / "coordination_validation.json"
+COLUMN_WIDTH_IN = 3.45
 COLORS = {
     "blind": "#6c757d",
     "fixed": "#d55e00",
     "predictive": "#0072b2",
-    "control": "#333333",
-}
-NOTE_BOX = {
-    "boxstyle": "round,pad=0.18",
-    "facecolor": "white",
-    "edgecolor": "0.75",
-    "alpha": 0.95,
-    "linewidth": 0.5,
 }
 
 plt.rcParams.update(
     {
-        "font.size": 10.5,
-        "axes.titlesize": 11,
-        "axes.labelsize": 10.5,
-        "xtick.labelsize": 9.5,
-        "ytick.labelsize": 9.5,
-        "legend.fontsize": 8.5,
-        "figure.dpi": 160,
-        "savefig.dpi": 220,
+        "font.size": 8,
+        "axes.titlesize": 8,
+        "axes.labelsize": 8,
+        "xtick.labelsize": 7,
+        "ytick.labelsize": 7,
+        "legend.fontsize": 7,
+        "axes.linewidth": 0.6,
+        "xtick.major.width": 0.6,
+        "ytick.major.width": 0.6,
+        "figure.dpi": 200,
         "axes.grid": True,
         "axes.axisbelow": True,
         "grid.alpha": 0.25,
+        "grid.linewidth": 0.5,
         "font.family": "serif",
+        "font.serif": ["Times New Roman", "Nimbus Roman", "Liberation Serif", "DejaVu Serif"],
+        "mathtext.fontset": "stix",
         "pdf.fonttype": 42,
         "ps.fonttype": 42,
     }
@@ -55,12 +51,13 @@ plt.rcParams.update(
 
 def save_figure(figure, stem: str) -> None:
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
-    for suffix in (".png", ".pdf"):
-        figure.savefig(
-            FIGURES_DIR / f"{stem}{suffix}",
-            bbox_inches="tight",
-            facecolor="white",
-        )
+    figure.savefig(
+        FIGURES_DIR / f"{stem}.pdf",
+        bbox_inches="tight",
+        pad_inches=0.02,
+        facecolor="white",
+        metadata={"CreationDate": None, "ModDate": None},
+    )
     plt.close(figure)
 
 
@@ -150,125 +147,126 @@ def mechanism_figure(figure_data: dict) -> None:
         "latest_safe_trigger_time_s": latest_safe_trigger,
     }
 
-    figure, axis = plt.subplots(figsize=(6.1, 4.65))
-    axis.plot(time, margin, color="#222222", linewidth=2.2, label=r"margin $M(t)$")
-    axis.axhline(0, color="#666666", linewidth=1)
+    figure, axis = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.85))
+    axis.plot(time, margin, color="#222222", linewidth=1.5, label=r"margin $M(t)$")
+    axis.axhline(0, color="#666666", linewidth=0.8)
     axis.axvline(
         margin_zero,
         color=COLORS["fixed"],
-        linewidth=2,
-        linestyle=(0, (2, 3)),
-        label=r"reactive trigger ($M=0$)",
+        linewidth=1.3,
+        linestyle=(0, (2, 2)),
+        label=r"reactive trigger at $t_0$ ($M=0$)",
     )
     axis.axvline(
         predictive_trigger,
         color=COLORS["predictive"],
-        linewidth=2,
-        linestyle=(0, (8, 4)),
-        label=r"predictive trigger ($\widehat{T}_A\leq T_h$)",
+        linewidth=1.3,
+        linestyle=(0, (6, 3)),
+        label=r"predictive trigger ($M/\hat{r}=T_h$)",
     )
     axis.axvline(
         latest_safe_trigger,
         color="#555555",
-        linewidth=1.8,
+        linewidth=1.2,
         linestyle=":",
         label=r"latest safe trigger $t_{\mathrm{pnr}}=t_f-\tau_r$",
     )
     axis.axvline(
         physical_deadline,
         color="#111111",
-        linewidth=2,
+        linewidth=1.3,
         linestyle="-.",
         label=r"physical deadline $t_f$",
     )
     axis.annotate(
         "",
-        xy=(margin_zero, 1.0),
-        xytext=(predictive_trigger, 1.0),
-        arrowprops={"arrowstyle": "<->", "color": COLORS["predictive"]},
+        xy=(margin_zero, 1.6),
+        xytext=(predictive_trigger, 1.6),
+        arrowprops={"arrowstyle": "<->", "color": COLORS["predictive"], "lw": 0.8},
     )
     axis.text(
-        (predictive_trigger + margin_zero) / 2,
-        1.15,
-        "lead time $L$",
+        predictive_trigger + 0.7,
+        1.75,
+        "lead $L$",
         color=COLORS["predictive"],
         horizontalalignment="center",
-        fontsize=9.5,
-        bbox=NOTE_BOX,
+        verticalalignment="bottom",
+        fontsize=7,
     )
     axis.annotate(
         "",
-        xy=(physical_deadline, -0.55),
-        xytext=(margin_zero, -0.55),
-        arrowprops={"arrowstyle": "<->", "color": "#111111"},
+        xy=(physical_deadline, 0.35),
+        xytext=(margin_zero, 0.35),
+        arrowprops={"arrowstyle": "<->", "color": "#111111", "lw": 0.8},
     )
     axis.text(
         (margin_zero + physical_deadline) / 2,
-        -0.42,
-        r"slack $\delta=t_f-t_0$",
+        0.5,
+        r"slack $\delta$",
         horizontalalignment="center",
-        fontsize=9.5,
-        bbox=NOTE_BOX,
+        verticalalignment="bottom",
+        fontsize=7,
     )
     axis.add_patch(
         plt.Rectangle(
-            (predictive_trigger, -1.35),
+            (predictive_trigger, -1.50),
             recovery_time,
             0.30,
-            facecolor=COLORS["predictive"],
+            facecolor="#d2e5f3",
             edgecolor=COLORS["predictive"],
-            alpha=0.28,
+            linewidth=0.6,
+            zorder=3,
         )
     )
     axis.text(
         predictive_trigger + recovery_time / 2,
-        -1.2,
-        r"recovery $\tau_r$ (in time)",
+        -1.35,
+        r"$\tau_r$ in time",
         color=COLORS["predictive"],
         horizontalalignment="center",
         verticalalignment="center",
-        fontsize=8.5,
-        bbox=NOTE_BOX,
+        fontsize=6.5,
+        zorder=4,
     )
     axis.add_patch(
         plt.Rectangle(
-            (margin_zero, -2.0),
+            (margin_zero, -2.10),
             recovery_time,
             0.30,
-            facecolor=COLORS["fixed"],
+            facecolor="#f8dcc5",
             edgecolor=COLORS["fixed"],
-            alpha=0.28,
+            linewidth=0.6,
+            zorder=3,
         )
     )
     axis.text(
         margin_zero + recovery_time / 2,
-        -1.85,
-        r"recovery $\tau_r$ (too late)",
+        -1.95,
+        r"$\tau_r$ too late",
         color=COLORS["fixed"],
         horizontalalignment="center",
         verticalalignment="center",
-        fontsize=8.5,
-        bbox=NOTE_BOX,
+        fontsize=6.5,
+        zorder=4,
     )
     axis.set(
         xlabel="time (s)",
         ylabel=r"margin $M$",
         xlim=(0, 10.5),
         ylim=(-2.5, 3.2),
-        title=r"Earlier action matters only when $\delta<\tau_r\leq\delta+L$",
     )
     handles, labels = axis.get_legend_handles_labels()
-    figure.legend(
+    axis.legend(
         handles,
         labels,
-        loc="lower center",
-        bbox_to_anchor=(0.5, 0.015),
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.2),
         ncol=2,
-        frameon=True,
-        framealpha=1.0,
-        edgecolor="0.8",
+        frameon=False,
+        handlelength=2.2,
+        columnspacing=1.0,
+        fontsize=6.5,
     )
-    figure.subplots_adjust(left=0.12, right=0.98, top=0.91, bottom=0.27)
     save_figure(figure, "fig_mechanism")
 
 
@@ -327,8 +325,7 @@ def boundary_figure(figure_data: dict) -> None:
     figure_data["boundary"] = {
         "source": "code/single_margin_simulator.py",
         "selection": (
-            "Within each displayed setting, choose the tested fixed pad with all "
-            "episodes successful and minimum mean successful elapsed time."
+            'For each plotted setting, choose the fastest tested fixed pad that completes every run successfully.'
         ),
         "pads": list(pads),
         "severities": list(severities),
@@ -344,34 +341,34 @@ def boundary_figure(figure_data: dict) -> None:
         if row["finish_time_difference_s"] is not None
     ]
     lower = min(-0.2, min(all_differences) - 0.18)
-    upper = max(0.2, max(all_differences) + 0.25)
-    figure, axes = plt.subplots(1, 2, figsize=(7.25, 3.65), sharey=True)
+    upper = max(0.2, max(all_differences) + 0.35)
+    figure, axes = plt.subplots(
+        1, 2, figsize=(COLUMN_WIDTH_IN, 2.15), sharey=True, layout="constrained"
+    )
     for axis in axes:
         axis.axhspan(0, upper, color=COLORS["predictive"], alpha=0.065)
         axis.axhspan(lower, 0, color=COLORS["fixed"], alpha=0.065)
-        axis.axhline(0, color="#444444", linewidth=1)
+        axis.axhline(0, color="#444444", linewidth=0.8)
         axis.set_ylim(lower, upper)
         axis.text(
-            0.97,
-            0.93,
-            "+ predictive faster",
+            0.96,
+            0.95,
+            "+ prediction faster",
             transform=axis.transAxes,
             color=COLORS["predictive"],
             horizontalalignment="right",
             verticalalignment="top",
-            fontsize=8,
-            bbox=NOTE_BOX,
+            fontsize=6,
         )
         axis.text(
-            0.03,
-            0.07,
-            "− fixed pad faster",
+            0.04,
+            0.05,
+            "\u2212 fixed pad faster",
             transform=axis.transAxes,
             color=COLORS["fixed"],
             horizontalalignment="left",
             verticalalignment="bottom",
-            fontsize=8,
-            bbox=NOTE_BOX,
+            fontsize=6,
         )
 
     acceleration_values = [row["finish_time_difference_s"] for row in acceleration_rows]
@@ -380,12 +377,12 @@ def boundary_figure(figure_data: dict) -> None:
         acceleration_values,
         marker="o",
         color=COLORS["predictive"],
-        linewidth=1.8,
-        markersize=5,
+        linewidth=1.2,
+        markersize=3.5,
     )
     axes[0].set(
-        xlabel=r"recovery capability $a_{\max}$ (units/s$^2$)",
-        ylabel=r"$\overline{t}_{\rm fixed}-\overline{t}_{\rm pred}$ (s)",
+        xlabel=r"$a_{\max}$ (units/s$^2$)",
+        ylabel=r"$\overline{t}_{\mathrm{fixed}}-\overline{t}_{\mathrm{pred}}$ (s)",
         title="(a) Recovery capability",
     )
 
@@ -397,44 +394,33 @@ def boundary_figure(figure_data: dict) -> None:
         [row["finish_time_difference_s"] for row in safe_rows],
         marker="o",
         color=COLORS["predictive"],
-        linewidth=1.8,
-        markersize=5,
+        linewidth=1.2,
+        markersize=3.5,
     )
     unsafe_rows = [row for row in exponent_rows if row["predictive_collision_count"]]
     if unsafe_rows:
-        marker_y = upper - 0.13 * (upper - lower)
+        marker_y = 0.5 * upper
         unsafe_x = [row["degradation_exponent"] for row in unsafe_rows]
+        no_safe_pad = all(row["selected_fixed_pad"] is None for row in unsafe_rows)
         axes[1].scatter(
             unsafe_x,
             [marker_y] * len(unsafe_x),
             marker="x",
-            s=55,
+            s=22,
             color=COLORS["fixed"],
-            linewidth=1.8,
+            linewidth=1.2,
             zorder=5,
         )
         axes[1].text(
-            float(np.mean(unsafe_x)),
-            marker_y - 0.08 * (upper - lower),
-            "collision observed\n(finish time omitted)",
+            min(unsafe_x) - 0.04,
+            marker_y - 0.06 * (upper - lower),
+            "both rules fail" if no_safe_pad else "prediction collides",
             color=COLORS["fixed"],
-            horizontalalignment="center",
+            horizontalalignment="left",
             verticalalignment="top",
-            fontsize=7.8,
-            bbox=NOTE_BOX,
+            fontsize=6,
         )
     axes[1].set(xlabel=r"degradation exponent $p$", title="(b) Degradation shape")
-    figure.suptitle(
-        "Exploratory finish-time difference from a selected fixed pad", fontsize=11.5
-    )
-    figure.text(
-        0.5,
-        0.015,
-        "Differences are shown only where both methods had zero observed failures.",
-        horizontalalignment="center",
-        fontsize=8.2,
-    )
-    figure.subplots_adjust(left=0.11, right=0.99, top=0.82, bottom=0.25, wspace=0.12)
     save_figure(figure, "fig_boundary")
 
 
@@ -443,9 +429,9 @@ def dose_figure(figure_data: dict) -> None:
     severities = (0, 2, 4, 5, 6, 8, 10)
     seeds = range(40)
     methods = {
-        "B0": ("uncertainty-blind reactive", "blind", "s", "--"),
-        "fixed_pad": (r"reactive at $M=0$", "fixed", "^", "-."),
-        "P": ("predictive rate trigger", "predictive", "o", "-"),
+        "B0": ("uncertainty-blind", "blind", "s", "--"),
+        "fixed_pad": (r"reactive, $M\leq 0$", "fixed", "^", "-."),
+        "P": (r"predictive, $T_h=2$ s", "predictive", "o", "-"),
     }
     values = {}
     for method in methods:
@@ -461,7 +447,9 @@ def dose_figure(figure_data: dict) -> None:
         "methods": values,
     }
 
-    figure, axes = plt.subplots(1, 2, figsize=(7.25, 3.55), sharey=True)
+    figure, axes = plt.subplots(
+        1, 2, figsize=(COLUMN_WIDTH_IN, 2.3), sharey=True, layout="constrained"
+    )
     handles = []
     for method, (label, color_key, marker, linestyle) in methods.items():
         line = axes[0].plot(
@@ -470,8 +458,8 @@ def dose_figure(figure_data: dict) -> None:
             marker=marker,
             linestyle=linestyle,
             color=COLORS[color_key],
-            linewidth=1.8,
-            markersize=4.8,
+            linewidth=1.2,
+            markersize=3.5,
             label=label,
         )[0]
         handles.append(line)
@@ -481,175 +469,33 @@ def dose_figure(figure_data: dict) -> None:
             marker=marker,
             linestyle=linestyle,
             color=COLORS[color_key],
-            linewidth=1.8,
-            markersize=4.8,
+            linewidth=1.2,
+            markersize=3.5,
         )
     axes[0].set(
-        title="(a) Successful completion rate",
+        title="(a) Successful completion",
         xlabel="fault severity (s)",
         ylabel="fraction of episodes",
         ylim=(-0.05, 1.05),
     )
-    axes[1].set(title="(b) Collision rate", xlabel="fault severity (s)")
-    figure.suptitle(
-        r"Dose response to hidden timing bias ($a_{\max}=1.0$)", fontsize=11.5
-    )
+    axes[1].set(title="(b) Collision", xlabel="fault severity (s)")
     figure.legend(
         handles=handles,
-        loc="lower center",
-        bbox_to_anchor=(0.5, 0.015),
+        loc="outside lower center",
         ncol=3,
-        frameon=True,
-        framealpha=1.0,
-        edgecolor="0.8",
-        fontsize=8,
+        frameon=False,
+        handlelength=2.2,
+        columnspacing=1.0,
+        fontsize=6.5,
     )
-    figure.subplots_adjust(left=0.10, right=0.99, top=0.80, bottom=0.27, wspace=0.13)
     save_figure(figure, "fig_dose")
 
 
-def coordination_figure(figure_data: dict) -> None:
-    if not COORDINATION_RESULTS.exists():
-        raise FileNotFoundError(
-            f"Run code/coordination_experiment.py first: {COORDINATION_RESULTS} is missing"
-        )
-    payload = json.loads(COORDINATION_RESULTS.read_text(encoding="utf-8"))
-    rows = {(row["arm"], row["condition"]): row for row in payload["test_summaries"]}
-    arms = (
-        ("no_intervention", "no intervention", "control", "D"),
-        ("fixed_pad_tuned", "selected fixed pad", "fixed", "s"),
-        ("predictive_tuned", "selected predictive horizon", "predictive", "o"),
-    )
-    missing = [
-        (arm, condition)
-        for arm, _, _, _ in arms
-        for condition in ("conflict", "clear")
-        if (arm, condition) not in rows
-    ]
-    if missing:
-        raise RuntimeError(f"coordination result rows are missing: {missing}")
-
-    figure_data["coordination"] = {
-        "source": "results/coordination_validation.json",
-        "selections": payload["selections"],
-        "paired_conflict_comparison": payload["paired_conflict_comparison"],
-        "test_summaries": payload["test_summaries"],
-    }
-
-    y = np.arange(len(arms))[::-1]
-    figure, axes = plt.subplots(
-        1,
-        2,
-        figsize=(7.25, 3.65),
-        sharey=True,
-        gridspec_kw={"width_ratios": (1.05, 1.25)},
-    )
-    for position, (arm, label, color_key, marker) in zip(y, arms):
-        conflict = rows[(arm, "conflict")]
-        clear = rows[(arm, "clear")]
-        axes[0].scatter(
-            conflict["successful_rate"],
-            position + 0.10,
-            marker=marker,
-            s=45,
-            color=COLORS[color_key],
-            zorder=3,
-        )
-        axes[0].scatter(
-            clear["successful_rate"],
-            position - 0.10,
-            marker=marker,
-            s=42,
-            facecolor="white",
-            edgecolor=COLORS[color_key],
-            linewidth=1.4,
-            zorder=3,
-        )
-        makespan = conflict["mean_successful_makespan_s"]
-        if makespan is None:
-            axes[1].text(
-                0.03,
-                position,
-                "no successful conflict episodes",
-                transform=axes[1].get_yaxis_transform(),
-                verticalalignment="center",
-                fontsize=8,
-                color=COLORS[color_key],
-                bbox=NOTE_BOX,
-            )
-        else:
-            axes[1].scatter(
-                makespan,
-                position,
-                marker=marker,
-                s=45,
-                color=COLORS[color_key],
-                zorder=3,
-            )
-            axes[1].text(
-                makespan + 0.15,
-                position,
-                f"{makespan:.2f} s",
-                verticalalignment="center",
-                fontsize=8,
-                bbox=NOTE_BOX,
-            )
-
-    axes[0].set_xlim(-0.05, 1.08)
-    axes[0].xaxis.set_major_formatter(PercentFormatter(xmax=1, decimals=0))
-    axes[0].set_xlabel("successful completion rate")
-    axes[0].set_title("(a) Conflict and clear trials")
-    axes[0].set_yticks(y)
-    axes[0].set_yticklabels([label for _, label, _, _ in arms])
-
-    successful_times = [
-        rows[(arm, "conflict")]["mean_successful_makespan_s"]
-        for arm, _, _, _ in arms
-        if rows[(arm, "conflict")]["mean_successful_makespan_s"] is not None
-    ]
-    axes[1].set_xlim(min(successful_times) - 0.6, max(successful_times) + 1.8)
-    axes[1].set_xlabel("mean successful conflict makespan (s)")
-    axes[1].set_title("(b) Successful conflict trials only")
-
-    handles = [
-        plt.Line2D(
-            [],
-            [],
-            marker="o",
-            linestyle="none",
-            markerfacecolor="0.35",
-            markeredgecolor="0.35",
-            label="conflict",
-        ),
-        plt.Line2D(
-            [],
-            [],
-            marker="o",
-            linestyle="none",
-            markerfacecolor="white",
-            markeredgecolor="0.35",
-            label="clear",
-        ),
-    ]
-    figure.suptitle("Held-out shared-zone coordination outcomes", fontsize=11.5)
-    figure.legend(
-        handles=handles,
-        loc="lower center",
-        bbox_to_anchor=(0.5, 0.015),
-        ncol=2,
-        frameon=True,
-        framealpha=1.0,
-        edgecolor="0.8",
-    )
-    figure.subplots_adjust(left=0.25, right=0.98, top=0.80, bottom=0.24, wspace=0.16)
-    save_figure(figure, "fig_coord")
-
-
 def parse_args():
-    parser = argparse.ArgumentParser(description="Regenerate the four paper figures.")
+    parser = argparse.ArgumentParser(description='Redraw the three figures for the note.')
     parser.add_argument(
         "--only",
-        choices=("all", "mechanism", "boundary", "dose", "coordination"),
+        choices=("all", "mechanism", "boundary", "dose"),
         default="all",
     )
     return parser.parse_args()
@@ -661,9 +507,8 @@ def main() -> None:
         "mechanism": mechanism_figure,
         "boundary": boundary_figure,
         "dose": dose_figure,
-        "coordination": coordination_figure,
     }
-    figure_data = {"schema_version": 2}
+    figure_data = {"schema_version": 3}
     selected = generators if args.only == "all" else {args.only: generators[args.only]}
     for name, generator in selected.items():
         generator(figure_data)

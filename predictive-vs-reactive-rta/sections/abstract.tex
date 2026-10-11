@@ -1,3 +1,28 @@
 \begin{abstract}
-Predictive runtime assurance can trigger recovery before a monitored margin is exhausted. A fixed current-margin rule can also act early, however, by using a larger threshold. We analyze when prediction offers something distinct. In an idealized timing model, a trigger based on projected time-to-infeasibility is a reactive threshold whose margin scales with the estimated degradation rate. Early action changes the recovery outcome only within a band determined by recovery duration and remaining slack. An advantage over one fixed margin across cases further requires degradation rates that vary and can be estimated. Exploratory kinematic sweeps examine this boundary using in-sample comparator selection; separate evaluations use seed-disjoint tuning and testing. In the single-margin study, the searches select $\rho=2.5$ and $T_h=2.5$\,s. The fixed rule records no collisions in 6,750 held-out conflict episodes, whereas the predictive rule records two, so we make no inferential comparison of elapsed time. In a redesigned three-robot study, untreated conflict trajectories collide in all 1,620 held-out runs. Both selected rules complete all 1,620 without collision or headway violation. Conditional on the fixed scenario grid, prediction reduces mean successful makespan by $2.779$\,s (paired 95\% bootstrap interval $[2.659,2.902]$\,s). The findings apply to these simulators and do not establish real-world safety or a general policy ranking. ROS~2/Nav2 validation is reserved for v2.
+A prediction can tell a robot to act before a safety margin runs out.  But a
+fixed threshold can also make it act early.  I wanted to understand when
+prediction adds something beyond choosing a more conservative threshold.  I
+study this question with a simplified timing model and two kinematic simulation
+setups, giving both rules the same tuning budget and testing on separate noise
+seeds.
+
+In the timing model, the predictive rule is a current-margin threshold whose
+buffer scales with the estimated rate of decline.  Extra lead changes the
+recovery outcome only within a band set by recovery duration and deadline
+slack; old observations consume that lead one for one.  The minimal predictive
+horizon wastes less lead than the minimal safe fixed buffer when recovery
+needs a similar amount of time across cases but the corresponding margins
+differ, provided the rates can be estimated.
+
+The clearest gain appears in the three-robot shared-zone test.  Both tuned
+rules succeed in all 1,620 conflict episodes, and prediction reduces mean
+completion time by $2.78$\,s (paired 95\% bootstrap interval
+$[2.66,2.90]$\,s).  On clear paths, it reduces unnecessary serializations from
+1,080 to 21 out of 1,620 episodes.  The two-robot test exposes a different
+behavior: the tuned fixed rule records no collisions in 6,750 conflict episodes
+and prediction records two.  Together, the tests show where adapting the margin
+helps in these simulations and where estimating its rate becomes the weak point.
 \end{abstract}
+
+\noindent\textbf{Keywords:} Runtime assurance, multi-robot systems, predictive
+monitoring, safety margins, time to collision, reproducible evaluation.

@@ -1,13 +1,54 @@
-\section{Related Work}\label{sec:related}
+\section{How this connects to prior work}
+\label{sec:related}
 
-\paragraph{Predictive runtime verification and enforcement.}
-Predictive runtime verification can use a priori system knowledge to produce a conclusive verdict before the observed execution alone permits one~\cite{pinisetty_rv}. Predictive runtime enforcement reduces to non-predictive enforcement when no system knowledge is available~\cite{pinisetty_re}. For stochastic linear systems, Yoon et al.~\cite{sankar_prm} determine whether a control sequence exists over a finite horizon that maintains a safety property with sufficiently high probability. RADICS combines a black-box monitor that switches to a safe algorithm on a failing trajectory with a white-box monitor that predicts such trajectories earlier~\cite{radics}. Predictive safety filters instead solve an online finite-horizon problem to certify or modify a proposed input under model uncertainty~\cite{predictive_filter}. We ask a narrower comparative question: once recovery timing and a tuned current-margin threshold are included, when does an earlier trigger change the measured outcome?
+\emph{Predictive runtime verification and enforcement.}  Predictive runtime
+verification uses a priori knowledge of the system to reach a conclusive verdict
+before the observed execution alone permits one \cite{pinisetty2017prv}, and
+predictive runtime enforcement reduces to non-predictive enforcement when no
+such knowledge is available \cite{pinisetty2017pre}.  For stochastic linear
+systems, Yoon \emph{et al.}\ determine whether a control sequence exists over a
+finite horizon that maintains a safety property with sufficiently high
+probability \cite{yoon2019prm}.  RADICS combines a black-box monitor that
+switches to a safe algorithm on a failing trajectory with a white-box monitor
+that predicts such trajectories earlier \cite{wheatman2021radics}.  Predictive
+safety filters solve an online finite-horizon problem to certify or modify a
+proposed input under model uncertainty \cite{wabersich2021filter}.  I ask a
+narrower comparative question: once recovery timing and a tuned current-margin
+threshold are included, when does an earlier trigger change the measured
+outcome?
 
-\paragraph{Mission-level runtime assurance.}
-Successor-safe monitors can reject commands predicted to violate mission feasibility before execution~\cite{missionrta_ad}. Compositional monitoring can identify policy violations that emerge across a robot swarm~\cite{swarmrta}, while collective run-time adaptation addresses safety and mission-completion problems in multi-robot systems~\cite{collective2019}. Simplex motivates using a simple, reliable core to control more complex functionality~\cite{simplex}. Its black-box extension uses runtime checks to transfer control between advanced and baseline controllers and includes a multi-robot case study~\cite{blackboxsimplex}; SOTER composes robotics RTA modules that switch between advanced and safe controllers~\cite{soter}. Our comparison concerns the trigger rule: projected time-to-threshold versus fixed current-margin thresholds.
+\emph{Runtime-assurance architectures.}  Simplex uses a simple, reliable core to
+bound the behavior of more complex functionality \cite{sha2001simplex}.  Its
+black-box extension uses runtime checks to transfer control between advanced and
+baseline controllers and includes a multi-robot case study
+\cite{mehmood2022blackbox}, and SOTER composes robotics runtime-assurance modules
+that switch between advanced and safe controllers \cite{desai2019soter}.
+Mission-level monitors can reject commands that would make a mission infeasible
+before they execute \cite{tsai2026missionrta}; compositional monitoring can
+detect policy violations that emerge only across a robot swarm
+\cite{kekatos2026swarmrta}; and collective run-time adaptation addresses safety
+and mission completion in multi-robot systems \cite{bozhinoski2019collective}.
+These works design what happens after a trigger.  I study the trigger rule
+itself: a projected time to threshold versus a fixed current-margin threshold.
 
-\paragraph{Adaptive safety margins.}
-Adaptive margins can scale a safety buffer using relative speed, braking capability, and uncertainty~\cite{raam}; control barrier functions provide a broader framework for encoding and enforcing safety constraints~\cite{cbf}. Our reduction makes explicit that the horizon trigger studied here is one particular rate-scaled margin. This motivates comparing it with tuned fixed margins rather than only an unpadded threshold.
+\emph{Adaptive margins and time-to-threshold triggers.}  Time to collision, the
+ratio of range to closing speed, has long been used to time braking and to grade
+traffic conflicts \cite{lee1976ttc,mahmud2017surrogate}.
+\Cref{prop:reduction} is the corresponding observation for a generic monitored
+margin: a threshold on projected time is a threshold on the margin scaled by the
+estimated rate.  Adaptive margins can also scale a safety buffer with relative
+speed, braking capability, and prediction uncertainty \cite{xu2026raam}, and
+control barrier functions provide a broader framework for encoding and enforcing
+safety constraints \cite{ames2019cbf}.  Because the horizon trigger studied here
+is one particular rate-scaled margin, it should be compared with tuned fixed
+margins and not only with an unpadded threshold.
 
-\paragraph{Prognostics and recoverability.}
-Prognostics estimates whether and when faults may occur and informs condition-based maintenance decisions~\cite{jardine}. Runtime-assurance verification formalizes decision-timing adequacy and time-bounded recoverability~\cite{recoverproofs}. Recent adaptive-governance work fits a first-order estimate of viability-index boundary-crossing time when the fitted slope is negative and frames it, under a local-linearity assumption, as a surrogate for viability-set exit~\cite{govern}. These neighboring results motivate a point-of-no-return evaluation, but they do not by themselves establish the empirical boundary claimed for the robot model studied here.
+\emph{Prognostics and recoverability.}  Prognostics estimates whether and when
+faults will occur in order to inform condition-based maintenance
+\cite{jardine2006prognostics}.  Runtime-assurance verification formalizes the
+adequacy of decision timing and time-bounded recoverability
+\cite{nigam2023recoverability}.  Recent work on adaptive governance of AI agents
+predicts when a viability index will cross its boundary from a first-order fit
+of its recent trend \cite{marin2026governance}.  These results motivate a
+point-of-no-return analysis, but they do not by themselves establish when an
+earlier trigger beats a tuned fixed margin for a robot model.

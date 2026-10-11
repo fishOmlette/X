@@ -1,8 +1,30 @@
-\section{Conclusion}
+\section{What I take from this}
+\label{sec:conclusion}
 
-For the trigger studied here, projected time to margin expiry is a current-margin threshold whose pad scales with the estimated degradation rate. Earlier action changes a recovery outcome only within a specific timing band. A structural advantage over one fixed pad across cases also requires rates that vary and can be estimated.
+For the trigger studied here, prediction is a way to adapt a margin threshold
+to the estimated rate of decline.  Its value depends on whether the extra lead
+changes what recovery can accomplish and how much unnecessary early action it
+avoids.  In the timing model, recovery duration and deadline slack set that
+boundary, and observation age consumes the available lead one for one.
 
-In the seed-disjoint single-margin evaluation, the tuned fixed rule records $0/6750$ conflict collisions and the tuned predictive rule records $2/6750$. Their successful-only times are therefore descriptive, with no inferential efficiency comparison. The coordination study gives a different result: both tuned rules succeed in $1620/1620$ genuine-conflict episodes, and prediction reduces mean successful makespan by $2.779$\,s (paired 95\% interval $[2.659,2.902]$\,s) while serializing far fewer clear paths. That result is limited to an immutable one-shot ordering and held-out noise on a fixed grid. In both studies, the predictive rule is compared with a tuned fixed threshold, and failures are considered before average completion time.
+The three-robot experiment shows a practical benefit of this adaptation.  Both
+tuned rules succeed in all 1,620 conflict episodes, while prediction reduces
+mean completion time by $2.779$\,s (paired 95\% interval
+$[2.659,2.902]$\,s).  It also cuts unnecessary clear-path serializations from
+1,080 to 21 out of 1,620 episodes.  Waiting until closer to the point when
+recovery is needed saves time in this fixed-order crossing setup.
 
-\paragraph{Reproducibility.}
-Code, machine-readable results, and figure scripts will accompany the arXiv v1 submission. The repository is \url{\repositoryurl}. ROS~2/Nav2 experiments remain v2 work.
+The two-robot experiment shows why the rate estimate matters.  The tuned fixed
+rule records $0/6750$ conflict collisions and prediction records $2/6750$, both
+where the conflict is revealed late and braking is slow.  A rate estimate that
+lags a steepening decline can use up the lead the predictive rule was meant to
+provide.
+
+My takeaway is that the recovery requirement is the right place to start.
+When recovery needs similar lead times across cases but margins decline at
+different rates, adapting the threshold can reduce unnecessary waiting.
+Observation delay and changing recovery durations are the next variables I
+would test, using the tuned fixed threshold as the baseline.
+
+\emph{Code and data.}  The simulators, tests, episode-level results, and figure
+scripts are available at \url{\repositoryurl}.

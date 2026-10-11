@@ -1,0 +1,34 @@
+\begin{table}[htbp]
+  \centering
+  \caption{Seed-Disjoint Coordination Test Results over 1,620 Episodes per Rule
+  and Condition}
+  \label{tab:coordination}
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \newcommand{\armhead}[2]{\begin{tabular}[b]{@{}c@{}}#1\\#2\end{tabular}}
+  \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    & \armhead{No}{intervention} & \armhead{Fixed pad}{$\rho=1.75$\,s}
+      & \armhead{Predictive}{$T_h=1.50$\,s} \\
+    \midrule
+    \multicolumn{4}{@{}l}{\textit{Conflict condition}} \\
+    Successful episodes        & 0      & 1,620  & 1,620  \\
+    Collisions                 & 1,620  & 0      & 0      \\
+    Headway violations         & 1,620  & 0      & 0      \\
+    Mean makespan (s)          & --     & 29.813 & 27.034 \\
+    Mean first trigger (s)     & --     & 4.534  & 5.917  \\
+    \addlinespace[2pt]
+    \multicolumn{4}{@{}l}{\textit{Clear condition}} \\
+    Successful episodes        & 1,620  & 1,620  & 1,620  \\
+    Serializations             & 0      & 1,080  & 21     \\
+    Mean makespan (s)          & 20.000 & 26.337 & 20.278 \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{3pt}
+  \parbox{\columnwidth}{\footnotesize Makespan is averaged over successful
+  episodes.  No rule records a timeout, repeated yield, or serialization breach.
+  The paired fixed-minus-predictive conflict difference is $2.779$\,s, with a
+  95\% interval of $[2.659,2.902]$\,s from a bootstrap clustered by test
+  replicate.}
+\end{table}

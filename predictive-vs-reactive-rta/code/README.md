@@ -1,22 +1,20 @@
 # Experiment code
 
-The v1 codebase contains two canonical simulators: a two-robot single-margin model and a three-robot shared-zone model. Experiment, validation, and plotting scripts import those simulators so that paper figures and tabulated results use the same dynamics and outcome definitions.
+I used two small simulators: two robots meeting at a crossing, and three robots sharing a zone. The experiment and plotting scripts use the same simulator code, so the figures and result tables use the same rules for motion, collisions, and completion.
 
-No ROS 2 or Nav2 installation is needed. Those experiments are reserved for v2.
+These scripts run with Python, NumPy, and Matplotlib. You do not need ROS 2 or Nav2.
 
-## Architecture
+## What each file does
 
 | File | Role |
 | --- | --- |
-| `single_margin_simulator.py` | Canonical two-robot dynamics, observation model, trigger policies, outcome fields, and deadline helpers. |
-| `coordination_simulator.py` | Canonical three-robot state machine, pair histories, serialization, physical zone intervals, and outcome fields. |
-| `single_margin_experiment.py` | Exploratory dose response, clear-condition specificity, prediction calibration, and diagnostic plot. |
-| `stress_tests.py` | Exploratory fixed-pad, braking-rate, degradation-shape, and wide-severity sweeps. |
-| `heldout_evaluation.py` | Seed-disjoint tuning/test evaluation for the single-margin policies; writes episode and aggregate records. |
-| `coordination_experiment.py` | Broad, seed-disjoint coordination tuning/test evaluation; writes episode and aggregate records. |
-| `generate_figures.py` | Regenerates the four paper figures and `results/figure_data.json`. |
-
-The design explanation lives here rather than in long source comments. Comments in the Python files are reserved for local invariants or non-obvious implementation choices.
+| `single_margin_simulator.py` | Moves the two robots, generates observations, applies triggers, and records what happened. |
+| `coordination_simulator.py` | Moves the three robots, tracks pairwise margins, and handles their crossing order. |
+| `single_margin_experiment.py` | Tries different fault severities, checks unnecessary yields, and compares predicted and actual margin-expiry times. |
+| `stress_tests.py` | Varies the fixed pad, braking rate, rate of margin decline, and fault severity. |
+| `heldout_evaluation.py` | Tunes both two-robot rules, tests them on new noise seeds, and saves individual runs and summaries. |
+| `coordination_experiment.py` | Tunes and tests the three-robot rules, then saves the runs and comparison. |
+| `generate_figures.py` | Draws the three figures and saves their values in `results/figure_data.json`. |
 
 ## Single-margin model
 
@@ -29,7 +27,7 @@ sigma(t) = sigma0 + sigma_range * range_fraction
 M(t)     = |g_hat(t)| - k_sigma * sigma(t) - G_safe
 ```
 
-The exponent `p` controls the degradation shape, and `a_max` limits A’s acceleration and braking. The conservative analytical deadline is the last continuous-time instant at which immediate constant braking from nominal speed stops A outside the wider crossing zone. It is a kinematic proxy, not the simulator’s exact collision boundary. `replay_last_collision_avoiding_trigger` separately reports the latest tested discrete trigger that avoids a collision for a specified condition.
+The exponent `p` controls how the bias disappears as B approaches, and `a_max` limits A’s acceleration and braking. I use two ways to find the latest useful trigger. The analytical calculation asks when A must start braking to stop outside the wider crossing zone. `replay_last_collision_avoiding_trigger` tries trigger times on the simulation grid and returns the latest one that avoids a collision. The two differ because stopping outside the wider zone is more conservative than the collision check.
 
 ### Policies
 
@@ -55,11 +53,11 @@ To avoid dividing by a fitted slope near zero, the single-margin implementation 
 
 Three robots approach one shared zone. The conflict distances `(12.0, 12.5, 13.0)` produce overlapping nominal zone occupancy; the clear distances `(12.0, 14.0, 16.0)` do not. The required entry headway equals the nominal physical occupancy time, `5/6 s` at the default speed.
 
-Each robot is in one of four explicit states: `approaching`, `waiting`, `crossing`, or `cleared`. Before a trigger, pair-specific margin histories are maintained independently. A trigger commits once to an estimated crossing order. Every later robot records the earlier robots as blockers, brakes, and resumes only after all of its blockers have cleared. The one-shot commitment prevents stale pair histories and repeated-yield ambiguity from changing the policy mid-recovery.
+Each robot is `approaching`, `waiting`, `crossing`, or `cleared`. Each pair has its own margin history. At the first trigger, the robots commit to a crossing order. Later robots brake and wait for all earlier robots to clear. That order stays fixed for the rest of the run, which lets me study trigger timing without also changing the recovery plan.
 
 The coordination policies are `no_intervention`, `fixed_pad`, and `predictive`. A fixed rule triggers when a pair margin is at most its pad. A predictive rule triggers when a pair margin is already non-positive or its slope projects a crossing within the chosen horizon. Once triggered, both invoke the same serialization recovery.
 
-Coordination outcomes are stricter than mere completion:
+Here is what the result fields mean:
 
 - `reached_goal`: all robots reach the configured exit distance.
 - `collision`: two interpolated physical zone-occupancy intervals overlap.
@@ -71,8 +69,6 @@ Coordination outcomes are stricter than mere completion:
 
 ## Experiment grids
 
-The compact scripts are exploratory. Their sample means describe the evaluated grid and must not be called population estimates or formal safety guarantees.
-
 | Script | Main grid |
 | --- | --- |
 | `single_margin_experiment.py` | Seeds `0..39`; severities `0, 2, 4, 5, 6, 8, 10`; calibration severities `4, 6, 8`; conflict and clear conditions. |
@@ -80,13 +76,13 @@ The compact scripts are exploratory. Their sample means describe the evaluated g
 | `heldout_evaluation.py` | 45 conflict scenarios: 3 braking rates x 3 exponents x 5 severities; 25 tuning and 150 test noise replicates per scenario; pad and horizon grids `0..4` by `0.25`. |
 | `coordination_experiment.py` | 27 scenarios: 3 braking rates x 3 exponents x 3 severities; 20 tuning and 60 test noise replicates per scenario; pad and horizon grids `0..4` by `0.25`; conflict and clear conditions. |
 
-For the held-out evaluations, every split/scenario/replicate tuple maps to a distinct deterministic seed, and paired methods reuse that tuple’s seed. Tuning and test noise replicates do not overlap. The scenario grids themselves are fixed rather than sampled from a population.
+Each combination of split, scenario, and replicate gets its own seed. The rules share that seed for a paired comparison, but tuning and testing use different seeds. Testing changes the noise while keeping the scenario grid fixed.
 
-The single-margin selection rule first restricts to candidates with zero tuning collisions, then minimizes mean conflict elapsed time, breaking ties toward the smaller parameter. The coordination rule first restricts to candidates with 100% successful tuning episodes and no serialization breach, then minimizes successful-only makespan; the result file explicitly records the fallback if no candidate qualifies.
+For two robots, I choose the fastest candidate with zero tuning collisions and break ties toward the smaller parameter. For three robots, a candidate must complete every tuning run successfully and respect the crossing order; I then choose the shortest mean completion time. If none qualifies, the result file records that the fallback selection was used.
 
 ## Run order
 
-From the repository root:
+From the `predictive-vs-reactive-rta` directory:
 
 ```powershell
 python -m venv .venv
@@ -100,18 +96,16 @@ python -m venv .venv
 .\.venv\Scripts\python code\generate_figures.py
 ```
 
-`single_margin_experiment.py` writes its exploratory four-panel diagnostic to `results/single_margin_diagnostic.png`. `heldout_evaluation.py` and `coordination_experiment.py` overwrite their named files under `results/`. `generate_figures.py` reads the coordination validation JSON and writes PDF and PNG copies of `fig_mechanism`, `fig_boundary`, `fig_dose`, and `fig_coord`. It also writes the plotted values to `results/figure_data.json`. To regenerate one panel only, use, for example:
-
 ```powershell
-.\.venv\Scripts\python code\generate_figures.py --only coordination
+.\.venv\Scripts\python code\generate_figures.py --only boundary
 ```
 
-## Statistical scope
+## Reading the intervals
 
-Exact-scenario collision intervals are two-sided 95% Wilson score intervals. Reported maximum Wilson upper bounds are maxima of pointwise scenario intervals, not simultaneous bounds. Paired elapsed-time or makespan intervals use a percentile bootstrap clustered by test replicate and are reported only when both arms satisfy the comparison’s success criterion. A zero observed collision count is not a safety proof.
+I calculate a two-sided 95% Wilson interval for collisions in each scenario and report the largest upper endpoint. That maximum does not give a simultaneous bound across all scenarios. For timing, I use a paired percentile bootstrap, grouping the scenarios by test replicate. I report the interval only when every compared run succeeds, so faster failures do not count as a timing improvement.
 
-## Tested environment
+## Environment used for the saved runs
 
-The release run records Windows 11 build 26200, Python 3.13.12, NumPy 2.4.4, Matplotlib 3.10.9, and a 13th Gen Intel Core i7-1360P with 12 cores and 16 logical processors. Paper compilation uses MiKTeX 26.5, pdfTeX 4.27, and BibTeX 4.2.
+The recorded results were generated on Windows 11 build 26200 with Python 3.13.12, NumPy 2.4.4, Matplotlib 3.10.9, and a 13th Gen Intel Core i7-1360P with 12 cores and 16 logical processors. Paper compilation uses MiKTeX 26.5, pdfTeX 4.27, and BibTeX 4.2.
 
-See [../results/README.md](../results/README.md) for generated-file provenance and headline outcomes.
+See [../results/README.md](../results/README.md) for the results and the files each script writes.
