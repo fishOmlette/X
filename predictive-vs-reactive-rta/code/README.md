@@ -1,8 +1,8 @@
 # Experiment code
 
-The v1 codebase contains two canonical simulators: a two-robot single-margin model and a three-robot shared-zone model. Experiment, validation, and plotting scripts import those simulators so that paper figures and tabulated results use the same dynamics and outcome definitions.
+The codebase contains two canonical simulators: a two-robot single-margin model and a three-robot shared-zone model. Experiment, validation, and plotting scripts import those simulators so that paper figures and tabulated results use the same dynamics and outcome definitions.
 
-No ROS 2 or Nav2 installation is needed. Those experiments are reserved for v2.
+No ROS 2 or Nav2 installation is needed; experiments on a full navigation stack are future work.
 
 ## Architecture
 
@@ -14,7 +14,7 @@ No ROS 2 or Nav2 installation is needed. Those experiments are reserved for v2.
 | `stress_tests.py` | Exploratory fixed-pad, braking-rate, degradation-shape, and wide-severity sweeps. |
 | `heldout_evaluation.py` | Seed-disjoint tuning/test evaluation for the single-margin policies; writes episode and aggregate records. |
 | `coordination_experiment.py` | Broad, seed-disjoint coordination tuning/test evaluation; writes episode and aggregate records. |
-| `generate_figures.py` | Regenerates the four paper figures and `results/figure_data.json`. |
+| `generate_figures.py` | Regenerates the three paper figures and `results/figure_data.json`. |
 | `legacy/` | Superseded coordination prototype and its diagnostic audit; retained for provenance, not used by the paper pipeline. |
 
 The design explanation lives here rather than in long source comments. Comments in the Python files are reserved for local invariants or non-obvious implementation choices.
@@ -87,7 +87,7 @@ The single-margin selection rule first restricts to candidates with zero tuning 
 
 ## Run order
 
-From the repository root:
+From the `predictive-vs-reactive-rta` directory:
 
 ```powershell
 python -m venv .venv
@@ -101,10 +101,10 @@ python -m venv .venv
 .\.venv\Scripts\python code\generate_figures.py
 ```
 
-`single_margin_experiment.py` writes its exploratory four-panel diagnostic to `results/single_margin_diagnostic.png`. `heldout_evaluation.py` and `coordination_experiment.py` overwrite their named files under `results/`. `generate_figures.py` reads the coordination validation JSON and writes PDF and PNG copies of `fig_mechanism`, `fig_boundary`, `fig_dose`, and `fig_coord`. It also writes the plotted values to `results/figure_data.json`. To regenerate one panel only, use, for example:
+`single_margin_experiment.py` writes its exploratory four-panel diagnostic to `results/single_margin_diagnostic.png`. `heldout_evaluation.py` and `coordination_experiment.py` overwrite their named files under `results/`; Tables II and III of the paper report values from `results/heldout_evaluation.json` and `results/coordination_validation.json`. `generate_figures.py` reruns the exploratory sweeps it plots and writes `fig_mechanism.pdf`, `fig_dose.pdf`, and `fig_boundary.pdf` to `figures/`, together with the plotted values in `results/figure_data.json`. To regenerate one figure only, use, for example:
 
 ```powershell
-.\.venv\Scripts\python code\generate_figures.py --only coordination
+.\.venv\Scripts\python code\generate_figures.py --only boundary
 ```
 
 ## Statistical scope
@@ -113,6 +113,6 @@ Exact-scenario collision intervals are two-sided 95% Wilson score intervals. Rep
 
 ## Tested environment
 
-The release run records Windows 11 build 26200, Python 3.13.12, NumPy 2.4.4, Matplotlib 3.10.9, and a 13th Gen Intel Core i7-1360P with 12 cores and 16 logical processors. Paper compilation uses MiKTeX 26.5, pdfTeX 4.27, and BibTeX 4.2.
+The recorded results were generated on Windows 11 build 26200 with Python 3.13.12, NumPy 2.4.4, Matplotlib 3.10.9, and a 13th Gen Intel Core i7-1360P with 12 cores and 16 logical processors. Paper compilation uses MiKTeX 26.5, pdfTeX 4.27, and BibTeX 4.2.
 
 See [../results/README.md](../results/README.md) for generated-file provenance and headline outcomes.

@@ -1,0 +1,126 @@
+\section{Evaluation Methodology}
+\label{sec:method}
+
+\subsection{Single-Margin Simulator}
+
+Two robots travel on perpendicular paths through one crossing, and robot A may
+brake and wait for robot B.  The monitored margin is a time headway,
+$M=\lvert\hat g\rvert-k_\sigma\sigma-G_{\mathrm{safe}}$, where $\hat g$ is the
+estimated difference between the arrival times of B and A at the crossing,
+$\sigma$ is a range-dependent uncertainty allowance, and
+$G_{\mathrm{safe}}=0.5$\,s is the required headway; additive Gaussian noise
+perturbs each measurement.  An optimistic hidden bias $s f^{p}$ delays B's
+estimated arrival, where $s$ is the fault severity in seconds, $f\in[0,1]$ is
+B's remaining range fraction, and the exponent $p$ sets how the bias decays:
+$p<1$ reveals the conflict late, $p=1$ linearly, and $p>1$ early.  Recovery is
+rate-limited braking with capability $a_{\max}$.  The predictive rule estimates
+the margin slope with the Theil--Sen estimator \cite{sen1968theilsen} over the
+eight most recent samples.  To avoid dividing by a fitted slope near zero, it
+projects only when the fitted decay exceeds $10^{-3}$ margin units per second
+($10^{-6}$ in the coordination simulator) and otherwise uses its $M\le0$
+fallback.
+
+Two model-specific quantities bound the latest useful trigger; neither is a
+general safety certificate.  A continuous-time braking calculation gives the
+latest trigger that stops A outside the wider crossing zone, $8.65$\,s with the
+default parameters; it is conservative relative to the simulator's collision
+condition.  Deterministic replay on the simulator's $0.1$\,s control grid finds
+$8.8$\,s as the latest tested forced-trigger time that avoids a collision in the
+default conflict episode; this boundary is empirical and grid-dependent.
+
+\subsection{Three-Robot Coordination Simulator}
+
+Three robots approach one shared zone at a nominal speed of $1.2$\,units/s; the
+zone is one unit long, so the nominal occupancy is $0.83$\,s.  In the conflict
+condition, start distances of $(12,12.5,13)$ units put adjacent nominal entry
+times only $0.42$\,s apart, so untreated trajectories overlap physically.  In the
+clear condition, start distances of $(12,14,16)$ units separate entries by
+$1.67$\,s.  A collision is recorded when interpolated zone-occupancy intervals
+overlap, and a separate headway violation when two entry times are less than
+$5/6$\,s apart.  Each robot's estimated arrival time includes a decaying hidden
+bias with per-robot multipliers $(0,1,2)$ and the exponent family used above.
+For each pair of robots, the monitored margin is the absolute difference between
+their estimated arrival times, minus the required headway and both uncertainty
+allowances, plus measurement noise.  The fixed rule triggers when any pairwise
+margin is at most $\rho$.  The predictive rule keeps a separate Theil--Sen slope
+history for each pair and triggers when a margin is nonpositive or its projected
+time to zero is at most $T_h$.
+
+Both rules invoke the same recovery, an explicit one-shot serialization state
+machine.  Robots start in the \textsc{approaching} state.  At the first trigger,
+any robot already \textsc{crossing} is placed first, the others are ordered by
+their current estimated arrival times, and the order is committed for the
+episode.  Every later robot enters \textsc{waiting} with all earlier robots as
+blockers and returns to \textsc{approaching} only after every blocker is
+\textsc{cleared}.  Pairwise slope histories are reset at commitment, and no robot
+yields twice.  The design isolates the effect of trigger timing on a fixed
+recovery; it is not a general multi-robot planner.  \Cref{tab:parameters} lists
+the main parameters of both simulators.
+
+\input{tables/parameters}
+
+\subsection{Evaluation Protocol}
+
+\emph{Exploratory sweeps.}  The dose-response experiment compares an
+uncertainty-blind arrival-gap trigger, the current-margin trigger at $M=0$, and
+the predictive rule with $T_h=2.0$\,s, using 40 paired noise seeds at each of
+seven severities.  The recovery-capability and degradation-shape sweeps use 25
+paired seeds at each of five severities, or 125 episodes per plotted setting and
+rule; the shape sweep fixes $a_{\max}=0.8$.  For each setting, the fixed-pad
+candidates are $\rho\in\{0,0.5,1.0,1.5,2.0,2.5,3.0,4.0\}$\,s, and the displayed
+comparator is the candidate with the lowest mean successful elapsed time among
+those for which every episode succeeds on the same setting and seed grid.
+Selection and reporting therefore use the same simulations, so these figures are
+mechanism checks rather than out-of-sample estimates.
+
+\emph{Seed-disjoint single-margin evaluation.}  The evaluation crosses three
+recovery capabilities, three degradation exponents, and five severities, giving
+the 45 conflict scenarios of \cref{tab:parameters}.  The fixed pad and the
+predictive horizon are both searched from $0$ to $4$ in steps of $0.25$.  Each
+candidate receives 25 tuning replicates per scenario (1,125 episodes).  Among
+candidates with no tuning collision, selection minimizes the mean conflict
+elapsed time and breaks ties toward the smaller parameter.  Testing then uses
+150 new replicates per scenario, or 6,750 episodes per conflict arm.  Clear-path
+behavior is evaluated at $a_{\max}=1.0$ over the 15 exponent--severity
+combinations, for 2,250 episodes per arm; a yield in this condition is a false
+yield.  The original $T_h=2.0$\,s rule is retained as a diagnostic arm, but the
+primary comparison uses the separately tuned horizon.
+
+\emph{Seed-disjoint coordination evaluation.}  Tuning crosses the same three
+capabilities and exponents with three severities, giving 27 scenarios, and
+searches both parameters over the same grid.  Each candidate receives 20 tuning
+replicates per scenario (540 episodes).  A candidate qualifies only if every
+tuning episode reaches the exit without collision, headway violation, timeout,
+or serialization breach; selection minimizes the mean successful makespan and
+breaks ties toward the smaller parameter.  Each selected rule and a
+no-intervention reference then receive 60 new replicates per scenario and
+condition, or 1,620 episodes.
+
+\emph{Seeds.}  Every split--scenario--replicate tuple maps to a distinct
+deterministic seed, giving 10,125 single-margin and 3,780 coordination seeds
+with no overlap between tuning and testing.  A tuple's seed is shared across
+candidates and rules to preserve pairing.  The split therefore holds out noise
+realizations only; the simulators and scenario grids remain fixed.
+
+\subsection{Statistical Reporting}
+
+Failure counts are reported before any timing comparison.  For each exact
+scenario, we compute a two-sided 95\% Wilson score interval for the collision
+probability \cite{wilson1927}.  We report the largest upper endpoint across the
+pointwise intervals; this maximum is neither a simultaneous confidence bound nor
+an estimate for a population of scenarios, and pooled counts summarize a fixed
+factorial design rather than one homogeneous binomial experiment.  Elapsed time
+and makespan are summarized only over successful episodes.  A paired percentile
+bootstrap with 20,000 resamples, clustered by test replicate
+\cite{efron1993bootstrap}, is computed only when every compared pair succeeds.
+If failure outcomes differ, we report descriptive successful-only means and
+suppress the inferential timing comparison.
+
+\subsection{Connection to the Timing Model}
+
+The recovery-capability sweep varies $a_{\max}$ as a proxy for recovery
+duration, and the exponent sweep varies how quickly the margin degrades.  The
+simulations do not measure the episode-level distributions of $\tau_r$,
+$\delta$, $L$, and $\Delta$, and they introduce no observation delay.  They test
+behavior consistent with the timing argument but do not validate
+\cref{prop:boundary,prop:homogeneity} by measuring all of their variables.

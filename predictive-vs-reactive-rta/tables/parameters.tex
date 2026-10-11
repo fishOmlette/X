@@ -1,0 +1,26 @@
+\begin{table}[!t]
+  \centering
+  \caption{Simulator and Evaluation Parameters}
+  \label{tab:parameters}
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Parameter & Single margin & Coordination \\
+    \midrule
+    Robots & 2 & 3 \\
+    Time step & $0.1$\,s & $0.1$\,s \\
+    Nominal speed & $1.2$\,units/s & $1.2$\,units/s \\
+    Required headway & $0.5$\,s & $5/6$\,s \\
+    Measurement-noise s.d. & $0.05$\,s & $0.05$\,s \\
+    Slope window & 8 samples & 8 samples \\
+    $a_{\max}$ (units/s$^2$) & $0.5,1.0,2.5$ & $0.5,1.0,2.5$ \\
+    Degradation exponent $p$ & $0.7,1.0,1.5$ & $0.7,1.0,1.5$ \\
+    Fault severity $s$ (s) & $2,4,6,8,10$ & $2,6,10$ \\
+    Conflict scenarios & 45 & 27 \\
+    Pad and horizon grid & $0$--$4$, step $0.25$ & $0$--$4$, step $0.25$ \\
+    Tuning / test replicates & 25 / 150 & 20 / 60 \\
+    Held-out conflict episodes & 6,750 per arm & 1,620 per arm \\
+    \bottomrule
+  \end{tabular}
+\end{table}

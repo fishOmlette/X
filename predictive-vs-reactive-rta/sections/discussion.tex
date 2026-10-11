@@ -1,11 +1,77 @@
-\section{Discussion}\label{sec:disc}
+\section{Discussion}
+\label{sec:discussion}
 
-Before implementing prediction, one can first ask whether its lead changes what recovery can accomplish. Prediction is most plausible when recovery is slow enough for an earlier trigger to cross the boundary in Proposition~\ref{prop:boundary}, and when degradation rates vary in a way that can be estimated before that boundary. At one known constant rate, a fixed pad reproduces the studied predictive trigger. Under fast, committed serialization, tuning may remove predictive lead altogether.
+\subsection{When to Predict}
 
-The simulators produce different results. In the single-margin study, the exploratory figures favor prediction over the unpadded rules and, in a few settings, over the in-sample fixed pad. After equal-budget, seed-disjoint tuning, the predictive arm intervenes less often on clear paths and has a lower descriptive successful-only elapsed time. It also records two held-out conflict collisions where the fixed arm records none, so an efficiency comparison at matched outcomes is unavailable. In the coordination study, both tuned arms succeed throughout the held-out conflict grid and the predictive arm finishes earlier. Its lower rate of clear-path serialization is consistent with adaptation to degradation rate.
+Before building a predictive assurance layer, one can ask whether its lead would
+change what recovery can accomplish.  The analysis suggests four questions.
+First, does recovery need lead at all, that is, does some case have
+$\tau_r>\delta$?  If not, an unpadded reactive rule suffices
+(\cref{prop:boundary}).  Second, how old are the observations?  Age consumes
+lead one for one, so reducing latency in the monitoring path can be as valuable
+as prediction (\cref{cor:age}).  Third, is the recovery requirement homogeneous
+in time or in margin?  If recovery needs a similar lead in every case while
+degradation rates differ, the predictive horizon wastes less lead than any safe
+fixed pad; if the required margin is similar instead, a fixed pad suffices
+(\cref{prop:homogeneity}).  Fourth, can the rate be estimated quickly and
+accurately enough from the available observations?  \Cref{prop:reduction} also
+suggests an intermediate design: scale a current-margin threshold with an online
+rate estimate instead of constructing a full predict-then-recover stack.  Its
+value would still depend on estimator delay, noise, and changes in the
+degradation rate.
 
-The coordination result depends on the recovery design. The first trigger commits one total order, after which blockers and release events determine the motion. Prediction changes when this commitment occurs; the order is never revised. The paired interval thus describes variation over measurement noise on the fixed 27-scenario grid. It says nothing about unseen geometries, robot counts, dynamics, or online re-planning.
+\subsection{Interpreting the Two Studies}
 
-Proposition~\ref{prop:reduction} also suggests an intermediate design: scale a current-margin threshold using an online rate estimate, without constructing a larger predict-then-recover stack. Its practical value would still depend on estimator delay, noise, and changes in degradation rate.
+The two simulators produce different results.  In the single-margin study, the
+exploratory figures favor prediction over the unpadded rules and, in a few
+settings, over the in-sample fixed pad.  After equal-budget, seed-disjoint
+tuning, the predictive rule intervenes less often on clear paths and has a lower
+descriptive successful-only elapsed time, but it also records two held-out
+conflict collisions where the fixed rule records none, so no efficiency
+comparison at matched outcomes is available.  Both collisions occurred in the
+slowest-recovery, late-reveal corner of the grid ($a_{\max}=0.5$, $p=0.7$),
+where the margin decline steepens as the conflict approaches.  A slope fitted
+over the eight most recent samples then lags the current rate and shortens the
+realized lead, which is consistent with the exact-rate assumption of
+\cref{prop:reduction} being violated where it matters most.
 
-Zero observed collisions is not a safety guarantee. The pointwise Wilson intervals are not simultaneous bounds over the scenario family, and holding out noise seeds does not create a new population of robot environments. The v1 comparison accordingly tunes the simpler early-trigger baseline, verifies that untreated paths conflict, separates tuning from testing, and reports failures before conditional timing.
+In the coordination study, both tuned rules succeed throughout the held-out
+conflict grid, and the predictive rule finishes earlier and serializes far fewer
+clear paths.  This pattern is consistent with \cref{prop:homogeneity} when
+degradation rates vary across robot pairs and scenarios: a fixed pad that is
+safe for the fastest degradation must trigger early, and often needlessly, when
+degradation is slow or absent.  The result depends on the recovery
+design.  The first trigger commits one total order, after which blockers and
+release events determine the motion; prediction changes when this commitment
+occurs, but the order is never revised.  The paired interval describes variation
+over measurement noise on the fixed 27-scenario grid and says nothing about
+unseen geometries, robot counts, dynamics, or online replanning.
+
+\subsection{Limitations}
+\label{sec:limitations}
+
+The evidence comes from controlled two-dimensional point-kinematic simulators
+with scalar monitored margins, fixed scenario grids, Gaussian measurement noise,
+and one braking or serialization recovery family.  It does not cover vehicle
+dynamics, perception failures, localization, networking, asynchronous
+execution, observation delay, or a full navigation stack.  The analytical
+stopping deadline is deliberately conservative, while the $8.8$\,s replay
+deadline is empirical for one deterministic episode and a $0.1$\,s trigger grid.
+The exploratory figures select the fixed pad in-sample and keep the horizon at
+$2.0$\,s.  The seed-disjoint evaluations hold out noise realizations only; the
+simulators, factor levels, and selection rules are fixed rather than sampled
+from a target population, and zero observed collisions are not a safety
+guarantee.  The coordination model has three robots, one shared zone, and an
+immutable one-shot ordering.  The related-work search was targeted rather than
+systematic.
+
+\subsection{Future Work}
+
+Three extensions follow directly.  First, injecting observation delay into both
+simulators would test \cref{cor:age} and quantify how latency trades against
+predictive lead.  Second, varying recovery durations jointly with degradation
+rates would test \cref{prop:homogeneity} by measuring the required lead and
+margin per case.  Third, experiments on ROS~2 with the Nav2 navigation stack,
+with localization degradation, communication faults, planner interactions, and
+full-stack telemetry, would test whether the boundary survives realistic
+estimation and middleware timing.

@@ -11,7 +11,7 @@ crossing order and releases each waiting robot only after its blockers clear.
 
 The generated audit records live under `results/legacy/`.
 
-Run the historical audit from the repository root with:
+Run the historical audit from the `predictive-vs-reactive-rta` directory with:
 
 ```powershell
 python code\legacy\audit_coordination_state.py

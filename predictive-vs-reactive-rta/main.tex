@@ -1,0 +1,73 @@
+\documentclass[journal]{IEEEtran}
+
+% Shared preamble: keep identical across both papers in this repository.
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx,array,multirow}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{cite}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,capitalise]{cleveref}
+
+\crefname{figure}{Fig.}{Figs.}
+\Crefname{figure}{Fig.}{Figs.}
+\crefname{table}{Table}{Tables}
+\Crefname{table}{Table}{Tables}
+\crefname{section}{Section}{Sections}
+\Crefname{section}{Section}{Sections}
+\crefname{subsection}{Section}{Sections}
+\Crefname{subsection}{Section}{Sections}
+\crefformat{equation}{(#2#1#3)}
+\Crefformat{equation}{Equation~(#2#1#3)}
+\crefrangeformat{equation}{(#3#1#4)--(#5#2#6)}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\crefname{definition}{Definition}{Definitions}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{corollary}{Corollary}{Corollaries}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\true}{\textsc{true}}
+\newcommand{\false}{\textsc{false}}
+\newcommand{\unknown}{\textsc{unknown}}
+
+% Paper-specific settings.
+\graphicspath{{figures/}}
+\newcommand{\repositoryurl}{https://github.com/fishOmlette/X}
+
+\hypersetup{
+  pdftitle={When Does Predicting Failure Help? A Boundary Analysis of Predictive versus Reactive Runtime Assurance for Multi-Robot Coordination},
+  pdfauthor={Mohammed Adil Farooq},
+  pdfkeywords={runtime assurance, multi-robot systems, predictive monitoring, safety margins, time to collision, reproducible evaluation}
+}
+
+\begin{document}
+
+\title{When Does Predicting Failure Help? A Boundary Analysis of Predictive
+  versus Reactive Runtime Assurance for Multi-Robot Coordination}
+
+\author{Mohammed~Adil~Farooq%
+\thanks{e-mail: \href{mailto:mdadilfarooq@gmail.com}{mdadilfarooq@gmail.com}}}
+
+\maketitle
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/problem_setup}
+\input{sections/analysis}
+\input{sections/methodology}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

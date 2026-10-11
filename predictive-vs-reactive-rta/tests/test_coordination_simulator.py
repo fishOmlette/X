@@ -6,7 +6,7 @@ from pathlib import Path
 CODE_DIR = Path(__file__).resolve().parents[1] / "code"
 sys.path.insert(0, str(CODE_DIR))
 
-from coordination_simulator import (  # noqa: E402
+from coordination_simulator import (
     CoordinationConfig,
     PairHistory,
     RobotState,

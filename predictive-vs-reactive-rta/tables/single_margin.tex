@@ -1,0 +1,22 @@
+\begin{table}[!t]
+  \centering
+  \caption{Seed-Disjoint Single-Margin Test Results over 6,750 Conflict
+  Episodes per Arm}
+  \label{tab:single-margin}
+  \footnotesize
+  \setlength{\tabcolsep}{3.5pt}
+  \begin{tabular}{@{}llrrr@{}}
+    \toprule
+    Rule & Parameter & Collisions & Successes & Mean time (s) \\
+    \midrule
+    Fixed pad, tuned & $\rho=2.5$\,s & 0 & 6,750 & 27.690 \\
+    Predictive, tuned & $T_h=2.5$\,s & 2 & 6,748 & 26.577 \\
+    Predictive, retained & $T_h=2.0$\,s & 172 & 6,578 & 25.990 \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{3pt}
+  \parbox{\columnwidth}{\scriptsize Mean elapsed time is averaged over
+  successful episodes only and therefore conditions on different success sets
+  for different rules.}
+\end{table}

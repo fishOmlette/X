@@ -1,18 +1,64 @@
 \section{Introduction}
+\label{sec:introduction}
 
-Autonomous systems increasingly use runtime layers to monitor safety, performance, or mission properties and intervene during execution. Existing work includes mission-level runtime assurance for autonomous driving~\cite{missionrta_ad}, compositional runtime verification for robot swarms~\cite{swarmrta}, modular runtime assurance for robotics~\cite{soter}, and predictive runtime verification, enforcement, and monitoring~\cite{pinisetty_re,pinisetty_rv,sankar_prm,radics}. Prediction is attractive because the extra lead may permit a completion-preserving recovery instead of an emergency stop.
+\IEEEPARstart{A}{utonomous} systems increasingly rely on runtime layers that
+monitor safety, performance, or mission properties and intervene during
+execution.  Examples include modular runtime assurance for robotics
+\cite{desai2019soter}, mission-level runtime assurance for autonomous driving
+\cite{tsai2026missionrta}, compositional runtime verification for robot swarms
+\cite{kekatos2026swarmrta}, and predictive runtime verification, enforcement,
+and monitoring
+\cite{pinisetty2017prv,pinisetty2017pre,yoon2019prm,wheatman2021radics}.
+Prediction is attractive because the extra lead it provides may allow a recovery
+that preserves the mission instead of an emergency stop.
 
-We ask: \emph{when does predicting loss of feasibility actually outperform reacting to it?} A predictive assurance layer must be built, tuned, and certified. Comparing it only with an unpadded reactive trigger does not show that prediction is necessary, because a fixed trigger margin is a simpler way to intervene early. The fixed margin should therefore receive a comparable tuning budget.
+A predictive monitor is, however, an inference component inside the robot's
+decision cycle.  It must estimate how fast a margin is degrading from noisy and
+possibly delayed observations, run within the cycle's latency budget, and be
+tuned and certified like any other safety function.  A reactive rule can also
+intervene early: it only needs a larger fixed margin.  Comparing a predictor
+with an unpadded reactive trigger therefore does not show that prediction is
+necessary.  The fair comparison gives the fixed margin a comparable tuning
+budget.  We ask: \emph{when does predicting the loss of feasibility outperform
+reacting to it?}
 
-The analysis in Section~\ref{sec:analysis} shows that a projected time-to-infeasibility trigger is a reactive trigger with a rate-scaled margin. It identifies the lead-time band in which an earlier trigger can change a recovery outcome and the rate variation needed to distinguish that trigger from one fixed margin across cases. Sections~\ref{sec:method}--\ref{sec:exp} examine these conditions in controlled simulations. Exploratory sweeps locate the boundary, and two further evaluations separate tuning from test noise. In the held-out single-margin comparison, the tuned fixed rule records $0/6750$ conflict collisions and the tuned predictive rule records $2/6750$; those outcomes do not support an efficiency comparison. The redesigned three-robot case uses geometry that is physically conflicting without intervention and an explicit serialization state machine. Both tuned policies have matched held-out success there, and the predictive rule has a shorter mean successful makespan on the fixed scenario grid.
+\Cref{sec:analysis} answers this question within an idealized timing model.  A
+trigger that fires when the projected time to margin expiry falls below a
+horizon is a reactive trigger with a rate-scaled margin.  An earlier trigger
+changes a recovery outcome only within a band set by recovery duration and
+deadline slack, and observation age shrinks that band exactly as lost lead does.
+The minimal predictive horizon wastes less lead than the minimal safe fixed pad
+when recovery requires a similar lead in every case but, because degradation
+rates differ, a different margin.  \Cref{sec:method,sec:results} examine these
+conditions in controlled simulations.  Exploratory sweeps locate the boundary,
+and two further evaluations separate tuning from testing.  In the held-out
+single-margin comparison, the tuned fixed rule records $0/6750$ conflict
+collisions and the tuned predictive rule records $2/6750$, so the outcomes do not
+support an efficiency comparison.  In a three-robot study with genuinely
+conflicting geometry and an explicit serialization state machine, both tuned
+rules succeed in every held-out conflict episode, and the predictive rule has a
+shorter mean makespan on the fixed scenario grid.
 
-\paragraph{Contributions.}
-\begin{itemize}
-  \item A reduction showing that the studied horizon-based predictive trigger is a rate-adaptive current-margin threshold (Proposition~\ref{prop:reduction}).
-  \item A boundary condition for when added lead can change recovery success, stated in terms of recovery duration and deadline slack, together with a necessary rate-variation condition for an advantage over one fixed pad (Proposition~\ref{prop:boundary} and Corollary~\ref{cor:factors}).
-  \item A reproducible evaluation that distinguishes exploratory, in-sample sweeps from seed-disjoint tuning and testing, reports failure counts before timing, and withholds timing inference when outcomes differ.
-  \item A genuine-conflict multi-robot evaluation with explicit approach, wait, crossing, blocker-release, and cleared states, identifying a tested one-shot serialization regime in which the rate-adaptive trigger reduces completion time relative to the tuned fixed pad at matched observed outcomes.
-\end{itemize}
+The paper makes four contributions:
+\begin{enumerate}
+  \item a reduction showing that the studied horizon-based predictive trigger is
+    a rate-adaptive current-margin threshold (\cref{prop:reduction});
+  \item a boundary condition, in terms of recovery duration, deadline slack, and
+    observation age, for when added lead changes the recovery outcome
+    (\cref{prop:boundary,cor:age}), and a characterization of when the minimal
+    predictive horizon wastes less lead than the minimal safe fixed pad
+    (\cref{prop:homogeneity});
+  \item a reproducible evaluation protocol that separates exploratory in-sample
+    sweeps from seed-disjoint tuning and testing, gives both rules equal tuning
+    budgets, reports failures before timing, and withholds timing inference when
+    failure outcomes differ; and
+  \item a genuine-conflict three-robot evaluation with explicit approaching,
+    waiting, crossing, and cleared states, which identifies a one-shot
+    serialization regime in which the rate-adaptive trigger shortens completion
+    time relative to the tuned fixed pad at matched observed outcomes.
+\end{enumerate}
 
-\paragraph{Scope.}
-The paper characterizes a trigger mechanism rather than proposing a new controller. The experiments are stylized two-dimensional kinematic simulations chosen to isolate that mechanism, and the results apply only to the tested models. Section~\ref{sec:limits} details the limits of the v1 evidence. Localization, communication, and navigation-stack experiments using ROS~2/Nav2 are reserved for v2.
+The paper characterizes a trigger mechanism rather than proposing a controller.
+The experiments are stylized two-dimensional kinematic simulations chosen to
+isolate that mechanism, and the results apply only to the tested models.
+\Cref{sec:limitations} details these limits.

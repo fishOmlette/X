@@ -1,33 +1,140 @@
-\section{Analysis}\label{sec:analysis}
+\section{Analysis}
+\label{sec:analysis}
 
-\begin{proposition}[Predictive triggering is a rate-scaled margin]\label{prop:reduction}
-On its positive-rate branch, the predictive rule in \eqref{eq:pred} is a reactive threshold with the time-varying pad $\rho(t)=T_h\hat r(t)$; its fallback pad is zero. Suppose that, on a monitored interval containing both threshold crossings, $M(t)=r(t_0-t)$ with an exact constant estimate $\hat r=r>0$, and that monitoring begins before either crossing. The predictive rule then fires $T_h$ seconds before $t_0$, while a fixed pad $\rho$ fires $\rho/r$ seconds before $t_0$. Thus, at one known constant rate, the fixed pad $\rho=T_h r$ reproduces the predictive trigger exactly. For a positive horizon and two distinct rates, no one fixed pad provides that same constant positive lead time at both rates.
+We first show that the predictive rule is a reactive rule with a rate-scaled
+pad, then determine when extra lead can change a recovery outcome, and finally
+compare the lead that each rule must spend to recover in every case.
+
+\begin{proposition}[Predictive triggering is a rate-scaled margin]
+\label{prop:reduction}
+On its positive-rate branch, the predictive rule \eqref{eq:predictive} is a
+reactive threshold with the time-varying pad $\rho(t)=T_h\hat r(t)$; its
+fallback pad is zero.  Suppose that, on a monitored interval containing both
+threshold crossings, $M(t)=r(t_0-t)$ with an exact constant estimate $\hat
+r=r>0$, and that monitoring begins before either crossing.  Then the predictive
+rule fires $T_h$ seconds before $t_0$, whereas a fixed pad $\rho$ fires $\rho/r$
+seconds before $t_0$.  At one known constant rate, the fixed pad $\rho=T_h r$
+therefore reproduces the predictive trigger exactly; for a positive horizon and
+two distinct rates, no single fixed pad provides the same lead at both rates.
 \end{proposition}
-\begin{proof}
-The threshold identity on the positive-rate branch follows directly from \eqref{eq:pred}. Under the stated affine model, $M(t_0-L)=rL$. The predictive threshold $M=T_h r$ is therefore reached at $L=T_h$, and the fixed threshold $M=\rho$ at $L=\rho/r$; the monitoring assumption makes these the first threshold crossings. If $T_h>0$ and $r_1\ne r_2$, matching that lead at both rates would require both $\rho=T_h r_1$ and $\rho=T_h r_2$, which is impossible.
-\end{proof}
 
-\begin{proposition}[When lead time changes the recovery outcome]\label{prop:boundary}
-Assume a predictive rule triggers $L\ge0$ seconds before $t_0$, while the unpadded reactive rule triggers at $t_0$. Then:
+\begin{IEEEproof}
+The threshold identity on the positive-rate branch follows directly from
+\eqref{eq:predictive}.  Under the affine model, $M(t_0-L)=rL$, so the predictive
+threshold $M=T_h r$ is reached at lead $L=T_h$ and the fixed threshold $M=\rho$
+at $L=\rho/r$; the monitoring assumption makes these the first crossings.  If
+$T_h>0$ and $r_1\neq r_2$, matching the lead at both rates would require both
+$\rho=T_h r_1$ and $\rho=T_h r_2$, which is impossible.
+\end{IEEEproof}
+
+\begin{proposition}[When lead changes the recovery outcome]
+\label{prop:boundary}
+Suppose that a predictive rule triggers $L\ge0$ seconds before $t_0$ and the
+unpadded reactive rule triggers at $t_0$.  Then:
 \begin{enumerate}
   \item if $\tau_r\le\delta$, both rules recover in time;
-  \item if $\delta<\tau_r\le\delta+L$, only the predictive trigger recovers in time; and
+  \item if $\delta<\tau_r\le\delta+L$, only the predictive rule recovers in
+    time; and
   \item if $\tau_r>\delta+L$, neither rule recovers in time.
 \end{enumerate}
 \end{proposition}
-\begin{proof}
-By \eqref{eq:success}, the unpadded rule succeeds exactly when $t_0+\tau_r\le t_f$, or $\tau_r\le\delta$. The predictive rule succeeds exactly when $t_0-L+\tau_r\le t_f$, or $\tau_r\le\delta+L$. The three cases follow.
-\end{proof}
 
-\begin{corollary}[Necessary conditions for an advantage over fixed pads]\label{cor:factors}
-Within the deadline-only model of Proposition~\ref{prop:boundary}, an earlier predictive trigger turns a recovery failure into success only in the middle band, which requires positive lead. Within the affine, exact-rate model of Proposition~\ref{prop:reduction}, a positive-horizon predictor can have a structural advantage over a \emph{single fixed pad across cases} only if the degradation rates vary: at one known constant rate, an equivalent fixed pad exists. These conditions are necessary within the stated models, not sufficient; estimation error and the joint distribution of rates, slack, and recovery times can still make a fixed pad preferable.
+\begin{IEEEproof}
+By \eqref{eq:success}, the unpadded rule succeeds exactly when
+$t_0+\tau_r\le t_f$, that is, $\tau_r\le\delta$.  The predictive rule succeeds
+exactly when $t_0-L+\tau_r\le t_f$, that is, $\tau_r\le\delta+L$.  The three
+cases follow.
+\end{IEEEproof}
+
+\Cref{fig:mechanism} illustrates the timing argument.  The same argument shows
+how observation latency enters.
+
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig_mechanism.pdf}
+  \caption{Timing model.  The unpadded reactive rule fires at margin expiry
+  $t_0$, whereas the predictive rule fires $L$ seconds earlier.  The earlier
+  trigger changes the recovery outcome only when $\delta<\tau_r\le\delta+L$.}
+  \label{fig:mechanism}
+\end{figure}
+
+\begin{corollary}[Observation age]\label{cor:age}
+Suppose that a trigger rule acts on margin observations of age $\Delta\ge0$, so
+that a rule with lead $L$ on fresh observations fires at $t_0-L+\Delta$.  It
+recovers in time if and only if $\tau_r+\Delta\le\delta+L$.  Under the affine,
+exact-rate model of \cref{prop:reduction}, the age delays the fixed-pad and the
+predictive triggers by the same amount.
 \end{corollary}
 
-Figure~\ref{fig:mech} illustrates the timing argument.
+\begin{IEEEproof}
+Substituting $t_{\mathrm{trig}}=t_0-L+\Delta$ into \eqref{eq:success} gives the
+condition.  Under the affine model, the margin observed at time $t$ is
+$M(t-\Delta)=r(t_0-t+\Delta)$, so each threshold in
+\cref{prop:reduction} is crossed $\Delta$ seconds later than with fresh
+observations.
+\end{IEEEproof}
 
-\begin{figure}[tbp]
-\centering
-\includegraphics[width=0.72\linewidth]{fig_mechanism.pdf}
-\caption{The unpadded reactive rule fires at margin expiry, while the predictive rule fires $L$ seconds earlier. The earlier trigger changes the recovery outcome only when $\delta<\tau_r\le\delta+L$.}
-\label{fig:mech}
-\end{figure}
+Observation age therefore acts as additional recovery time.  Latency removed
+from the monitoring path, for example by computing the margin on board rather
+than remotely, enlarges the set of recoverable cases exactly as an equal gain in
+predictive lead does.  Because age shifts both rules equally, it changes whether
+any trigger is early enough but not which rule is earlier.
+
+Lead is not free.  Acting earlier than recovery requires lengthens waiting and
+triggers interventions in situations that would have resolved without them.  To
+compare the two rules across heterogeneous situations, consider cases
+$k=1,\ldots,K$ with rates $r_k>0$ under the affine, exact-rate model, slack
+$\delta_k$, and recovery duration $\tau_{r,k}$.  By \cref{prop:boundary}, a rule
+with lead $L_k$ recovers in case $k$ if and only if $L_k\ge L_k^\star$, where
+$L_k^\star=\tau_{r,k}-\delta_k$ is the \emph{required lead}; the corresponding
+\emph{required margin} is $m_k^\star=r_k L_k^\star$.  We call $L_k-L_k^\star$ the
+\emph{excess lead} of a rule that recovers in case $k$.
+
+\begin{proposition}[Homogeneity of the recovery requirement]
+\label{prop:homogeneity}
+Assume $L_k^\star>0$ for all $k$.  The smallest fixed pad that recovers in every
+case is $\rho^\star=\max_k m_k^\star$, and the smallest horizon that does so is
+$T_h^\star=\max_k L_k^\star$.  With these choices, the excess lead in case $k$ is
+\begin{equation}
+  e_k^{\mathrm{fix}}=\frac{\rho^\star-m_k^\star}{r_k}
+  \quad\text{and}\quad
+  e_k^{\mathrm{pred}}=T_h^\star-L_k^\star.
+  \label{eq:excess-lead}
+\end{equation}
+Hence the fixed pad wastes no lead in any case if and only if the required
+margins are equal across cases, and the predictive horizon wastes no lead in any
+case if and only if the required leads are equal.  If all rates are equal, the
+two rules have identical excess lead in every case.
+\end{proposition}
+
+\begin{IEEEproof}
+By \cref{prop:reduction}, the fixed pad gives lead $\rho/r_k$ and the horizon
+gives lead $T_h$.  The pad recovers in every case if and only if $\rho\ge
+r_kL_k^\star=m_k^\star$ for all $k$, and the horizon does so if and only if
+$T_h\ge L_k^\star$ for all $k$, which gives the minimal values.  Substitution
+gives \eqref{eq:excess-lead}, which vanishes for every $k$ exactly when the
+corresponding requirement is constant.  If $r_k=r$ for all $k$, then
+$\rho^\star=r\max_k L_k^\star$ and $e_k^{\mathrm{fix}}=T_h^\star-L_k^\star=
+e_k^{\mathrm{pred}}$.
+\end{IEEEproof}
+
+\Cref{prop:homogeneity} turns the question in the title into a question about
+the recovery requirement.  Prediction is structurally preferable when recovery
+needs a similar amount of \emph{time} in every case but, because degradation
+rates differ, a different amount of \emph{margin}.  A fixed pad is preferable
+when the required margin is homogeneous instead.  Excess lead is only a proxy
+for the cost of acting early; the simulations measure that cost directly
+through elapsed time and unnecessary interventions.
+
+\begin{corollary}[Necessary conditions for an advantage over fixed pads]
+\label{cor:necessary}
+Within the deadline model, an earlier trigger converts a recovery failure into
+success only in the middle band of \cref{prop:boundary}, shifted by any
+observation age as in \cref{cor:age}; this requires positive lead.  Within the
+affine, exact-rate model, the minimal horizon can waste less lead than the
+minimal safe fixed pad only if degradation rates vary across cases
+(\cref{prop:homogeneity}).  These conditions are necessary within the stated
+models but not sufficient: rate-estimation error and the joint distribution of
+rates, slack, recovery durations, and observation age can still make a fixed pad
+preferable.
+\end{corollary}

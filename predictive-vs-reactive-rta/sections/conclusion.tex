@@ -1,8 +1,21 @@
 \section{Conclusion}
+\label{sec:conclusion}
 
-For the trigger studied here, projected time to margin expiry is a current-margin threshold whose pad scales with the estimated degradation rate. Earlier action changes a recovery outcome only within a specific timing band. A structural advantage over one fixed pad across cases also requires rates that vary and can be estimated.
+For the trigger studied here, a projected time to margin expiry is a
+current-margin threshold whose pad scales with the estimated degradation rate.
+Earlier action changes a recovery outcome only within a band set by recovery
+duration and deadline slack, observation age consumes that band one for one,
+and a predictive horizon wastes less lead than a fixed pad when recovery
+requires a similar lead, but a different margin, across cases.  In the
+seed-disjoint single-margin evaluation, the tuned fixed rule records $0/6750$
+conflict collisions and the tuned predictive rule records $2/6750$, so their
+successful-only times remain descriptive.  In the coordination evaluation, both
+tuned rules succeed in all 1,620 genuine-conflict episodes, and prediction
+shortens mean makespan by $2.779$\,s (paired 95\% interval $[2.659,2.902]$\,s)
+while serializing far fewer clear paths.  That result is limited to an immutable
+one-shot ordering and to held-out noise on a fixed grid.  In both studies, the
+predictive rule is compared with a tuned fixed threshold, and failures are
+examined before average completion time.
 
-In the seed-disjoint single-margin evaluation, the tuned fixed rule records $0/6750$ conflict collisions and the tuned predictive rule records $2/6750$. Their successful-only times are therefore descriptive, with no inferential efficiency comparison. The coordination study gives a different result: both tuned rules succeed in $1620/1620$ genuine-conflict episodes, and prediction reduces mean successful makespan by $2.779$\,s (paired 95\% interval $[2.659,2.902]$\,s) while serializing far fewer clear paths. That result is limited to an immutable one-shot ordering and held-out noise on a fixed grid. In both studies, the predictive rule is compared with a tuned fixed threshold, and failures are considered before average completion time.
-
-\paragraph{Reproducibility.}
-Code, machine-readable results, and figure scripts will accompany the arXiv v1 submission. The repository is \url{\repositoryurl}. ROS~2/Nav2 experiments remain v2 work.
+\emph{Code and data availability.}  The simulators, tests, episode-level
+results, and figure scripts are available at \url{\repositoryurl}.

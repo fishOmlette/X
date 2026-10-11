@@ -6,7 +6,7 @@ from pathlib import Path
 CODE_DIR = Path(__file__).resolve().parents[1] / "code"
 sys.path.insert(0, str(CODE_DIR))
 
-from single_margin_simulator import (  # noqa: E402
+from single_margin_simulator import (
     Cfg,
     conservative_crossing_zone_stopping_deadline,
     replay_last_collision_avoiding_trigger,

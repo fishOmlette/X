@@ -6,7 +6,7 @@ This directory contains machine-generated evidence for the manuscript. Regenerat
 
 ### Single-margin held-out evaluation
 
-Both searches selected `2.50`: seconds of fixed reactive pad and seconds of predictive horizon. Across 6,750 held-out conflict episodes per arm, the fixed rule recorded `0` collisions and the tuned predictive rule recorded `2`. Because collision outcomes differ, the fixed-minus-predictive elapsed-time difference is descriptive and its inferential interval is suppressed. Clear-condition false yields were `1800/2250` for the fixed rule and `1358/2250` for prediction.
+Both searches selected `2.50 s`, for the fixed pad and for the predictive horizon. Across 6,750 held-out conflict episodes per arm, the fixed rule recorded `0` collisions and the tuned predictive rule recorded `2`. Because collision outcomes differ, the fixed-minus-predictive elapsed-time difference is descriptive and its inferential interval is suppressed. Clear-condition false yields were `1800/2250` for the fixed rule and `1358/2250` for prediction.
 
 Mean successful conflict elapsed time was `27.690 s` for the fixed rule and `26.577 s` for prediction. Their raw all-pairs elapsed-time difference of `1.113 s` is not interpreted inferentially because the safety outcomes differ.
 
@@ -32,7 +32,7 @@ The no-intervention conflict control collided and violated headway in all `1620/
 | `coordination_validation_tuning.csv` | `code/coordination_experiment.py` | Every coordination tuning candidate and selection metric. |
 | `coordination_validation_trials.csv` | `code/coordination_experiment.py` | Episode-level held-out coordination outcomes. |
 | `coordination_validation_summary.csv` | `code/coordination_experiment.py` | Test-arm summaries by condition. |
-| `figure_data.json` | `code/generate_figures.py` | Values and provenance used in the four paper figures. |
+| `figure_data.json` | `code/generate_figures.py` | Values and provenance used in the three paper figures. |
 | `single_margin_diagnostic.png` | `code/single_margin_experiment.py` | Exploratory success, collision, calibration, and trigger-deadline diagnostic; not used in the paper. |
 
 Files under `legacy/` document diagnosis of the superseded coordination implementation. They are development records, not primary paper evidence and not inputs to the final figures.
@@ -45,7 +45,7 @@ For the coordination simulator, `successful` means all three robots reached the 
 
 ## Reproduce
 
-From the repository root, after installing `code/requirements.txt`:
+From the `predictive-vs-reactive-rta` directory, after installing `code/requirements.txt`:
 
 ```powershell
 .\.venv\Scripts\python code\heldout_evaluation.py
@@ -53,4 +53,4 @@ From the repository root, after installing `code/requirements.txt`:
 .\.venv\Scripts\python code\generate_figures.py
 ```
 
-The release environment is Windows 11 build 26200, Python 3.13.12, NumPy 2.4.4, Matplotlib 3.10.9, and a 13th Gen Intel Core i7-1360P. Exact wall-clock times are stored in the JSON reports because they vary by machine.
+The recorded results were generated on Windows 11 build 26200 with Python 3.13.12, NumPy 2.4.4, Matplotlib 3.10.9, and a 13th Gen Intel Core i7-1360P. Exact wall-clock times are stored in the JSON reports because they vary by machine.
