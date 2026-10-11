@@ -1,0 +1,538 @@
+% Bibliography for "Contracts Across the Multi-Robot Execution Stack".
+% Metadata checked against Crossref, arXiv, publisher pages, or the cited
+% repository.  Article numbers are given in `note`; IEEEtran.bst does not
+% print the doi field, which is kept for reference management.
+
+% ---------------------------------------------------------------------------
+% Multi-robot coordination background
+% ---------------------------------------------------------------------------
+
+@article{gerkey2004mrta,
+  author  = {Brian P. Gerkey and Maja J. Matari{\'c}},
+  title   = {A Formal Analysis and Taxonomy of Task Allocation in Multi-Robot Systems},
+  journal = {The International Journal of Robotics Research},
+  volume  = {23},
+  number  = {9},
+  pages   = {939--954},
+  year    = {2004},
+  doi     = {10.1177/0278364904045564}
+}
+
+@article{choi2009cbba,
+  author  = {Han-Lim Choi and Luc Brunet and Jonathan P. How},
+  title   = {Consensus-Based Decentralized Auctions for Robust Task Allocation},
+  journal = {IEEE Transactions on Robotics},
+  volume  = {25},
+  number  = {4},
+  pages   = {912--926},
+  year    = {2009},
+  doi     = {10.1109/TRO.2009.2022423}
+}
+
+@article{sharon2015cbs,
+  author  = {Guni Sharon and Roni Stern and Ariel Felner and Nathan R. Sturtevant},
+  title   = {Conflict-Based Search for Optimal Multi-Agent Pathfinding},
+  journal = {Artificial Intelligence},
+  volume  = {219},
+  pages   = {40--66},
+  year    = {2015},
+  doi     = {10.1016/j.artint.2014.11.006}
+}
+
+@article{kehoe2015cloud,
+  author  = {Ben Kehoe and Sachin Patil and Pieter Abbeel and Ken Goldberg},
+  title   = {A Survey of Research on Cloud Robotics and Automation},
+  journal = {IEEE Transactions on Automation Science and Engineering},
+  volume  = {12},
+  number  = {2},
+  pages   = {398--409},
+  year    = {2015},
+  doi     = {10.1109/TASE.2014.2376492}
+}
+
+% ---------------------------------------------------------------------------
+% Surveys
+% ---------------------------------------------------------------------------
+
+@article{li2026llmmrs,
+  author  = {Peihan Li and Zijian An and Shams Abrar and Lifeng Zhou},
+  title   = {Large Language Models for Multi-Robot Systems: A Survey},
+  journal = {Autonomous Robots},
+  volume  = {50},
+  number  = {3},
+  year    = {2026},
+  note    = {{Art. no.} 30},
+  doi     = {10.1007/s10514-026-10257-4}
+}
+
+@article{street2023formal,
+  author  = {Charlie Street and Masoumeh Mansouri and Bruno Lacerda},
+  title   = {Formal Modelling for Multi-Robot Systems Under Uncertainty},
+  journal = {Current Robotics Reports},
+  volume  = {4},
+  number  = {3},
+  pages   = {55--64},
+  year    = {2023},
+  doi     = {10.1007/s43154-023-00104-0}
+}
+
+@article{gielis2022communications,
+  author  = {Jennifer Gielis and Ajay Shankar and Amanda Prorok},
+  title   = {A Critical Review of Communications in Multi-Robot Systems},
+  journal = {Current Robotics Reports},
+  volume  = {3},
+  number  = {4},
+  pages   = {213--225},
+  year    = {2022},
+  doi     = {10.1007/s43154-022-00090-9}
+}
+
+@article{garg2024safecontrol,
+  author  = {Kunal Garg and Songyuan Zhang and Oswin So and Charles Dawson and Chuchu Fan},
+  title   = {Learning Safe Control for Multi-Robot Systems: Methods, Verification, and Open Challenges},
+  journal = {Annual Reviews in Control},
+  volume  = {57},
+  year    = {2024},
+  note    = {{Art. no.} 100948},
+  doi     = {10.1016/j.arcontrol.2024.100948}
+}
+
+@misc{kim2026safeembodied,
+  author       = {Dabin Kim and Daemin Park and Sangyub Lee and Jinsik Kim and Yeongtak Oh and Jongho Shin and Sungroh Yoon},
+  title        = {Safe Embodied {AI} for Long-Horizon Tasks: A Cross-Layer Analysis of Robotic Manipulation},
+  howpublished = {arXiv:2606.05660},
+  year         = {2026},
+  doi          = {10.48550/arXiv.2606.05660}
+}
+
+% ---------------------------------------------------------------------------
+% Contract theory and mission-level assurance
+% ---------------------------------------------------------------------------
+
+@techreport{benveniste2007contracts,
+  author      = {Albert Benveniste and Beno{\^i}t Caillaud and Roberto Passerone},
+  title       = {A Generic Model of Contracts for Embedded Systems},
+  institution = {INRIA},
+  type        = {Research Report},
+  number      = {RR-6214},
+  year        = {2007},
+  url         = {https://inria.hal.science/inria-00153477}
+}
+
+@inproceedings{mallozzi2020crome,
+  author    = {Piergiuseppe Mallozzi and Pierluigi Nuzzo and Patrizio Pelliccione and Gerardo Schneider},
+  title     = {{CROME}: Contract-Based Robotic Mission Specification},
+  booktitle = {2020 18th ACM-IEEE International Conference on Formal Methods and Models for System Design (MEMOCODE)},
+  pages     = {1--11},
+  year      = {2020},
+  doi       = {10.1109/MEMOCODE51338.2020.9315065}
+}
+
+@misc{mallozzi2023contextual,
+  author       = {Piergiuseppe Mallozzi and Pierluigi Nuzzo and Nir Piterman and Gerardo Schneider and Patrizio Pelliccione},
+  title        = {Correct-by-Construction Design of Contextual Robotic Missions Using Contracts},
+  howpublished = {arXiv:2306.08144},
+  year         = {2023},
+  doi          = {10.48550/arXiv.2306.08144}
+}
+
+@inproceedings{mallozzi2023repair,
+  author    = {Piergiuseppe Mallozzi and Inigo Incer and Pierluigi Nuzzo and Alberto Sangiovanni-Vincentelli},
+  title     = {Contract-Based Specification Refinement and Repair for Mission Planning},
+  booktitle = {2023 IEEE/ACM 11th International Conference on Formal Methods in Software Engineering (FormaliSE)},
+  pages     = {29--38},
+  year      = {2023},
+  doi       = {10.1109/FormaliSE58978.2023.00011}
+}
+
+@inproceedings{chaki2013assurance,
+  author    = {Sagar Chaki and John M. Dolan and Joseph Andrew Giampapa},
+  title     = {Toward a Quantitative Method for Assuring Coordinated Autonomy},
+  booktitle = {Proceedings of the AAMAS 2013 Workshop on Autonomous Robots and Multirobot Systems (ARMS)},
+  month     = may,
+  year      = {2013},
+  url       = {https://publications.ri.cmu.edu/toward-a-quantitative-method-for-assuring-coordinated-autonomy}
+}
+
+@inproceedings{chaki2013probabilistic,
+  author    = {Sagar Chaki and Joseph Andrew Giampapa},
+  title     = {Probabilistic Verification of Coordinated Multi-Robot Missions},
+  booktitle = {Model Checking Software (SPIN 2013)},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {7976},
+  publisher = {Springer},
+  pages     = {135--153},
+  year      = {2013},
+  doi       = {10.1007/978-3-642-39176-7_9}
+}
+
+@inproceedings{porter2013reliability,
+  author    = {John F. Porter and Kawa Cheung and Joseph A. Giampapa and John M. Dolan},
+  title     = {A Reliability Analysis Technique for Estimating Sequentially Coordinated Multirobot Mission Performance},
+  booktitle = {PRIMA 2013: Principles and Practice of Multi-Agent Systems},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {8291},
+  publisher = {Springer},
+  pages     = {276--291},
+  year      = {2013},
+  doi       = {10.1007/978-3-642-44927-7_19}
+}
+
+@article{stancliff2006missionreliability,
+  author  = {Stephen B. Stancliff and John M. Dolan and Ashitey Trebi-Ollennu},
+  title   = {Mission Reliability Estimation for Repairable Robot Teams},
+  journal = {International Journal of Advanced Robotic Systems},
+  volume  = {3},
+  number  = {2},
+  year    = {2006},
+  note    = {{Art. no.} 24},
+  doi     = {10.5772/5743}
+}
+
+% ---------------------------------------------------------------------------
+% Language-conditioned multi-robot planning
+% ---------------------------------------------------------------------------
+
+@inproceedings{mandi2024roco,
+  author    = {Zhao Mandi and Shreeya Jain and Shuran Song},
+  title     = {{RoCo}: Dialectic Multi-Robot Collaboration with Large Language Models},
+  booktitle = {2024 IEEE International Conference on Robotics and Automation (ICRA)},
+  pages     = {286--299},
+  year      = {2024},
+  doi       = {10.1109/ICRA57147.2024.10610855}
+}
+
+@article{obata2025lipllm,
+  author  = {Kazuma Obata and Tatsuya Aoki and Takato Horii and Tadahiro Taniguchi and Takayuki Nagai},
+  title   = {{LiP-LLM}: Integrating Linear Programming and Dependency Graph With Large Language Models for Multi-Robot Task Planning},
+  journal = {IEEE Robotics and Automation Letters},
+  volume  = {10},
+  number  = {2},
+  pages   = {1122--1129},
+  year    = {2025},
+  doi     = {10.1109/LRA.2024.3518105}
+}
+
+% ---------------------------------------------------------------------------
+% Component contracts, monitoring, and distributed robot programming
+% ---------------------------------------------------------------------------
+
+@article{luckcuck2026compositional,
+  author  = {Matt Luckcuck and Marie Farrell and Angelo Ferrando and Rafael C. Cardoso and Louise A. Dennis and Michael Fisher},
+  title   = {A Compositional Approach to Verifying Modular Robotic Systems},
+  journal = {Robotics and Autonomous Systems},
+  volume  = {205},
+  year    = {2026},
+  note    = {{Art. no.} 105648},
+  doi     = {10.1016/j.robot.2026.105648}
+}
+
+@inproceedings{ghaffari2024rosmonitoring,
+  author    = {Maryam Ghaffari Saadat and Angelo Ferrando and Louise A. Dennis and Michael Fisher},
+  title     = {{ROSMonitoring} 2.0: Extending {ROS} Runtime Verification to Services and Ordered Topics},
+  booktitle = {Proceedings of the Sixth International Workshop on Formal Methods for Autonomous Systems (FMAS 2024)},
+  series    = {Electronic Proceedings in Theoretical Computer Science},
+  volume    = {411},
+  pages     = {38--55},
+  year      = {2024},
+  doi       = {10.4204/EPTCS.411.3}
+}
+
+@article{caldas2024rvft,
+  author  = {Ricardo Caldas and Juan Antonio Pi{\~n}era Garc{\'i}a and Matei Schiopu and Patrizio Pelliccione and Gena{\'i}na Rodrigues and Thorsten Berger},
+  title   = {Runtime Verification and Field-Based Testing for {ROS}-Based Robotic Systems},
+  journal = {IEEE Transactions on Software Engineering},
+  volume  = {50},
+  number  = {10},
+  pages   = {2544--2567},
+  year    = {2024},
+  doi     = {10.1109/TSE.2024.3444697}
+}
+
+@article{ghosh2020koord,
+  author  = {Ritwika Ghosh and Chiao Hsieh and Sasa Misailovic and Sayan Mitra},
+  title   = {{Koord}: A Language for Programming and Verifying Distributed Robotics Application},
+  journal = {Proceedings of the ACM on Programming Languages},
+  volume  = {4},
+  number  = {OOPSLA},
+  pages   = {1--30},
+  year    = {2020},
+  doi     = {10.1145/3428300}
+}
+
+@article{harbin2023design,
+  author  = {James Harbin and Simos Gerasimou and Nicholas Matragkas and Thanos Zolotas and Radu Calinescu and Misael Alpizar Santana},
+  title   = {Model-Driven Design Space Exploration for Multi-Robot Systems in Simulation},
+  journal = {Software and Systems Modeling},
+  volume  = {22},
+  number  = {5},
+  pages   = {1665--1688},
+  year    = {2023},
+  doi     = {10.1007/s10270-022-01041-w}
+}
+
+% ---------------------------------------------------------------------------
+% Dynamical and multi-agent contracts
+% ---------------------------------------------------------------------------
+
+@article{sharf2021dynamical,
+  author  = {Miel Sharf and Bart Besselink and Adam Molin and Qiming Zhao and Karl Henrik Johansson},
+  title   = {Assume/Guarantee Contracts for Dynamical Systems: Theory and Computational Tools},
+  journal = {IFAC-PapersOnLine},
+  volume  = {54},
+  number  = {5},
+  pages   = {25--30},
+  year    = {2021},
+  doi     = {10.1016/j.ifacol.2021.08.469}
+}
+
+@inproceedings{chen2019invariance,
+  author    = {Yuxiao Chen and James Anderson and Karan Kalsi and Steven H. Low and Aaron D. Ames},
+  title     = {Compositional Set Invariance in Network Systems with Assume-Guarantee Contracts},
+  booktitle = {2019 American Control Conference (ACC)},
+  pages     = {1027--1034},
+  year      = {2019},
+  doi       = {10.23919/ACC.2019.8814437}
+}
+
+@inproceedings{liu2022stlcontracts,
+  author    = {Siyuan Liu and Adnane Saoud and Pushpak Jagtap and Dimos V. Dimarogonas and Majid Zamani},
+  title     = {Compositional Synthesis of Signal Temporal Logic Tasks via Assume-Guarantee Contracts},
+  booktitle = {2022 IEEE 61st Conference on Decision and Control (CDC)},
+  pages     = {2184--2189},
+  year      = {2022},
+  doi       = {10.1109/CDC51059.2022.9992715}
+}
+
+@article{kazemi2024agrl,
+  author  = {Milad Kazemi and Mateo Perez and Fabio Somenzi and Sadegh Soudjani and Ashutosh Trivedi and Alvaro Velasquez},
+  title   = {Assume-Guarantee Reinforcement Learning},
+  journal = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume  = {38},
+  number  = {19},
+  pages   = {21223--21231},
+  year    = {2024},
+  doi     = {10.1609/aaai.v38i19.30116}
+}
+
+% ---------------------------------------------------------------------------
+% Distributed state, middleware, and communication
+% ---------------------------------------------------------------------------
+
+@article{macenski2022ros2,
+  author  = {Steven Macenski and Tully Foote and Brian Gerkey and Chris Lalancette and William Woodall},
+  title   = {Robot Operating System 2: Design, Architecture, and Uses in the Wild},
+  journal = {Science Robotics},
+  volume  = {7},
+  number  = {66},
+  year    = {2022},
+  note    = {{Art. no.} eabm6074},
+  doi     = {10.1126/scirobotics.abm6074}
+}
+
+@standard{omg2015dds,
+  title        = {Data Distribution Service ({DDS}), Version 1.4},
+  organization = {Object Management Group (OMG)},
+  type         = {Document},
+  number       = {formal/2015-04-10},
+  year         = {2015},
+  url          = {https://www.omg.org/spec/DDS/1.4/}
+}
+
+@inproceedings{maruyama2016ros2,
+  author    = {Yuya Maruyama and Shinpei Kato and Takuya Azumi},
+  title     = {Exploring the Performance of {ROS2}},
+  booktitle = {Proceedings of the 13th International Conference on Embedded Software (EMSOFT)},
+  pages     = {1--10},
+  year      = {2016},
+  doi       = {10.1145/2968478.2968502}
+}
+
+@inproceedings{kronauer2021latency,
+  author    = {Tobias Kronauer and Joshwa Pohlmann and Maximilian Matth{\'e} and Till Smejkal and Gerhard Fettweis},
+  title     = {Latency Analysis of {ROS2} Multi-Node Systems},
+  booktitle = {2021 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems (MFI)},
+  pages     = {1--7},
+  year      = {2021},
+  doi       = {10.1109/MFI52462.2021.9591166}
+}
+
+@inproceedings{corsaro2023zenoh,
+  author    = {Angelo Corsaro and Luca Cominardi and Olivier Hecart and Gabriele Baldoni and Julien Enoch Pierre Avital and Julien Loudet and Carlos Guimar{\~a}es and Michael Ilyin and Dmitrii Bannov},
+  title     = {Zenoh: Unifying Communication, Storage and Computation from the Cloud to the Microcontroller},
+  booktitle = {2023 26th Euromicro Conference on Digital System Design (DSD)},
+  pages     = {422--428},
+  year      = {2023},
+  doi       = {10.1109/DSD60849.2023.00065}
+}
+
+@article{silva2026probabilistic,
+  author  = {Thales C. Silva and Xi Yu and M. Ani Hsieh},
+  title   = {Probabilistic Multi-Robot Planning with Temporal Tasks and Communication Constraints},
+  journal = {Autonomous Robots},
+  volume  = {50},
+  number  = {1},
+  year    = {2026},
+  note    = {{Art. no.} 2},
+  doi     = {10.1007/s10514-025-10231-6}
+}
+
+@inproceedings{kaul2012aoi,
+  author    = {Sanjit Kaul and Roy Yates and Marco Gruteser},
+  title     = {Real-Time Status: How Often Should One Update?},
+  booktitle = {2012 Proceedings IEEE INFOCOM},
+  pages     = {2731--2735},
+  year      = {2012},
+  doi       = {10.1109/INFCOM.2012.6195689}
+}
+
+@standard{ieee2020ptp,
+  title        = {{IEEE} Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems},
+  organization = {IEEE},
+  type         = {Std},
+  number       = {1588-2019},
+  year         = {2020},
+  doi          = {10.1109/IEEESTD.2020.9120376}
+}
+
+@standard{w3c2013prov,
+  author       = {Luc Moreau and Paolo Missier},
+  title        = {{PROV-DM}: The {PROV} Data Model},
+  organization = {World Wide Web Consortium},
+  type         = {W3C Recommendation},
+  year         = {2013},
+  url          = {https://www.w3.org/TR/prov-dm/}
+}
+
+% ---------------------------------------------------------------------------
+% Runtime assurance and safety
+% ---------------------------------------------------------------------------
+
+@article{sha2001simplex,
+  author  = {Lui Sha},
+  title   = {Using Simplicity to Control Complexity},
+  journal = {IEEE Software},
+  volume  = {18},
+  number  = {4},
+  pages   = {20--28},
+  year    = {2001},
+  doi     = {10.1109/MS.2001.936213}
+}
+
+@inproceedings{desai2019soter,
+  author    = {Ankush Desai and Shromona Ghosh and Sanjit A. Seshia and Natarajan Shankar and Ashish Tiwari},
+  title     = {{SOTER}: A Runtime Assurance Framework for Programming Safe Robotics Systems},
+  booktitle = {2019 49th Annual IEEE/IFIP International Conference on Dependable Systems and Networks (DSN)},
+  pages     = {138--150},
+  year      = {2019},
+  doi       = {10.1109/DSN.2019.00027}
+}
+
+@inproceedings{shivakumar2020soterros,
+  author    = {Sumukh Shivakumar and Hazem Torfah and Ankush Desai and Sanjit A. Seshia},
+  title     = {{SOTER} on {ROS}: A Run-Time Assurance Framework on the Robot Operating System},
+  booktitle = {Runtime Verification (RV 2020)},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {12399},
+  publisher = {Springer},
+  pages     = {184--194},
+  year      = {2020},
+  doi       = {10.1007/978-3-030-60508-7_10}
+}
+
+@article{ames2017cbf,
+  author  = {Aaron D. Ames and Xiangru Xu and Jessy W. Grizzle and Paulo Tabuada},
+  title   = {Control Barrier Function Based Quadratic Programs for Safety Critical Systems},
+  journal = {IEEE Transactions on Automatic Control},
+  volume  = {62},
+  number  = {8},
+  pages   = {3861--3876},
+  year    = {2017},
+  doi     = {10.1109/TAC.2016.2638961}
+}
+
+@article{wang2017barrier,
+  author  = {Li Wang and Aaron D. Ames and Magnus Egerstedt},
+  title   = {Safety Barrier Certificates for Collisions-Free Multirobot Systems},
+  journal = {IEEE Transactions on Robotics},
+  volume  = {33},
+  number  = {3},
+  pages   = {661--674},
+  year    = {2017},
+  doi     = {10.1109/TRO.2017.2659727}
+}
+
+@misc{tsai2026missionrta,
+  author       = {Chieh Tsai and Salim Hariri},
+  title        = {Mission-Level Runtime Assurance Framework for Autonomous Driving},
+  howpublished = {arXiv:2606.06996},
+  year         = {2026},
+  doi          = {10.48550/arXiv.2606.06996}
+}
+
+@misc{kekatos2026swarmrta,
+  author       = {Nikolaos Kekatos and Panagiotis Katsaros and Alexios Lekidis and Theodoros Nestoridis and Tom Nianios},
+  title        = {Mission-Level Runtime Assurance for {LLM}-Assisted {ISR} Swarms over a Verification-Aware Fabric},
+  howpublished = {arXiv:2607.23532},
+  year         = {2026},
+  doi          = {10.48550/arXiv.2607.23532}
+}
+
+% ---------------------------------------------------------------------------
+% Embodied execution
+% ---------------------------------------------------------------------------
+
+@misc{kim2026guardrails,
+  author       = {Joonkyung Kim and Wenxi Chen and Davood Soleymanzadeh and Yi Ding and Xiangbo Gao and Zhengzhong Tu and Ruqi Zhang and Fan Fei and Sushant Veer and Yiwei Lyu and Minghui Zheng and Yan Gu},
+  title        = {Modular Safety Guardrails Are Necessary for Foundation-Model-Enabled Robots in the Real World},
+  howpublished = {arXiv:2602.04056},
+  year         = {2026},
+  doi          = {10.48550/arXiv.2602.04056}
+}
+
+@misc{liu2026phyagentos,
+  author       = {Yang Liu and Weixing Chen and Xinshuai Song and Tao Pu and Siwen Mo and Yongjie Bai and Zihao Chen and Qianran Sun and Liruo Zhong and Ying Shen and Liang Lin},
+  title        = {{PhyAgentOS}: A Self-Evolving Operating System for Embodied Agents with Decoupled Cognitive Planning and Physical Execution},
+  howpublished = {arXiv:2607.16636},
+  year         = {2026},
+  doi          = {10.48550/arXiv.2607.16636}
+}
+
+% ---------------------------------------------------------------------------
+% Public issue reports (ROS 2 middleware failures)
+% ---------------------------------------------------------------------------
+
+@misc{nav2issue6163,
+  title        = {Nightly {CI} Failing Across Multiple {RMWs}},
+  howpublished = {GitHub issue ros-navigation/navigation2 \#6163},
+  year         = {2026},
+  url          = {https://github.com/ros-navigation/navigation2/issues/6163}
+}
+
+@misc{nav2pr4948,
+  title        = {Use Main Function Instead of Global Variable to Setup the Test Environment},
+  howpublished = {GitHub pull request ros-navigation/navigation2 \#4948},
+  year         = {2025},
+  url          = {https://github.com/ros-navigation/navigation2/pull/4948}
+}
+
+@misc{nav2pr6241,
+  title        = {Fix {Zenoh} Test Failures Caused by Late Cleanup},
+  howpublished = {GitHub pull request ros-navigation/navigation2 \#6241},
+  year         = {2026},
+  url          = {https://github.com/ros-navigation/navigation2/pull/6241}
+}
+
+@misc{cyclonedds2426,
+  title        = {{Cyclone DDS} 11.0.1 Intermittently Asserts in ddsi\_fini During {ROS} 2 Action Teardown},
+  howpublished = {GitHub issue eclipse-cyclonedds/cyclonedds \#2426},
+  year         = {2026},
+  url          = {https://github.com/eclipse-cyclonedds/cyclonedds/issues/2426}
+}
+
+@misc{fastrtps392,
+  title        = {Improve Service Discovery},
+  howpublished = {GitHub issue ros2/rmw\_fastrtps \#392},
+  year         = {2020},
+  url          = {https://github.com/ros2/rmw_fastrtps/issues/392}
+}

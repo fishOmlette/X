@@ -1,77 +1,85 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Multi-robot systems are assembled from components whose correctness claims are
-made under different assumptions.  A mission synthesizer may guarantee a
-temporal goal under a declared context; a planner may report feasibility for a
-particular state and model; middleware may report a quality-of-service event;
-and a safety filter may guarantee local invariance under a dynamics and timing
+\IEEEPARstart{M}{ulti-robot} systems are assembled from components whose
+correctness claims rest on different assumptions.  A mission synthesizer may
+guarantee a temporal goal within a declared context; a planner may report
+feasibility for a particular state and model; a learned predictor may forecast
+peer motion over a horizon; middleware may report a quality-of-service event;
+and a safety filter may guarantee forward invariance under a dynamics and timing
 model.  Mission success depends on each claim and on whether its assumptions
-remain satisfied when another component or robot consumes its output.
+still hold when another component, or another robot, consumes its output.  The
+practical requirement is easy to state: \emph{a result should cross an
+interface with enough context for the receiver to decide whether it is still
+valid.}
 
-The practical requirement is simple: a result should cross an interface with
-enough context for the receiver to decide whether it remains valid.
-
-This interface problem is becoming more important as multi-robot stacks combine
+This requirement is becoming harder to meet.  Multi-robot stacks now combine
 classical task allocation and motion coordination
 \cite{gerkey2004mrta,choi2009cbba,sharon2015cbs} with language-conditioned
-planning and learned prediction
-\cite{mandi2023roco,obata2024lipllm,li2026llmmrs}.  These learned components
-expand capability, but they do not replace explicit physical, temporal, or
-deployment assumptions.  At lower layers, ROS~2 and DDS transport state and
-commands, while runtime assurance and barrier-based controllers may alter a
-nominal decision before actuation
-\cite{macenski2022ros2,omg2015dds,desai2019soter,wang2017barrier}.  A complete
-execution argument must therefore cross semantic, physical, software,
-communication, and safety boundaries.
+planning and learned prediction \cite{mandi2024roco,obata2025lipllm,li2026llmmrs}.
+Learned components expand capability, but they do not remove the need for
+explicit physical, temporal, and deployment assumptions.  Inference is also
+distributed: a prediction may be computed on board, next to the controller that
+uses it, or remotely on infrastructure that fuses more data at the cost of
+latency \cite{kehoe2015cloud}.  Each placement changes the interfaces that a
+result must cross.  At lower layers, ROS~2 and the Data Distribution Service
+(DDS) transport state and commands, while runtime-assurance and barrier-based
+controllers may override a nominal decision before actuation
+\cite{macenski2022ros2,omg2015dds,desai2019soter,wang2017barrier}.  An
+end-to-end execution argument must therefore cross semantic, physical,
+software, communication, and safety boundaries.
 
-Multi-robot coupling makes this problem distinct from ordinary component
-integration.  Stale or ambiguous state at robot $r_i$ can cause a locally
-admissible decision that invalidates robot $r_j$'s route, resource claim, or
-safety margin.  Join, leave, restart, and network partition events can change
-the set of valid assignments even when every message remains syntactically
-well-formed.  The relevant interfaces are both vertical, between functions in
-one robot, and horizontal, between robots or distributed components.
-
-Existing work addresses parts of this problem through quantitative mission
-assurance, contract-based mission design, ROS component contracts,
-compositional reasoning for interconnected dynamics, runtime monitoring, and
-safety-controller switching
-\cite{chaki2013assurance,chaki2013probabilistic,porter2013reliability,
-street2023formal,garg2024safecontrol}.  The approaches protect different objects
-and produce different evidence.  This survey asks whether their combined
-coverage supports the full multi-robot command-to-action path.  More
-specifically, I ask:
-
-\begin{enumerate}
-  \item Which objects, assumptions, and guarantees are represented by existing
-    contract-based and runtime-assurance approaches?
-  \item How are those claims composed, monitored, enforced, or repaired, and
-    what evidence supports them?
-  \item Which obligations remain implicit when information crosses semantic,
-    physical, distributed, and inter-robot boundaries?
-\end{enumerate}
-
-\Cref{fig:systems-pipeline} illustrates the command path and the distinction
-between intra-robot and inter-robot interfaces.
+Multi-robot coupling makes this more than an ordinary integration problem.
+Stale or ambiguous state at robot $r_i$ can make a locally admissible decision
+invalidate robot $r_j$'s route, resource claim, or safety margin.  Join, leave,
+restart, and partition events can invalidate assignments even when every message
+is syntactically well formed.  The relevant interfaces are \emph{vertical},
+between functions within one robot, and \emph{horizontal}, between robots or
+distributed services (\cref{fig:command-path}).
 
 \input{figures/command_path}
 
-The paper makes three contributions:
-
-\begin{enumerate}
-  \item a cross-layer taxonomy of contract-based assurance organized by the
-    object of reasoning, enforcement mechanism, and reported evidence;
-  \item a coverage analysis of recurring gaps in temporal validity,
-    uncertainty and provenance, implementation and lifecycle compatibility, and
-    distributed authority; and
-  \item an edge-contract reference framework and failure-attribution taxonomy
-    synthesized from those gaps.
+Existing work addresses parts of this problem through contract-based mission
+design, quantitative mission assurance, component contracts for the Robot
+Operating System (ROS), compositional reasoning for interconnected dynamics,
+runtime monitoring, and safety-controller switching
+\cite{mallozzi2020crome,chaki2013assurance,luckcuck2026compositional,
+sharf2021dynamical,ghaffari2024rosmonitoring,desai2019soter}.  These approaches
+protect different objects and produce different kinds of evidence.  This paper
+asks whether their combined coverage supports the full multi-robot
+command-to-action path:
+\begin{enumerate}[\IEEEsetlabelwidth{RQ3:}]
+  \item[RQ1:] Which objects, assumptions, and guarantees do existing
+    contract-based and runtime-assurance approaches represent?
+  \item[RQ2:] How are these claims composed, monitored, enforced, or repaired,
+    and what evidence supports them?
+  \item[RQ3:] Which obligations remain implicit when information crosses
+    semantic, physical, distributed, and inter-robot boundaries, and what must
+    an interface carry to make them checkable?
 \end{enumerate}
 
-The proposed framework is a reference model; the paper does not claim a new
-contract algebra or a demonstrated reliability improvement.  \Cref{sec:scope}
-defines the review method, \cref{sec:background} states the interface problem,
-and \cref{sec:related-work} surveys the literature.  \Cref{sec:gaps} derives the
-cross-layer gaps, after which \cref{sec:synthesis} presents the reference
-framework.  \Cref{sec:discussion} discusses limitations and open problems.
+The paper makes four contributions:
+\begin{enumerate}
+  \item a cross-layer taxonomy of contract-based and runtime-assurance
+    approaches, organized by protected object, mechanism, and reported evidence
+    (\cref{sec:taxonomy});
+  \item a coverage analysis that identifies five recurring interface gaps,
+    supported by a qualitative coverage matrix and by public failure reports
+    from ROS~2 middleware (\cref{sec:gaps});
+  \item an interface-contract reference framework with three-valued admission
+    and recovery semantics, including a temporal admission margin for peer
+    state that determines which metadata a horizontal interface must carry and
+    when on-board inference is preferable to remote inference
+    (\cref{sec:framework}); and
+  \item a failure-attribution taxonomy and a worked command trace that assign
+    validators and recovery authority along the command path
+    (\cref{sec:attribution,sec:trace}).
+\end{enumerate}
+
+The framework is a reference model.  It does not define a new contract algebra,
+and it has not been evaluated as a reliability mechanism.
+\Cref{sec:background} states the interface problem, \cref{sec:method} describes
+the review method, \cref{sec:taxonomy} presents the taxonomy, and
+\cref{sec:gaps} derives the gaps.  \Cref{sec:framework} develops the
+framework, \cref{sec:discussion} discusses its implications and limitations,
+and \cref{sec:conclusion} concludes.

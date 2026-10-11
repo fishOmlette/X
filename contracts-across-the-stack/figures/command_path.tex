@@ -1,95 +1,73 @@
-\definecolor{SemanticBlue}{HTML}{DCEBFA}
-\definecolor{WorldPurple}{HTML}{E9E0F5}
-\definecolor{PhysicsGreen}{HTML}{DDEFD8}
-\definecolor{RuntimeOrange}{HTML}{F9E4C8}
-\definecolor{SafetyRed}{HTML}{F7D8D5}
-\definecolor{RealityGray}{HTML}{E6E8EB}
-
-\tikzset{
-  pipeline/.style={draw,rounded corners=2pt,minimum height=9mm,
-    minimum width=43mm,align=center,font=\small,inner sep=3pt},
-  robotstage/.style={pipeline,minimum width=40mm},
-  flow/.style={->,>=latex,line width=1.05pt},
-  peer/.style={<->,>=latex,line width=1.35pt,draw=MidnightBlue},
-  branch/.style={->,>=latex,line width=1.05pt},
-  edgelabel/.style={midway,fill=white,inner xsep=4pt,inner ysep=2pt,
-    font=\scriptsize,align=center},
-  obligation/.style={draw,dashed,rounded corners=2pt,align=center,
-    font=\footnotesize,inner sep=5pt,text width=143mm}
-}
-
-\begin{figure}[t]
+\begin{figure*}[!t]
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    % Shared command-formulation path.  All arrows point downward.
-    \node[pipeline,fill=RealityGray] (human) at (0,0)
-      {Operator intent};
-    \node[pipeline,fill=SemanticBlue] (semantic) at (0,-1.35)
+  \begin{tikzpicture}[
+    x=1cm,y=1cm,
+    stage/.style={draw,rounded corners=2pt,minimum height=8mm,
+      minimum width=46mm,align=center,font=\small,inner sep=3pt},
+    lane/.style={stage,minimum width=42mm},
+    flow/.style={-{Latex[length=2.2mm]},line width=0.8pt},
+    peer/.style={{Latex[length=2.4mm]}-{Latex[length=2.4mm]},line width=1.1pt,
+      draw=MidnightBlue},
+    tag/.style={midway,fill=white,inner xsep=3pt,inner ysep=1.5pt,
+      font=\scriptsize,align=center}
+  ]
+    \definecolor{IntentGray}{HTML}{E6E8EB}
+    \definecolor{SemanticBlue}{HTML}{DCEBFA}
+    \definecolor{PredictPurple}{HTML}{E9E0F5}
+    \definecolor{PhysicsGreen}{HTML}{DDEFD8}
+    \definecolor{RuntimeOrange}{HTML}{F9E4C8}
+    \definecolor{SafetyRed}{HTML}{F7D8D5}
+
+    \node[stage,fill=IntentGray] (intent) at (0,0) {Operator intent};
+    \node[stage,fill=SemanticBlue] (task) at (0,-1.25)
       {Semantic task formation};
-    \node[pipeline,fill=WorldPurple] (world) at (0,-2.70)
-      {Predictive state and world model};
-    \node[pipeline,fill=RealityGray] (team) at (0,-4.05)
-      {Joint team task, constraints, and forecast};
+    \node[stage,fill=PredictPurple] (predict) at (0,-2.50)
+      {Prediction of team and world state};
+    \node[stage,fill=IntentGray] (joint) at (0,-3.75)
+      {Joint allocation, constraints, and forecast};
 
-    \draw[flow] (human.south) -- node[edgelabel]
-      {$C_0$: interpreted request} (semantic.north);
-    \draw[flow] (semantic.south) -- node[edgelabel]
-      {$C_1$: structured task} (world.north);
-    \draw[flow] (world.south) -- node[edgelabel]
-      {$C_2$: predicted team state} (team.north);
+    \draw[flow] (intent) -- node[tag] {$C_0$: interpreted request} (task);
+    \draw[flow] (task) -- node[tag] {$C_1$: structured task} (predict);
+    \draw[flow] (predict) -- node[tag] {$C_2$: predicted team state} (joint);
 
-    % Two parallel robot-execution lanes.
-    \node[robotstage,fill=PhysicsGreen] (ground1) at (-4.40,-5.90)
-      {Physical grounding};
-    \node[robotstage,fill=PhysicsGreen] (ground2) at (4.40,-5.90)
-      {Physical grounding};
-    \node[robotstage,fill=RuntimeOrange] (runtime1) at (-4.40,-7.40)
-      {Distributed runtime};
-    \node[robotstage,fill=RuntimeOrange] (runtime2) at (4.40,-7.40)
-      {Distributed runtime};
-    \node[robotstage,fill=SafetyRed] (safety1) at (-4.40,-8.90)
-      {Safety validation and authority};
-    \node[robotstage,fill=SafetyRed] (safety2) at (4.40,-8.90)
-      {Safety validation and authority};
-    \node[robotstage,fill=RealityGray] (robot1) at (-4.40,-10.40)
-      {Physical robot $r_1$};
-    \node[robotstage,fill=RealityGray] (robot2) at (4.40,-10.40)
-      {Physical robot $r_2$};
+    \foreach \side/\xpos/\idx in {L/-4.6/1,R/4.6/2} {
+      \node[lane,fill=PhysicsGreen] (ground\side) at (\xpos,-5.55)
+        {Physical grounding};
+      \node[lane,fill=RuntimeOrange] (runtime\side) at (\xpos,-6.85)
+        {Distributed runtime};
+      \node[lane,fill=SafetyRed] (safety\side) at (\xpos,-8.15)
+        {Runtime safety and authority};
+      \node[lane,fill=IntentGray] (robot\side) at (\xpos,-9.45)
+        {Physical robot $r_{\idx}$};
+      \draw[flow] (ground\side) -- node[tag] {vertical interface
+        $e^{\mathrm v}$} (runtime\side);
+      \draw[flow] (runtime\side) -- (safety\side);
+      \draw[flow] (safety\side) -- (robot\side);
+    }
 
-    % The joint plan branches into the two robot lanes.
-    \coordinate (split) at (0,-4.72);
-    \draw[line width=0.9pt] (team.south) -- (split);
-    \draw[branch] (split) -| (ground1.north);
-    \draw[branch] (split) -| (ground2.north);
+    \coordinate (split) at (0,-4.45);
+    \draw[line width=0.8pt] (joint.south) -- (split);
+    \draw[flow] (split) -| (groundL.north);
+    \draw[flow] (split) -| (groundR.north);
+    \node[font=\small\bfseries,fill=white,inner xsep=3pt] at (-4.6,-4.85)
+      {Robot $r_1$};
+    \node[font=\small\bfseries,fill=white,inner xsep=3pt] at (4.6,-4.85)
+      {Robot $r_2$};
 
-    % Draw lane headings after the branches so the white backgrounds mask lines.
-    \node[font=\small\bfseries,fill=white,inner xsep=4pt,inner ysep=2pt]
-      at (-4.40,-5.18) {Robot $r_1$ execution lane};
-    \node[font=\small\bfseries,fill=white,inner xsep=4pt,inner ysep=2pt]
-      at (4.40,-5.18) {Robot $r_2$ execution lane};
+    \draw[peer] (runtimeL.east) -- node[tag,text=MidnightBlue,
+      font=\scriptsize\bfseries] {horizontal interface $e^{\mathrm h}$\\
+      peer state and coordination} (runtimeR.west);
 
-    \draw[flow] (ground1.south) -- node[edgelabel]
-      {vertical contract $e^{\mathrm v}_{r_1}$} (runtime1.north);
-    \draw[flow] (runtime1.south) -- (safety1.north);
-    \draw[flow] (safety1.south) -- (robot1.north);
-
-    \draw[flow] (ground2.south) -- node[edgelabel]
-      {vertical contract $e^{\mathrm v}_{r_2}$} (runtime2.north);
-    \draw[flow] (runtime2.south) -- (safety2.north);
-    \draw[flow] (safety2.south) -- (robot2.north);
-
-    % Only this edge is bidirectional: peer state and coordination evidence.
-    \draw[peer] (runtime1.east) -- node[edgelabel,font=\scriptsize\bfseries,
-      text=MidnightBlue,text width=29mm]
-      {peer contract $e^{\mathrm h}$\\(bidirectional)} (runtime2.west);
-
-    \node[obligation,fill=white] at (0,-11.65)
-      {Every admitted edge carries a typed payload plus semantic/physical,
-       temporal, uncertainty/evidence, compatibility/lifecycle, and
-       authority/recovery obligations.};
+    \node[draw,dashed,rounded corners=2pt,align=center,font=\footnotesize,
+      inner sep=4pt,text width=150mm] at (0,-10.55)
+      {Each admitted transfer carries a typed payload together with semantic
+       and physical, temporal, uncertainty and evidence, compatibility and
+       lifecycle, and authority and recovery obligations.};
   \end{tikzpicture}
-  \caption{Cross-layer multi-robot command path.  Downward arrows are
-  producer--consumer transfers; the double-headed horizontal edge exchanges
-  peer state and coordination obligations between robots.}
-  \label{fig:systems-pipeline}
-\end{figure}
+  \caption{Cross-layer command path of a two-robot team.  Single-headed arrows
+  are producer--consumer transfers; $C_0$--$C_2$ label the shared
+  command-formulation interfaces.  Vertical interfaces connect functions within
+  one robot, and the double-headed horizontal interface exchanges peer state and
+  coordination obligations between robots.}
+  \label{fig:command-path}
+\end{figure*}

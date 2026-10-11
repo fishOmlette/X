@@ -1,50 +1,49 @@
-\definecolor{ContractBlue}{HTML}{DCEBFA}
-\definecolor{ValidatorGreen}{HTML}{DDEFD8}
-\definecolor{RecoveryOrange}{HTML}{F9E4C8}
-\definecolor{RejectRed}{HTML}{F7D8D5}
-
-\begin{figure}[t]
+\begin{figure}[!t]
   \centering
   \begin{tikzpicture}[
-    box/.style={draw,rounded corners=2pt,minimum height=7.5mm,
-      minimum width=41mm,align=center,font=\footnotesize,inner sep=3pt},
-    arrow/.style={->,>=latex,line width=1.05pt},
-    label/.style={fill=white,inner xsep=3pt,inner ysep=1.5pt,
-      font=\scriptsize,align=center}
+    x=1cm,y=1cm,
+    box/.style={draw,rounded corners=2pt,minimum height=7mm,align=center,
+      font=\footnotesize,inner sep=2.5pt},
+    arrow/.style={-{Latex[length=2mm]},line width=0.7pt},
+    tag/.style={font=\scriptsize,align=center,inner sep=1pt}
   ]
-    \node[box,fill=ContractBlue] (producer) at (0,0)
-      {Producer output};
-    \node[box,fill=ContractBlue] (contract) at (0,-1.10)
-      {Edge contract $C_e$\\payload, assumptions, evidence};
-    \node[box,fill=ValidatorGreen,minimum width=66mm] (validators) at (0,-2.40)
-      {Required validators $V_{e,q}$\\syntax, time, uncertainty, compatibility,
-       $A_e$, $G_e$, provenance};
+    \definecolor{ContractBlue}{HTML}{DCEBFA}
+    \definecolor{ValidatorGreen}{HTML}{DDEFD8}
+    \definecolor{RecoveryOrange}{HTML}{F9E4C8}
+    \definecolor{RejectRed}{HTML}{F7D8D5}
 
-    \node[box,fill=ValidatorGreen] (consumer) at (-4.0,-3.85)
+    \node[box,fill=ContractBlue,minimum width=36mm] (producer) at (0,0)
+      {Producer output};
+    \node[box,fill=ContractBlue,minimum width=52mm] (contract) at (0,-1.05)
+      {Interface contract $C_e$: payload,\\metadata, assumptions, evidence};
+    \node[box,fill=ValidatorGreen,minimum width=64mm] (validators) at (0,-2.35)
+      {Required validators $V_{e,q}$, $q\in\mathcal Q_e$: syntax, time,\\
+       uncertainty, compatibility, $A_e$, $G_e$, provenance};
+
+    \coordinate (branch) at (0,-3.25);
+    \node[box,fill=ValidatorGreen,text width=27mm] (admit) at (-2.05,-4.05)
       {Admit to consumer};
-    \node[box,fill=RejectRed] (reject) at (4.0,-3.85)
-      {Reject and record failed predicate};
-    \node[box,fill=RecoveryOrange,minimum width=54mm] (recovery) at (4.0,-5.05)
-      {Invoke $R_e$\\refresh, re-estimate, replan, degrade, stop};
-    \node[box,fill=ContractBlue] (repair) at (4.0,-6.20)
-      {New contract instance\\with new lineage};
+    \node[box,fill=RejectRed,text width=30mm] (reject) at (1.95,-4.05)
+      {Reject; record failed predicate and evidence};
+    \node[box,fill=RecoveryOrange,text width=30mm] (recover) at (1.95,-5.25)
+      {Invoke $R_e$: refresh, re-estimate, replan, degrade, or stop};
+    \node[box,fill=ContractBlue,text width=30mm] (repair) at (1.95,-6.40)
+      {New contract instance with new lineage};
 
     \draw[arrow] (producer) -- (contract);
     \draw[arrow] (contract) -- (validators);
-    \coordinate (branch) at (0,-3.10);
-    \draw[arrow] (validators.south) -- (branch) -| (consumer.north);
+    \draw[line width=0.7pt] (validators.south) -- (branch);
+    \draw[arrow] (branch) -| (admit.north);
     \draw[arrow] (branch) -| (reject.north);
-    \node[label] at (-2.15,-3.10)
-      {all required checks $=\textsc{true}$};
-    \node[label] at (2.15,-3.10)
-      {$\textsc{false}$ or required $\textsc{unknown}$};
-    \draw[arrow] (reject) -- (recovery);
-    \draw[arrow] (recovery) -- (repair);
-    \draw[arrow] (repair.east) -- ++(1.15,0) |-
-      node[label,pos=0.62] {repair succeeds} (contract.east);
+    \node[tag,anchor=south] at (-2.05,-3.22) {all required $=\true$};
+    \node[tag,anchor=south] at (1.95,-3.22) {\false{} or required \unknown};
+    \draw[arrow] (reject) -- (recover);
+    \draw[arrow] (recover) -- (repair);
+    \draw[arrow] (repair.east) -- ++(0.35,0) |- (contract.east);
   \end{tikzpicture}
-  \caption{Admission and recovery lifecycle for one edge contract.  A repair
-  creates a new contract instance and provenance record while preserving the
-  rejected claim.}
-  \label{fig:contract-lifecycle}
+  \caption{Admission and recovery on one interface.  A required check that
+  returns \unknown{} blocks admission like \false.  A successful repair creates a
+  new contract instance and provenance record while preserving the rejected
+  claim.}
+  \label{fig:lifecycle}
 \end{figure}

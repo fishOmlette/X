@@ -1,61 +1,74 @@
-\documentclass[journal,onecolumn]{IEEEtran}
+\documentclass[journal]{IEEEtran}
 
+% Shared preamble: keep identical across both papers in this repository.
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs,tabularx,array,multirow}
 \usepackage{graphicx}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,fit,calc}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{cite}
 \usepackage{url}
-\usepackage{placeins}
-\usepackage{hyperref}
-\usepackage[nameinlink,capitalise,noabbrev]{cleveref}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,capitalise]{cleveref}
 
-\makeatletter
-\setlength{\@fptop}{0pt}
-\setlength{\@dblfptop}{0pt}
-\makeatother
+\crefname{figure}{Fig.}{Figs.}
+\Crefname{figure}{Fig.}{Figs.}
+\crefname{table}{Table}{Tables}
+\Crefname{table}{Table}{Tables}
+\crefname{section}{Section}{Sections}
+\Crefname{section}{Section}{Sections}
+\crefname{subsection}{Section}{Sections}
+\Crefname{subsection}{Section}{Sections}
+\crefformat{equation}{(#2#1#3)}
+\Crefformat{equation}{Equation~(#2#1#3)}
+\crefrangeformat{equation}{(#3#1#4)--(#5#2#6)}
 
-\hypersetup{
-  colorlinks=true,
-  linkcolor=MidnightBlue,
-  citecolor=ForestGreen,
-  urlcolor=BrickRed,
-  pdftitle={Contracts Across the Multi-Robot Execution Stack: A Cross-Layer Survey and Reference Framework},
-  pdfauthor={Adil Farooq}
-}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\crefname{definition}{Definition}{Definitions}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{corollary}{Corollary}{Corollaries}
 
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
-\hyphenation{multi-robot middle-ware Physics-NeMo}
-\title{Contracts Across the Multi-Robot Execution Stack:\\
-  A Cross-Layer Survey and Reference Framework}
+\newcommand{\true}{\textsc{true}}
+\newcommand{\false}{\textsc{false}}
+\newcommand{\unknown}{\textsc{unknown}}
 
-\author{Adil~Farooq\thanks{Independent researcher, India
-  (e-mail: \texttt{mdadilfarooq@gmail.com}).}}
+% Paper-specific packages.
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\hyphenation{multi-robot middle-ware time-stamp}
+
+\hypersetup{
+  pdftitle={Contracts Across the Multi-Robot Execution Stack: A Cross-Layer Review and Reference Framework},
+  pdfauthor={Mohammed Adil Farooq},
+  pdfkeywords={multi-robot systems, assume-guarantee contracts, runtime assurance, runtime verification, ROS 2, age of information}
+}
 
 \begin{document}
+
+\title{Contracts Across the Multi-Robot Execution Stack:\\
+  A Cross-Layer Review and Reference Framework}
+
+\author{Mohammed~Adil~Farooq%
+\thanks{e-mail: \href{mailto:mdadilfarooq@gmail.com}{mdadilfarooq@gmail.com}}}
+
 \maketitle
 
 \input{sections/abstract}
 \input{sections/introduction}
-\input{sections/scope_and_sources}
 \input{sections/background}
-\input{sections/related_work}
-\input{sections/cross_layer_gaps}
-\input{sections/edge_contract_framework}
-\input{sections/discussion_and_evaluation}
+\input{sections/review_method}
+\input{sections/taxonomy}
+\input{sections/gap_analysis}
+\input{sections/framework}
+\input{sections/discussion}
 \input{sections/conclusion}
 
-\clearpage
-\appendices
-\input{appendices/evidence_coverage}
-\FloatBarrier
-\flushbottom
 \bibliographystyle{IEEEtran}
-\bibliography{references/references}
+\bibliography{references}
 
 \end{document}

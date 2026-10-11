@@ -1,0 +1,60 @@
+\section{Review Method}
+\label{sec:method}
+
+We conducted a structured narrative review of how contract-based and
+runtime-assurance approaches represent, compose, monitor, enforce, or repair
+assumptions that cross robot-software and inter-robot interfaces.  Each source
+was examined with four questions:
+\begin{enumerate}
+  \item What is the primary object of reasoning: mission, component behavior,
+    dynamical interaction, distributed state, runtime authority, or embodied
+    execution?
+  \item Which mechanism does the source supply: specification, refinement,
+    composition, synthesis, monitoring, testing, intervention, or repair?
+  \item Which kind of evidence does it report (\cref{sec:evidence-kinds}), and
+    does that evidence include a physical multi-robot system?
+  \item Which semantic, physical, temporal, uncertainty, evidence,
+    compatibility, lifecycle, and authority obligations does it leave to
+    adjacent components?
+\end{enumerate}
+
+\emph{Search.}  We searched arXiv and web-indexed IEEE, ACM, Springer, Elsevier,
+and institutional repositories by title, abstract, and full text.  Core queries
+combined \emph{assume--guarantee} or \emph{contract-based} with \emph{robot},
+\emph{ROS}, \emph{multi-robot}, \emph{multi-agent}, \emph{mission
+specification}, \emph{coordinated autonomy}, \emph{mission reliability},
+\emph{probabilistic model checking}, \emph{runtime verification}, and
+\emph{runtime assurance}.  Backward and forward snowballing from foundational
+contract work, coordinated-mission assurance, robotic mission frameworks, ROS
+contract and monitoring systems, and recent cross-layer reviews added sources
+that use different terminology.
+
+\emph{Selection.}  We included primary work that defines a contract,
+compositional-assurance, runtime-monitoring, or runtime-assurance mechanism
+applicable to robotics, cyber-physical systems, or interconnected agents;
+reports a relevant robotics implementation; or defines a directly relevant
+communication standard.  We also included surveys that organize multi-robot
+modeling, communication, learning, safety, or embodied assurance.  We excluded
+general design-by-contract work without an architectural or cyber-physical
+connection and planning work that does not expose an interface-assurance
+question.  Representative planning and middleware sources were retained only
+where they clarify what an interface must carry.
+
+\emph{Coding.}  For each source, we recorded the protected object, mechanism,
+reported evidence, deployment setting, and obligations left to adjacent
+components, and we grouped sources into twelve approach classes under six
+protected objects (\cref{tab:taxonomy}).  The coded corpus contains 36 sources.
+The remaining 15 references supply background on multi-robot coordination and
+middleware, foundational contract theory, the standards used by the framework,
+related surveys, and the public issue reports analyzed in
+\cref{sec:middleware-evidence}.  Coverage of each obligation is coded per class
+(\cref{tab:coverage}).  A class receives ``E'' when the obligation is explicit
+and central in every source of the class, ``P'' when the treatment is partial,
+conditional, model-internal, or present in only some sources, and ``--'' when
+the obligation lies outside the stated mechanisms.  The coding describes the
+cited mechanisms, not every capability of the surrounding systems.
+
+\emph{Scope of inference.}  The search evolved through snowballing, so
+PRISMA-style candidate and exclusion counts were not retained.  The review
+therefore supports qualitative statements about coverage and evidence
+boundaries; it supports no claim about prevalence or effect size.

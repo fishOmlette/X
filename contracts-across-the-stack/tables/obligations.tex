@@ -1,0 +1,34 @@
+\begin{table*}[!t]
+  \centering
+  \caption{Interface-Contract Obligations Derived from the Five Gaps}
+  \label{tab:obligations}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.08}
+  \begin{tabularx}{\textwidth}{@{}P{0.17\textwidth}P{0.33\textwidth}P{0.25\textwidth}Y@{}}
+    \toprule
+    Gap & Metadata and evidence carried by the interface & Required validators & Response on rejection \\
+    \midrule
+    G1: Semantic and physical validity
+      & Canonical task and resource identifiers; hard constraints; frames and units; model, operating region, and margins
+      & Registry resolution; task, feasibility, or certificate check
+      & Clarify, reject, repair the task, or replan \\
+    G2: Temporal validity
+      & Event or forecast-target time; publication and availability times; validity interval; clock domain and error bound
+      & Freshness, target-time, deadline, and clock-comparability predicates, e.g., \eqref{eq:temporal-admission}
+      & Request fresh state, shorten the horizon, degrade, or stop \\
+    G3: Uncertainty, provenance, and evidence
+      & Uncertainty type, scope, correlations, calibration, and propagation rule; model and solver identity; lineage; evidence kind
+      & Uncertainty-threshold, calibration, certificate, and provenance-policy checks
+      & Re-estimate, re-solve, choose a robust alternative, or escalate \\
+    G4: Implementation and lifecycle compatibility
+      & Schema, protocol, implementation, dependency, and configuration identities; membership; resource ownership; team epoch
+      & Supported-combination, epoch, ownership, and lifecycle-transition checks
+      & Reconcile, downgrade, isolate, restart, or reallocate \\
+    G5: Intervention, recovery, and attribution
+      & Producer and consumer authority; safety overrides; acknowledgements; completion evidence; recovery owner
+      & Authority, acknowledgement, intervention-report, and completion predicates
+      & Transfer authority, coordinate replanning, stop, or request human action \\
+    \bottomrule
+  \end{tabularx}
+\end{table*}
