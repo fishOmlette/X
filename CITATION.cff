@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: >-
+  If you use material from this repository, please cite the corresponding
+  research note listed under references.
+title: Validity and Timing in Multi-Robot Runtime Assurance
+type: software
+authors:
+  - family-names: Farukh
+    given-names: Mohamed Adil
+    email: mdadilfarooq@gmail.com
+repository-code: https://github.com/fishOmlette/X
+keywords:
+  - multi-robot systems
+  - runtime assurance
+  - assume-guarantee contracts
+references:
+  - type: article
+    status: in-preparation
+    title: >-
+      Contracts Across the Multi-Robot Execution Stack: A Cross-Layer Review
+      and Reference Framework
+    authors:
+      - family-names: Farukh
+        given-names: Mohamed Adil
+  - type: article
+    status: in-preparation
+    title: >-
+      When Does Predicting Failure Help? A Boundary Analysis of Predictive
+      versus Reactive Runtime Assurance for Multi-Robot Coordination
+    authors:
+      - family-names: Farukh
+        given-names: Mohamed Adil
