@@ -1,18 +1,39 @@
-\begin{table}[t]
+\begin{table}[htbp]
   \centering
-  \caption{Running command trace; all thresholds are scenario-specific contract parameters}
+  \caption{Worked Command Trace; All Thresholds Are Scenario-Specific Contract
+  Parameters}
   \label{tab:command-trace}
-  \scriptsize
-  \begin{tabularx}{\textwidth}{@{}P{0.13\textwidth}P{0.27\textwidth}Y Y@{}}
+  \footnotesize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.08}
+  \begin{tabularx}{\textwidth}{@{}P{0.12\textwidth}P{0.22\textwidth}YP{0.30\textwidth}@{}}
     \toprule
-    Function & Payload $P_e$ & Assumption, guarantee, and metadata & Validator and rejection $V_e,R_e$ \\
+    Function & Payload $P_e$ & Assumption $A_e$, guarantee $G_e$, metadata $M_e$, and evidence $E_e$ & Validators $V_e$ and response $R_e$ \\
     \midrule
-    Semantic task formation & Roles, sector identifier, inspection goal, and corridor-clear constraint & $A_e$: referents resolve and two capable robots exist; $G_e$: confirmed hard constraints remain explicit & Resolve against map and capability registries; clarify or reject an unresolved referent \\
-    Predictive state & Occupancy and joint trajectories over horizon $H$ & $M_e$: event and target times, horizon, uncertainty semantics, and other-agent policy identity & Reject or shorten $H$ if age exceeds $\bar\Delta$ or uncertainty is not below its declared limit $\bar U$ \\
-    Physical grounding & Reachable viewpoints and time-parameterized paths & $G_e$: separation is at least $d_{\min}$ and actuator limits hold; $E_e$: model, solver status, and minimum margins & Re-solve or return infeasible when solver status is unacceptable or a required margin is negative \\
-    Distributed runtime & Assignments, paths, peer state, and acknowledgements & $M_e$: frame, units, schema/protocol/implementation identities, team epoch, ownership, and clock-error bound & Drop expired or wrong-epoch data; reconcile, degrade, or replan when age, clock, ownership, or compatibility checks fail \\
-    Runtime safety & Admissible command or intervention record & $G_e$: conditional local-safety claim; $E_e$: active constraint, model/state/update assumptions, and intervention cause & Apply a feasible override and publish its cause; stop or escalate if the safety program is infeasible \\
-    Physical robots & Execution state, health, resource release, and completion evidence & Capability and health guarantee; ownership and completion status & Isolate an unhealthy robot, reallocate its task, or request human action \\
+    Semantic task formation
+      & Roles, sector identifier, inspection goal, and corridor-clear constraint
+      & $A_e$: referents resolve and two capable robots exist; $G_e$: confirmed hard constraints remain explicit
+      & Resolve against map and capability registries; clarify or reject an unresolved referent \\
+    Prediction
+      & Occupancy and joint trajectories over horizon $H$
+      & $M_e$: event and target times, horizon, uncertainty semantics, and identity of the model of other agents
+      & Reject or shorten $H$ if the age exceeds $\bar\Delta$ or the uncertainty exceeds its declared limit $\bar U$ \\
+    Physical grounding
+      & Reachable viewpoints and time-parameterized paths
+      & $G_e$: separation of at least $d_{\min}$ and actuator limits hold; $E_e$: model, solver status, and minimum margins
+      & Re-solve, or return infeasible when the solver status is unacceptable or a required margin is negative \\
+    Distributed runtime
+      & Assignments, paths, peer state, and acknowledgements
+      & $M_e$: frame, units, schema, protocol, and implementation identities, team epoch, ownership, event times, and clock-error bounds
+      & Admit peer state only while \eqref{eq:temporal-admission} holds; drop wrong-epoch data; reconcile, degrade, or replan when clock, ownership, or compatibility checks fail \\
+    Runtime safety
+      & Admissible command or intervention record
+      & $G_e$: conditional local-safety claim; $E_e$: active constraint, model, state, and update-rate assumptions, and intervention cause
+      & Apply a feasible override and publish its cause; stop or escalate if the safety program is infeasible \\
+    Physical robots
+      & Execution state, health, resource release, and completion evidence
+      & $G_e$: capability and health; $M_e$: ownership and completion status
+      & Isolate an unhealthy robot, reallocate its task, or request human action \\
     \bottomrule
   \end{tabularx}
 \end{table}

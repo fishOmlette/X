@@ -1,10 +1,19 @@
-\section{Conclusion}
+\section{What I take from this}
 \label{sec:conclusion}
 
-The reviewed work provides substantial machinery for mission specification,
-component verification, dynamical composition, monitoring, and safety fallback.
-Its guarantees become difficult to connect when they protect different objects
-or leave interface assumptions implicit.  The edge-contract framework organizes
-the recurring obligations and distinguishes intra-robot from inter-robot
-interfaces.  It remains a reference model: formal instantiation and multi-robot
-evaluation are required before it can support a reliability claim.
+The main lesson from this review is that a component's guarantee is hard to use
+when the next component cannot check its assumptions.  In the coding used here,
+each approach class makes at most two of seven interface obligations explicit
+and central, and none does so for lifecycle.  That pattern points to a useful
+place to work: the handoffs between mechanisms that already exist.
+
+The proposed framework is a way to make those obligations visible: record what
+is being transferred, what makes it valid, how the receiver checks it, and who
+acts when a check fails.  The peer-state example makes one part concrete.  State
+age, clock error, and estimation error all consume separation margin, so a more
+accurate remote estimate can still be less useful than a fresher on-board one.
+
+This gives me a concrete starting point for implementation: choose an
+inter-robot interface, encode the assumptions its consumer needs, and attach
+checks and recovery actions to them.  I would start with peer-state timing and
+measure how those checks change stale-data admission and task completion.

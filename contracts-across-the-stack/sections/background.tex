@@ -6,77 +6,74 @@
 A multi-robot system contains a team $\mathcal R=\{r_1,\ldots,r_n\}$ whose
 objectives, observations, actions, or resources are coupled
 \cite{gerkey2004mrta,street2023formal,gielis2022communications}.  The coupling
-may arise from a shared mission, collision
-constraints, task precedence, limited resources, or communication through a
-time-varying graph.  Consequently, local correctness is generally insufficient:
-a decision that is safe for one robot under an old peer state can violate the
-joint constraint under the current team state.
+may arise from a shared mission, collision constraints, task precedence, limited
+resources, or communication over a time-varying graph.  Local correctness is
+therefore insufficient in general: a decision that is safe for one robot under
+an old peer state can violate a joint constraint under the current team state.
 
 Let $x_i$, $u_i$, and $w_i$ denote the state, input, and disturbance of robot
-$i$.  A general model is
+$r_i$.  A general model is
 \begin{equation}
-  \dot x_i=f_i(x_i,u_i,w_i),
-  \qquad
-  g_{ij}(x_i,x_j)\ge 0,\qquad \{i,j\}\in\mathcal E_c,
+  \dot x_i=f_i(x_i,u_i,w_i),\qquad
+  g_{ij}(x_i,x_j)\ge 0,\quad \{i,j\}\in\mathcal E_c,
   \label{eq:coupled-dynamics}
 \end{equation}
-where $\mathcal E_c$ indexes coupled team constraints.  For collision avoidance,
-for example, $g_{ij}=\lVert p_i-p_j\rVert^2-d_{\min}^2$; other instances encode
-formation, visibility, or other coupled state constraints
-\cite{sharf2021dynamical,chen2019invariance,wang2017barrier}.  The local dynamics
-in \cref{eq:coupled-dynamics} can be valid while the joint constraint is evaluated
-with an invalid peer state.  This is the mechanical reason that horizontal
-interfaces require explicit timing and uncertainty assumptions.
+where $\mathcal E_c$ indexes the coupled team constraints.  For collision
+avoidance, $g_{ij}=\lVert p_i-p_j\rVert^2-d_{\min}^2$ for positions $p_i,p_j$
+and minimum separation $d_{\min}$; other instances encode formation, visibility,
+or connectivity constraints
+\cite{sharf2021dynamical,chen2019invariance,wang2017barrier}.  The local
+dynamics in \eqref{eq:coupled-dynamics} can be modeled correctly while the joint
+constraint is evaluated with an invalid peer state.  This is the mechanical
+reason why horizontal interfaces need explicit timing and uncertainty
+assumptions.
 
-A typical command passes through task interpretation, allocation, prediction,
+A command typically passes through task interpretation, allocation, prediction,
 motion or action planning, distributed communication, runtime validation, and
 physical execution.  These functions need not occupy separate processes or
 robots, but each transformation changes the object being reasoned about.  A
-language instruction becomes a task model; a task model becomes an assignment;
-an assignment becomes trajectories or actions; and distributed observations
-become inputs to safety-critical control.  Evidence that is meaningful at one
-stage may be insufficient at the next.
+language instruction becomes a task model, a task model becomes an assignment,
+an assignment becomes trajectories, and distributed observations become inputs
+to safety-critical control.  Evidence that is meaningful at one stage may be
+insufficient at the next.
 
-\subsection{What a Contract Protects}
+\subsection{Contracts, Verification, and Assurance}
 
 An assume--guarantee contract separates an environment assumption $A$ from a
-component guarantee $G$ \cite{benveniste2007contracts}.  A contract theory may
-also define satisfaction, compatibility, refinement, composition, and quotient
-for a chosen behavioral model.  Robotics uses this idea at several levels: a
-mission contract can describe temporal goals and contexts; a component contract
-can specify software behavior; a dynamical contract can constrain input and
-output trajectories; and a runtime-assurance specification can govern transfer
-of control authority.  These contract objects are related, but they are not
+component guarantee $G$ \cite{benveniste2007contracts}.  A contract theory
+additionally defines satisfaction, compatibility, refinement, composition, and
+quotient for a chosen behavioral model.  Robotics uses the idea at several
+levels: a mission contract describes temporal goals and contexts, a component
+contract specifies software behavior, a dynamical contract constrains input and
+output trajectories, and a runtime-assurance specification governs the transfer
+of control authority.  These contract objects are related but not
 interchangeable.
 
-Here, a \emph{contract} states obligations, \emph{verification} checks a stated
-property, and \emph{assurance} is the broader argument and evidence supporting
-confidence in system behavior.  A contract contributes to assurance only when
-its assumptions, checking mechanism, and evidence are explicit.
-
-This distinction matters because an interface schema is not automatically a
-contract.  Names, types, timestamps, and version fields become contractual only
-when they participate in explicit assumptions or guarantees, are checked by a
+I use three terms consistently.  A \emph{contract} states obligations,
+\emph{verification} checks a stated property, and \emph{assurance} is the
+broader argument and evidence supporting confidence in system behavior.  A
+contract contributes to assurance only when its assumptions, checking mechanism,
+and evidence are explicit.  An interface schema is therefore not automatically
+a contract.  Names, types, time stamps, and version fields become contractual
+only when they appear in explicit assumptions or guarantees, are checked by a
 defined validator, and have a specified consequence when the check fails.
 Likewise, a runtime monitor observes only the properties encoded in its
 specification; it cannot infer an omitted frame, validity horizon, or recovery
-policy.  The survey therefore considers both the stated property and the
-evidence used to support it.
+policy.
 
-\subsection{Evidence Boundary}
+\subsection{Kinds of Evidence}
+\label{sec:evidence-kinds}
 
-Because every guarantee depends on its assumptions, the type of supporting
-evidence matters.  The survey distinguishes three forms.  \emph{Capability evidence}
-shows that a system performs a task.  \emph{Assurance evidence} supports a
-specified property under declared assumptions, for example through proof,
-synthesis, monitoring, or testing.  \emph{Deployment evidence} measures behavior
-on a stated platform, configuration, workload, or fault condition.  A planning
-benchmark is therefore not evidence of network-timing robustness, and a formal
-guarantee under a dynamics model is not evidence that an implementation uses
-the correct frame, clock, or software version.  The survey compares approaches
-within their reported evidence boundaries and does not treat all successful
-demonstrations as equivalent.  This distinction is especially important for
-coordinated-autonomy studies, where a mission-level probability or reliability
-estimate can be valid for its model and data without certifying every runtime
-interface used to execute the mission
+Because every guarantee is conditional on its assumptions, the kind of
+supporting evidence matters.  I distinguish three kinds.  \emph{Capability
+evidence} shows that a system performs a task.  \emph{Assurance evidence}
+supports a specified property under declared assumptions, for example through
+proof, synthesis, monitoring, or systematic testing.  \emph{Deployment evidence}
+measures behavior on a stated platform, configuration, workload, or fault
+condition.  A planning benchmark is not evidence of robustness to network
+timing, and a formal guarantee under a dynamics model is not evidence that an
+implementation uses the correct frame, clock, or software version.  The
+distinction matters for coordinated-autonomy studies in particular: a
+mission-level probability or reliability estimate can be valid for its model and
+data without certifying the runtime interfaces that execute the mission
 \cite{chaki2013probabilistic,porter2013reliability}.

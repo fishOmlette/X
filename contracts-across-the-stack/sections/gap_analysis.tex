@@ -1,0 +1,148 @@
+\section{Where interface assumptions get lost}
+\label{sec:gaps}
+
+The reviewed approaches use different behavioral models, so their guarantees
+cannot be combined simply by listing them.  A cross-layer execution argument
+must preserve the assumptions that matter when an output expressed under one
+model becomes an input to another.  \Cref{tab:coverage} codes each approach
+class against seven interface obligations, and four patterns stand out.  No
+class is explicit and central on more than two of the seven obligations.  No
+class treats membership, ownership, and lifecycle transitions as explicit and
+central.  Temporal validity is explicit only in the two distributed-state
+classes, which treat physical validity and recovery at most partially.  Recovery
+is explicit only where authority transfer is local to one controller or one
+runtime.  The obligations group into five recurring gaps, G1--G5.
+
+\input{tables/coverage}
+
+\subsection{G1: Semantic and Physical Validity}
+
+Mission contracts make goals and contexts explicit, and planning and learning
+systems produce assignments or actions.  The receiving component still needs the
+task identifiers, capabilities, map, state, dynamics, resources, and
+communication model behind a proposal.  It must also be able to distinguish a
+hard constraint from a planner preference, a model suggestion, and a checked
+feasibility claim.  A meaningful plan may be physically infeasible, and a
+feasible plan may violate the operator's intent.  Feasibility must therefore be
+qualified as nominal, robust, probabilistic, or conditional on a named model and
+operating region
+\cite{mallozzi2020crome,mallozzi2023repair,mandi2024roco,obata2025lipllm,
+chaki2013probabilistic}.
+
+\subsection{G2: Temporal Validity of Distributed State}
+\label{sec:gap-time}
+
+Distributed execution involves several distinct times: the time of the physical
+event, the publication time, the arrival time, the time at which the consumer
+can use the data, the target time of a forecast, and the end of the validity
+interval.  Replacing the event time with a reception time stamp hides both
+producer and network delay.  For a stream of state updates, the age of
+information at time $t$ is
+\begin{equation}
+  \Delta(t)=t-u(t),
+  \label{eq:aoi}
+\end{equation}
+where $u(t)$ is the event time of the newest update available to the consumer
+\cite{kaul2012aoi}.  Age matters only relative to a decision: the same sample can
+be fresh enough for a slow inspection task and too old for collision avoidance
+between fast robots.  Comparing event times across robots also requires the
+clocks to be comparable.  Synchronization protocols such as IEEE~1588 can bound
+the offset between clocks \cite{ieee2020ptp}, but the bound helps the consumer
+only if it travels with the time stamp.  Transport reliability or a cadence
+notification does not establish that the margin a decision needs is available
+\cite{omg2015dds,kronauer2021latency}.  A cross-robot interface therefore needs
+event-time semantics, the clock domain and an error bound, an
+application-specific validity bound, and a response to stale or incomparable
+state.  \Cref{sec:temporal-admission} derives these fields from the collision
+constraint in \eqref{eq:coupled-dynamics}.
+
+\subsection{G3: Uncertainty, Provenance, and Evidence}
+
+The word \emph{uncertainty} may refer to a covariance, an interval, a reachable
+set, a calibrated probability, or semantic ambiguity.  These representations
+cannot be compared or propagated in the same way, and a confidence value with no
+declared meaning cannot satisfy a downstream chance constraint or robust margin.
+The interface must identify the representation, the covered variables and
+correlations, the calibration regime, the validity horizon, and the propagation
+rule.
+
+The same requirement applies to evidence.  A consumer should be able to tell a
+proof from a solver status, a monitor verdict, a calibration report, a test
+identifier, and a deployment measurement.  Provenance links a payload and its
+evidence to the model, configuration, observations, and transformations that
+produced them.  Without this lineage, a downstream rejection may reveal that a
+claim failed but not which assumption or artifact needs repair
+\cite{kim2026safeembodied,w3c2013prov}.
+
+\subsection{G4: Implementation and Lifecycle Compatibility}
+
+Type and wire compatibility are weaker than behavioral compatibility.  Two
+components can decode the same message while using different coordinate frames,
+units, parameter sets, middleware implementations, dependency versions, or clock
+sources.  Admitting a result therefore requires separate identities for the
+schema, protocol, implementation, dependencies, and configuration, together with
+evidence that the combination is supported
+\cite{macenski2022ros2,omg2015dds,kronauer2021latency}.
+
+Message contracts also omit lifecycle unless it is represented explicitly.
+Join, leave, restart, and partition recovery can invalidate old assignments or
+duplicate resource ownership.  A multi-robot contract needs a team epoch,
+membership and ownership state, legal lifecycle transitions, and a
+reconciliation rule for retained or delayed data
+\cite{luckcuck2026compositional,liu2026phyagentos}.
+
+\subsection{G5: Intervention, Recovery, and Attribution}
+
+Monitoring is incomplete if a failed check has no defined consequence.  The
+responsible authority may request clarification, obtain fresh state,
+re-estimate, replan, transfer control, degrade the mission, isolate a robot,
+stop, or escalate to a human.  In a team, this response must be coordinated: an
+unreported local safety override can invalidate peer trajectories or
+task-completion logic.  Runtime-assurance and field-testing work accordingly
+treats intervention, observability, and reporting as first-class mechanisms
+\cite{desai2019soter,shivakumar2020soterros,caldas2024rvft}.
+
+Fault origin and first observation must also be kept apart.  A collision risk
+first detected by a controller may originate in semantic grounding, prediction,
+physical modeling, communication delay, or hardware.  Recording origin, first
+observation, effect, and recovery authority as separate fields supports both
+online handling and post-mission diagnosis.
+
+\subsection{Evidence from ROS~2 Middleware}
+\label{sec:middleware-evidence}
+
+Public failure reports from the nightly continuous-integration (CI) pipeline of
+Nav2, the ROS~2 navigation stack, illustrate G2 and G4 in deployed software
+\cite{nav2issue6163}.  Unchanged Nav2 test sources failed for different reasons
+under three ROS middleware (RMW) implementations.
+\begin{itemize}
+  \item With \texttt{rmw\_zenoh}, the ROS~2 middleware based on Zenoh
+    \cite{corsaro2023zenoh}, tests passed every assertion yet aborted at
+    process exit: \texttt{rclcpp::shutdown()} ran from the destructor of a
+    global test-fixture object after the thread-local storage of the Zenoh
+    runtime had already been destroyed.  Moving initialization and shutdown
+    into \texttt{main()} removed the failures \cite{nav2pr4948,nav2pr6241}.
+  \item With Cyclone DDS, a teardown assertion in \texttt{ddsi\_fini} appeared
+    with release~11.0.1 but not with 11.0.0, using the same
+    \texttt{rmw\_cyclonedds\_cpp} version.  Reverting one upstream commit that
+    changed the type-lookup request and reply headers eliminated the failure in
+    40 repeated runs, although that commit may expose rather than contain the
+    defect \cite{cyclonedds2426}.
+  \item With Fast DDS, a service request reached its server and the callback
+    ran, but the response was dropped because the response writer had not yet
+    matched the client's response reader; increasing the client's wait time did
+    not help.  The behavior is consistent with a known limitation of service
+    discovery in the Fast DDS middleware layer
+    \cite{nav2issue6163,fastrtps392}.
+\end{itemize}
+
+In each case, the message types, the application code, and the declared QoS
+were unchanged.  What differed was the implementation identity, its patch
+version, or the order of lifecycle events, which is exactly the information
+that a type-level interface does not carry (G4).  The Fast DDS case also shows
+that the availability of one endpoint is not evidence that a complete
+request--response interaction can occur in time (G2).  I contributed the
+Zenoh fix and the Cyclone DDS diagnosis; all observations are taken from the
+public record.  These are single-host test failures rather than multi-robot
+field incidents, so they illustrate the gaps but do not measure their
+prevalence.

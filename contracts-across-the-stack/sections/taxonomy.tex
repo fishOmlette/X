@@ -1,0 +1,183 @@
+\section{What the reviewed approaches protect}
+\label{sec:taxonomy}
+
+I organize the reviewed literature by its \emph{protected object}: the
+property or artifact that an approach is designed to preserve.
+\Cref{tab:taxonomy} summarizes the twelve approach classes; the classes overlap,
+and one system can contribute to more than one of them.
+
+\input{tables/taxonomy}
+
+\subsection{Related Surveys}
+
+Recent surveys use other organizing lenses.  Li \emph{et al.}\ classify
+language-model research for multi-robot systems into task allocation, motion
+planning, action generation, and human intervention \cite{li2026llmmrs}.
+Street \emph{et al.}\ review formal models for robot teams under uncertainty,
+and Gielis \emph{et al.}\ analyze how robotic applications and communication
+systems interact \cite{street2023formal,gielis2022communications}.  Garg
+\emph{et al.}\ organize learning-based safe control by safety notion, control
+method, and verification tool \cite{garg2024safecontrol}.  Kim \emph{et al.}\
+review safety for long-horizon manipulation by intervention locus (planning,
+policy, and execution) and grade the strength of the supporting evidence
+\cite{kim2026safeembodied}.  These surveys clarify capabilities, models,
+communication, or intervention layers.  The present review uses a different
+unit of comparison: the protected object, together with the information required
+when its guarantee becomes another component's assumption.
+
+\subsection{Mission Intent}
+
+CROME captures mission requirements as contract-based goal graphs, checks
+feasibility, refines goals from a library, and synthesizes controllers
+\cite{mallozzi2020crome}; later work decomposes contextual missions into
+context-specific sub-missions with correct-by-construction switching
+\cite{mallozzi2023contextual}.  Contract operations can also refine a mission
+against a component library or repair an unrealizable specification
+\cite{mallozzi2023repair}.  These methods make goals, contexts, refinement, and
+realizability explicit at the mission boundary; data age, provenance, and
+implementation identity lie outside their scope.
+
+Language-conditioned planners address an adjacent problem: turning open-ended
+instructions into plans, role assignments, or optimization models.  RoCo
+coordinates language-model agents through dialogue with environment feedback,
+and LiP-LLM combines a language model with a predefined skill set, a dependency
+graph, and a linear program \cite{mandi2024roco,obata2025lipllm}.  Both provide
+capability evidence, while collision checking, skill definitions, and
+feasibility solvers remain external.  Expressing intent is not the same as
+certifying its physical or distributed execution.
+
+Quantitative assurance of coordinated autonomy addresses the mission level from
+another direction.  Chaki, Dolan, and Giampapa characterize coordination
+phenomena and mission phases and evaluate discrete-time Markov-chain models by
+probabilistic model checking \cite{chaki2013assurance}; related work computes
+mission utility by probabilistic verification \cite{chaki2013probabilistic}.
+Reliability studies estimate the performance of sequentially coordinated
+missions from measured robot behavior and compare repairable team
+configurations \cite{porter2013reliability,stancliff2006missionreliability}.
+Within the reviewed corpus, this line is the closest mission-level predecessor
+of the present question because it connects coordination structure to
+quantitative mission evidence.  Its protected object is mission or team
+reliability, whereas I ask which obligations must cross the heterogeneous
+interfaces that realize such a mission.
+
+\subsection{Component Behavior}
+
+Luckcuck \emph{et al.}\ specify ROS nodes with first-order assume--guarantee
+contracts, compose node contracts into system properties through inference
+rules, and translate contracts written in the ROS Contract Language (RCL) into
+executable runtime monitors \cite{luckcuck2026compositional}.  The approach
+connects behavioral contracts to node implementations; cross-robot state age,
+team membership, and heterogeneous deployment compatibility are not its central
+objects.  ROSMonitoring~2.0 monitors topics and services, including message
+order, with partial ROS~2 support \cite{ghaffari2024rosmonitoring}.  Caldas
+\emph{et al.}\ contribute guidelines for runtime verification and field-based
+testing of ROS-based systems that emphasize observability, instrumentation, and
+reporting \cite{caldas2024rvft}.  Together, these works show that
+specification, instrumentation, and evidence collection are separate
+engineering concerns.
+
+Distributed robot programming and model-driven design connect software
+structure to team behavior more directly.  Koord provides platform-independent
+abstractions for distributed shared memory, sensing, and control; its executable
+semantics expose proof obligations, of which platform-specific ones are checked
+with physics-based models and hybrid verification tools \cite{ghosh2020koord}.
+ATLAS models team architecture, mission, and collective intelligence and uses
+simulation to explore design choices and robustness \cite{harbin2023design}.
+Both analyses remain tied to their languages, models, generated infrastructure,
+and simulation settings; neither defines an evidence envelope for every
+interface of a heterogeneous deployed stack.
+
+\subsection{Dynamical Interaction}
+
+Contracts for dynamical systems place assumptions on input trajectories and
+guarantees on outputs.  Sharf \emph{et al.}\ verify satisfaction and refinement
+of linear contracts by linear programming and prove safety in a two-vehicle
+example \cite{sharf2021dynamical}.  Chen \emph{et al.}\ use parameterized
+temporal-logic contracts to compute robust invariant sets compositionally for
+network systems \cite{chen2019invariance}, and Liu \emph{et al.}\ synthesize
+decentralized controllers for interconnected nonlinear systems from
+signal-temporal-logic contracts \cite{liu2022stlcontracts}.  Assume--guarantee
+reinforcement learning expresses contracts over neighboring components as
+regular languages and combines local satisfaction probabilities into a lower
+bound for the whole system \cite{kazemi2024agrl}.  These approaches address
+interaction and decomposition directly, but they assume that the declared
+neighbor abstractions, labels, communication, dynamics, and timing are available
+as modeled.
+
+\subsection{Distributed State}
+
+ROS~2 provides modular robot communication through interchangeable middleware
+implementations, most commonly DDS \cite{macenski2022ros2,omg2015dds}.  DDS
+quality-of-service (QoS) policies govern reliability,
+history, durability, liveliness, deadline, and lifespan.  These are
+data-stream mechanisms; they do not establish application-level freshness or
+mission validity.  The \emph{Deadline} policy concerns the expected period
+between samples, not the age of the physical event a sample represents.  The
+\emph{Lifespan} policy expires samples relative to their source time stamp,
+which by default records the write call rather than the physical event; the
+standard relies on sufficiently synchronized clocks and allows a reader to
+substitute the reception time stamp when it detects that they are not
+\cite{omg2015dds}.
+
+ROS~2 latency studies show that process structure, executor behavior, and the
+DDS implementation affect end-to-end timing
+\cite{maruyama2016ros2,kronauer2021latency}.  Communication surveys find that
+coordination and networking assumptions are often designed and evaluated
+separately \cite{gielis2022communications}, and recent planning work builds
+temporal communication constraints and intermittent connectivity into
+stochastic multi-robot planning \cite{silva2026probabilistic}.  Age-of-information
+research characterizes how fresh the newest available update is
+\cite{kaul2012aoi}.  These works provide deployment semantics and measurements
+rather than compositional robot contracts.  They nevertheless expose a necessary
+bridge: a dynamical or safety guarantee that assumes current peer state needs an
+application-level rule that relates event time, clock uncertainty, delivery, and
+the physical decision.
+
+\subsection{Runtime Authority}
+
+The Simplex architecture uses a simple, verified controller to bound the
+behavior of a more complex one \cite{sha2001simplex}.  SOTER makes this pattern
+programmable for robotics: a decision module transfers authority from an
+advanced controller to a safe controller when a monitor predicts a violation
+\cite{desai2019soter}, and SOTER on ROS evaluates the pattern in simulated
+multi-robot surveillance \cite{shivakumar2020soterros}.  Control barrier
+functions and multi-robot barrier certificates instead constrain the admissible
+inputs to keep a modeled safe set invariant \cite{ames2017cbf,wang2017barrier}.
+These mechanisms give strong conditional safety guarantees, but the guarantees
+depend on the dynamics model, state estimation, update rate, feasibility, and
+timely peer state.  A local intervention can preserve one robot's safety while
+invalidating the team plan unless it is reported upstream.
+
+Mission-level runtime verification extends monitoring beyond immediate safety.
+Tsai and Hariri reject driving commands that would make the mission infeasible
+before they execute \cite{tsai2026missionrta}.  Kekatos \emph{et al.}\ compose
+platform, squad, and mission monitors for robot swarms over a messaging fabric
+that makes evidence loss observable, so that unsupported negative verdicts
+become an explicit \emph{unknown} rather than an all-clear
+\cite{kekatos2026swarmrta}.  This treatment of missing evidence is the closest
+reviewed counterpart to the admission semantics of \cref{sec:admission}.
+
+\subsection{Embodied Execution}
+
+Kim \emph{et al.}\ argue for modular safety guardrails that monitor and
+intervene across action, decision, and human-centered safety
+\cite{kim2026guardrails}.  PhyAgentOS separates cognitive planning from physical
+execution and provides compatibility preflight, supervised execution sessions,
+evidence-grounded verification, layered safety, and heartbeat monitoring
+\cite{liu2026phyagentos}.  It is the closest reviewed runtime architecture to
+several obligations synthesized here.  PhyAgentOS, however, defines one
+embodied-agent runtime, whereas the framework of \cref{sec:framework} is an
+architecture-independent classification of obligations on both cross-layer and
+peer-robot interfaces.  Within the reviewed works, I found no composition model
+that jointly represents temporal validity, ownership, provenance, and recovery
+across those interfaces.
+
+\subsection{Synthesis}
+
+The reviewed literature supplies mechanisms for mission realizability, node
+behavior, dynamical composition, communication observation, and runtime safety.
+Coverage becomes discontinuous where these mechanisms meet.  A mission guarantee
+may end before physical feasibility; a dynamical guarantee may assume current
+neighbor signals; a middleware status may omit the physical event time; and a
+safety intervention may never return to task allocation.  \Cref{sec:gaps}
+turns these discontinuities into five interface gaps.

@@ -1,0 +1,43 @@
+\begin{table}[htbp]
+  \centering
+  \caption{Qualitative Coverage of Interface Obligations by Approach Class}
+  \label{tab:coverage}
+  \footnotesize
+  \setlength{\tabcolsep}{2.4pt}
+  \newcommand{\colhead}[1]{\rotatebox{90}{#1}}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.5\columnwidth}*{7}{c}@{}}
+    \toprule
+    & \multicolumn{2}{c}{G1} & G2 & G3 & \multicolumn{2}{c}{G4} & G5 \\
+    \cmidrule(lr){2-3}\cmidrule(lr){4-4}\cmidrule(lr){5-5}\cmidrule(lr){6-7}\cmidrule(l){8-8}
+    Approach class & \colhead{Semantic} & \colhead{Physical} & \colhead{Temporal}
+      & \colhead{Uncertainty} & \colhead{Compatibility} & \colhead{Lifecycle}
+      & \colhead{Recovery} \\
+    \midrule
+    Mission contracts                    & E  & P  & -- & -- & -- & P  & P  \\
+    Language-conditioned planning        & E  & P  & -- & -- & -- & -- & P  \\
+    Coordinated-mission assurance        & E  & P  & -- & E  & -- & P  & P  \\
+    Component contracts and monitors     & P  & P  & P  & -- & P  & -- & P  \\
+    Distributed programming and design   & E  & P  & P  & P  & E  & P  & P  \\
+    Dynamical contracts                  & -- & E  & -- & -- & -- & -- & -- \\
+    Assume--guarantee learning           & P  & P  & -- & E  & -- & -- & -- \\
+    Middleware and QoS                   & -- & -- & E  & -- & E  & P  & -- \\
+    Communication-aware coordination     & P  & P  & E  & P  & -- & P  & P  \\
+    Runtime assurance and safety filters & -- & E  & P  & P  & -- & -- & E  \\
+    Mission-level runtime verification   & E  & P  & P  & P  & -- & -- & P  \\
+    Cross-layer guardrails and runtimes  & P  & E  & P  & P  & P  & P  & E  \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{3pt}
+  \parbox{\columnwidth}{\footnotesize E: explicit and central in every source of
+  the class; P: partial, conditional, model-internal, or present in only some
+  sources; --: outside the stated mechanisms.  Semantic: task identity, intent,
+  and hard constraints.  Physical: feasibility or safety under a physical model.
+  Temporal: event time, data age, validity interval, and clock semantics.
+  Uncertainty: uncertainty representation, provenance, and evidence kind.
+  Compatibility: implementation, version, and configuration identity.
+  Lifecycle: membership, ownership, and lifecycle transitions.  Recovery:
+  defined response to a failed check, including authority transfer.  G1--G5
+  refer to the gaps of \cref{sec:gaps}; sources per class are listed in
+  \cref{tab:taxonomy}.}
+\end{table}

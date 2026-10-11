@@ -1,0 +1,94 @@
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{@{}P{0.15\textwidth}P{0.15\textwidth}P{0.21\textwidth}P{0.21\textwidth}P{\dimexpr0.28\textwidth-24pt\relax}@{}}
+  \caption{Reviewed approaches grouped by what they protect}
+  \label{tab:taxonomy}\\
+  \toprule
+  Approach class & Protected object & Mechanism & Reported evidence & Obligations left to adjacent components \\
+  \midrule
+  \endfirsthead
+  \multicolumn{5}{@{}l}{\textit{Table \thetable{} continued}}\\
+  \toprule
+  Approach class & Protected object & Mechanism & Reported evidence & Obligations left to adjacent components \\
+  \midrule
+  \endhead
+  \midrule
+  \multicolumn{5}{r@{}}{\textit{Continued on next page}}\\
+  \endfoot
+  \bottomrule
+  \endlastfoot
+    \multicolumn{5}{@{}l}{\textit{Mission intent}} \\*
+    Mission contracts \cite{mallozzi2020crome,mallozzi2023contextual,mallozzi2023repair}
+      & Goals, contexts, and component libraries
+      & Contract-based goal graphs, refinement, synthesis, context switching, and repair
+      & Mission examples and synthesized controllers; no physical team evaluation
+      & Physical validity, event-time state, implementation identity, and peer reconciliation \\
+    Language-conditioned planning \cite{mandi2024roco,obata2025lipllm}
+      & Instructions, roles, task dependencies, and plans
+      & Dialogue with environment feedback; dependency graph with a linear program
+      & Multi-robot benchmarks, simulation, and selected real-world execution
+      & Calibrated uncertainty, timing, compatibility, and deployment assurance \\
+    Coordinated-mission assurance \cite{chaki2013assurance,chaki2013probabilistic,porter2013reliability,stancliff2006missionreliability}
+      & Mission phases, coordination, utility, and team reliability
+      & Markov-chain model checking, probabilistic verification, and reliability estimation
+      & In-progress robot validation, measured robot behavior, and repairable-team analysis
+      & Interface-carried uncertainty, provenance, software identity, lifecycle state, and recovery evidence \\
+    \addlinespace[2pt]
+    \multicolumn{5}{@{}l}{\textit{Component behavior}} \\*
+    Component contracts and monitors \cite{luckcuck2026compositional,ghaffari2024rosmonitoring,caldas2024rvft}
+      & ROS node assumptions, guarantees, and message traces
+      & First-order contracts, composition rules, and generated monitors; topic and service monitoring; testing guidelines
+      & Inspection-rover and smaller examples; UAV case study; literature, repository, and practitioner studies
+      & Team epoch, resource ownership, state age, and evidence lineage \\
+    Distributed programming and design \cite{ghosh2020koord,harbin2023design}
+      & Coordination programs, proof obligations, and team architecture
+      & Executable semantics, modular verification, generated infrastructure, and simulation-based robustness analysis
+      & Three Koord applications; three simulated ATLAS case studies
+      & Runtime freshness, evidence lineage, heterogeneous implementation identity, and recovery authority \\
+    \addlinespace[2pt]
+    \multicolumn{5}{@{}l}{\textit{Dynamical interaction}} \\*
+    Dynamical contracts \cite{sharf2021dynamical,chen2019invariance,liu2022stlcontracts}
+      & Input/output trajectories, invariant sets, and temporal tasks
+      & Satisfaction and refinement checks, compositional invariance, and decentralized synthesis
+      & Two-vehicle, microgrid, and numerical simulations
+      & Message age, lifecycle, implementation identity, and recovery semantics \\
+    Assume--guarantee learning \cite{kazemi2024agrl}
+      & Neighbor abstractions, labels, and local policies
+      & Regular-language contracts with a lower bound on global satisfaction probability
+      & Grid-world, room-temperature, and traffic-signal case studies
+      & Physical and middleware validity of the assumed abstractions \\
+    \addlinespace[2pt]
+    \multicolumn{5}{@{}l}{\textit{Distributed state}} \\*
+    Middleware and QoS \cite{macenski2022ros2,omg2015dds,maruyama2016ros2,kronauer2021latency}
+      & Data streams, delivery status, and endpoint compatibility
+      & QoS policies and offered/requested matching; end-to-end latency measurement across DDS implementations
+      & Standard and architecture descriptions; configuration-specific benchmarks
+      & Event-time validity, physical decision validity, evidence lineage, and recovery \\
+    Communication-aware coordination \cite{gielis2022communications,silva2026probabilistic,kaul2012aoi}
+      & Information freshness and intermittent connectivity
+      & Age-of-information analysis; temporal communication constraints in stochastic multi-robot planning
+      & Critical review; analytical results; planning simulations
+      & Implementation identity, evidence lineage, and coordinated recovery \\
+    \addlinespace[2pt]
+    \multicolumn{5}{@{}l}{\textit{Runtime authority}} \\*
+    Runtime assurance and safety filters \cite{sha2001simplex,desai2019soter,shivakumar2020soterros,ames2017cbf,wang2017barrier,garg2024safecontrol}
+      & Safety properties, safe sets, and control authority
+      & Controller switching, barrier-constrained inputs, and learned safe control with verification
+      & Drone surveillance in simulation and hardware; simulated multi-robot surveillance; wheeled-robot experiments; survey
+      & Semantic evidence, implementation compatibility, and upstream reporting of interventions \\
+    Mission-level runtime verification \cite{tsai2026missionrta,kekatos2026swarmrta}
+      & Mission feasibility and swarm-level policies
+      & Pre-execution command rejection; compositional verdicts with an explicit unknown
+      & Simulated driving fault scenarios; simulated swarm mission
+      & Physical feasibility, implementation identity, and recovery orchestration \\
+    \addlinespace[2pt]
+    \multicolumn{5}{@{}l}{\textit{Embodied execution}} \\*
+    Cross-layer guardrails and runtimes \cite{kim2026guardrails,liu2026phyagentos,kim2026safeembodied}
+      & Layered interventions, execution sessions, and evidence
+      & Monitoring and intervention layers; compatibility preflight, session verification, and heartbeat
+      & Position paper; simulated and physical embodiments; structured review
+      & Common composition semantics across peer-robot interfaces \\
+\end{longtable}
+\endgroup

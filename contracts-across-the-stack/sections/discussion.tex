@@ -1,0 +1,86 @@
+\section{What the findings mean}
+\label{sec:discussion}
+
+\subsection{How this connects to prior work}
+
+The review leaves me with a practical question: how can assumptions and
+evidence survive the handoffs between planners, predictors, monitors, and
+safety mechanisms?  The framework records those handoffs.  The mission,
+component, dynamical, and runtime-assurance theories in \cref{sec:taxonomy}
+are still needed to establish the claims attached to them.  The local condition
+\eqref{eq:compatibility} does not prove a global mission property.  Feedback
+loops, shared variables, circular assumptions, realizability, probabilistic
+dependence, lifecycle ordering, and authority transfer require a formal
+semantics chosen for the implementation at hand.
+
+Within the reviewed corpus, the coordinated-autonomy work of Chaki, Dolan,
+Giampapa, Porter, and colleagues is the closest mission-level predecessor
+because it explicitly relates robot coordination to quantitative assurance and
+reliability
+\cite{chaki2013assurance,chaki2013probabilistic,porter2013reliability,
+stancliff2006missionreliability}.  The interface-contract framework works at a
+different level of abstraction: it inventories the obligations that interfaces
+must carry before a mission-level model, monitor, or reliability estimate can be
+applied consistently to a heterogeneous deployed stack.  A natural connection
+is to treat contract rejections, recoveries, and evidence lineage as observable
+variables of a quantitative mission model.  RCL is the closest component-level
+counterpart: it gives behavioral contracts formal semantics and generates
+monitors \cite{luckcuck2026compositional}, whereas the framework supplies the
+inventory of payload, validity, evidence, compatibility, admission, and recovery
+obligations that such a formalism must instantiate.  PhyAgentOS and the
+verification-aware swarm fabric of Kekatos \emph{et al.}\ implement parts of
+this inventory inside one runtime or one messaging layer
+\cite{liu2026phyagentos,kekatos2026swarmrta}; the framework states the
+obligations independently of any architecture so that they can be checked on
+both vertical and horizontal interfaces.
+
+\subsection{Checks to try in a ROS~2 deployment}
+
+A ROS~2 developer can apply the framework by auditing every inter-robot topic,
+service, and action, together with the vertical interfaces that feed them.  A
+ROS~2 message header carries a time stamp, but whether it records acquisition,
+processing, or publication time is a convention of the producer rather than a
+checked property \cite{macenski2022ros2}.  The audit should therefore establish
+that peer state carries its event time and frame, that its clock domain and an
+offset bound are known, and that the meaning of any covariance or confidence is
+declared.  The interface should identify the configuration, the middleware
+implementation and version, and the team epoch.  The consumer should evaluate
+an admission predicate such as \eqref{eq:temporal-admission} and invoke a
+declared recovery action instead of continuing silently on stale or
+incompatible input.  The failures in \cref{sec:middleware-evidence} add two
+lifecycle rules: initialize and shut down middleware in an explicit order rather
+than from static destructors, and treat the discovery of a service as distinct
+from the ability to complete a request--response exchange.  Not every message
+needs every field; the downstream component's assumptions determine which are
+required.
+
+\subsection{Scope of the review}
+
+I used a structured narrative search focused on the command-to-action path.
+The sources combine proofs, simulations, standards, issue reports, and robotics
+demonstrations, so the coverage matrix compares what they represent rather than
+estimating failure prevalence.  The framework is a proposal; its effect on
+reliability still needs an implementation study.  Security, human factors,
+certification, and resource-contract theory are outside this review.
+\Cref{prop:temporal-admission} works through peer-state admission for collision
+avoidance; other constraints need their own predicates.
+
+\subsection{What remains open}
+
+I see four open problems.  First, the reference fields need formal semantics that
+compose across discrete mission logic, continuous dynamics, probabilistic
+prediction, and asynchronous communication.  Second, lifecycle contracts must
+handle membership, partition recovery, ownership, and retained state without
+assuming a globally consistent instant.  Third, uncertainty and evidence need
+machine-checkable types so that a consumer can decide whether a proof, a
+calibration result, or a deployment test supports its decision.  Fourth,
+monitoring must scale without turning every peer exchange into an unbounded
+evidence log or a centralized bottleneck.
+
+Evaluation should test the framework as an executable mechanism rather than
+count populated metadata fields.  Relevant outcomes include false admission and
+false rejection, time to detection, correctness of fault attribution, recovery
+time, task completion, unsafe events, and runtime overhead.  Reproducible studies
+should report the team size, platform, software and middleware versions,
+configuration, timing assumptions, injected faults, and run-level traces.
+Those measurements would show which interface checks make a practical difference.

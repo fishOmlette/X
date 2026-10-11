@@ -1,0 +1,218 @@
+\section{A proposed interface framework}
+\label{sec:framework}
+
+I use the five gaps to propose a common record for information passed between
+components or robots.  The record states what is being sent, why the receiver
+may use it, how to check it, and what to do if the check fails.  Formal claims
+about refinement, realizability, controller synthesis, or the whole system
+still need the appropriate behavioral models from \cref{sec:taxonomy}.
+
+\input{tables/obligations}
+
+\subsection{Interfaces as Producer--Consumer Edges}
+
+I represent the deployed system as a directed graph whose vertices are
+functions assigned to robots or services.  A \emph{vertical} edge
+$e^{\mathrm v}=(r,k)\rightarrow(r,k+1)$ connects consecutive functions of robot
+$r$, while a \emph{horizontal} edge $e^{\mathrm h}=(r,k)\rightarrow(s,l)$ with
+$s\neq r$ connects robots or distributed services.  A horizontal edge is more
+than another message path: its consumer may act on behalf of a different robot
+and thereby change joint feasibility, resource ownership, or a peer's safety
+margin.  Vertical edges usually share a clock, an implementation, and a
+lifecycle; horizontal edges usually do not.
+
+\subsection{Interface Contracts}
+
+\begin{definition}[Interface contract]\label{def:interface-contract}
+For an edge $e=(p,c)$ from producer $p$ to consumer $c$, an interface contract
+is the tuple
+\begin{equation}
+  C_e=(P_e,M_e;\,A_e,G_e,V_e,E_e,R_e),
+  \label{eq:contract}
+\end{equation}
+where $P_e$ is a typed payload; $M_e$ is typed metadata, such as identifiers,
+frames and units, times, uncertainty semantics, implementation identities, team
+epoch, and lineage; $A_e$ is the consumer's assumption; $G_e$ is the producer's
+guarantee; $V_e$ is a set of validators or monitor references; $E_e$ is the
+supporting evidence, such as a solver result, proof, calibration report, monitor
+record, or test identifier; and $R_e$ is the response to rejection or unresolved
+validity.
+\end{definition}
+
+A metadata field is contractual only when it appears in $A_e$, $G_e$, $V_e$, or
+$R_e$.  \Cref{tab:obligations} maps each gap of \cref{sec:gaps} to the metadata,
+validators, and recovery actions that an interface contract must specify; it is
+the bridge from the review to the framework.  Provenance can reuse the
+entity--activity--agent relations of W3C PROV \cite{w3c2013prov}.  The framework
+keeps schema, protocol, and implementation identity separate because, as
+\cref{sec:middleware-evidence} shows, syntactic compatibility does not establish
+behavioral compatibility.
+
+\subsection{Compatibility and Admission}
+\label{sec:admission}
+
+On a single edge, local compatibility requires the producer's guarantee to imply
+the consumer's assumption:
+\begin{equation}
+  G_e\Longrightarrow A_e.
+  \label{eq:compatibility}
+\end{equation}
+A consumer with several peer inputs must additionally check joint assumptions,
+such as a common team epoch, consistent frames, unique resource ownership, and a
+reconciliation rule after a partition; per-message checks cannot establish these
+relations.  Condition \eqref{eq:compatibility} is therefore local.  Proving
+that a composed team satisfies a global mission property requires defined
+input--output ownership, feedback and temporal semantics, and a composition or
+refinement calculus \cite{luckcuck2026compositional,mallozzi2023repair}.
+
+Validators make the condition operational.  A syntactic validator checks
+decoding, required fields, types, dimensions, units, frames, and schema
+compatibility.  A semantic validator may call a solver, a runtime monitor, a
+perception check, a calibrated statistical test, or a certificate verifier.
+Each validator returns a value in $\{\true,\false,\unknown\}$.  Let
+$\mathcal Q_e$ be the set of checks required on edge $e$, covering syntax,
+time, uncertainty, compatibility, assumptions, guarantees, and provenance.
+The edge admits the transfer at time $t$ if and only if every required check
+returns \true:
+\begin{equation}
+  \operatorname{Admit}_e(t)\Leftrightarrow
+  V_{e,q}(P_e,M_e,E_e,t)=\true\ \ \forall q\in\mathcal Q_e.
+  \label{eq:admission}
+\end{equation}
+A required check that returns \unknown{} blocks admission, so missing metadata
+or evidence leads to rejection rather than to silent acceptance; Kekatos
+\emph{et al.}\ apply the same principle to missing monitoring evidence in robot
+swarms \cite{kekatos2026swarmrta}.  Advisory checks outside $\mathcal Q_e$ may
+return \unknown{} without blocking.  Condition \eqref{eq:admission} is what turns
+descriptive fields into an enforced boundary: every required predicate takes
+part in the execution decision.
+
+\input{tables/attribution}
+
+\subsection{Temporal Admission for Peer State}
+\label{sec:temporal-admission}
+
+The collision constraint of \eqref{eq:coupled-dynamics} shows which metadata a
+horizontal interface must carry for a temporal validator to return \true.
+
+\begin{proposition}[Temporal admission margin]
+\label{prop:temporal-admission}
+Let robots $r_i$ and $r_j$ have speeds bounded by $\bar v_i$ and $\bar v_j$, and
+express all times in the consumer's clock.  Suppose the consumer holds position
+estimates $\hat p_k$, $k\in\{i,j\}$, with stamped event times $\hat t_k$, such
+that the true event time $t_k\le t$ satisfies $\lvert\hat t_k-t_k\rvert\le
+\kappa_k$ and $\lVert\hat p_k-p_k(t_k)\rVert\le\varepsilon_k$.  For a decision
+taken at time $t$ and held until $t+h$, let
+$\bar\Delta_k=t+h-\hat t_k+\kappa_k$.  If
+\begin{equation}
+  \lVert\hat p_i-\hat p_j\rVert\ \ge\ d_{\min}
+  +\sum_{k\in\{i,j\}}\bigl(\varepsilon_k+\bar v_k\bar\Delta_k\bigr),
+  \label{eq:temporal-admission}
+\end{equation}
+then $\lVert p_i(s)-p_j(s)\rVert\ge d_{\min}$ for all $s\in[t,t+h]$.
+\end{proposition}
+
+\begin{proof}
+Fix $s\in[t,t+h]$ and $k\in\{i,j\}$.  Because $t_k\le t\le s$ and
+$t_k\ge\hat t_k-\kappa_k$, the true age satisfies
+$0\le s-t_k\le\bar\Delta_k$.  The speed and error bounds give
+$\lVert p_k(s)-\hat p_k\rVert\le\lVert p_k(s)-p_k(t_k)\rVert
++\lVert p_k(t_k)-\hat p_k\rVert\le\bar v_k\bar\Delta_k+\varepsilon_k$.  The
+triangle inequality then yields $\lVert p_i(s)-p_j(s)\rVert\ge\lVert\hat
+p_i-\hat p_j\rVert-\sum_k(\varepsilon_k+\bar v_k\bar\Delta_k)\ge d_{\min}$.
+\end{proof}
+
+Condition \eqref{eq:temporal-admission} is sufficient but not necessary, and it
+is conservative because it ignores the direction of motion.  Its value here is
+structural: every term on its right-hand side is a field that the interface must
+carry or the consumer must already know.  The validator needs the event time
+$\hat t_k$ rather than the reception time, the clock-error bound $\kappa_k$, an
+error bound $\varepsilon_k$ with declared meaning, and the speed bound $\bar v_k$.
+If any of these is missing, the validator returns \unknown{} and the decision is
+not admitted.  Substituting the reception time for $\hat t_k$ understates the
+age by the producer and network delay, which is exactly the failure described
+in G2.
+
+\begin{corollary}[Validity interval]\label{cor:validity-interval}
+Under the assumptions of \cref{prop:temporal-admission}, let
+$a_k=t-\hat t_k$ be the stamped age at decision time and
+\[
+  m(t)=\lVert\hat p_i-\hat p_j\rVert-d_{\min}
+  -\sum_{k}\bigl(\varepsilon_k+\bar v_k(a_k+\kappa_k)\bigr)
+\]
+the separation margin that remains at that time.  Condition
+\eqref{eq:temporal-admission} holds if and only if $h\le h^\star(t)$, where
+\begin{equation}
+  h^\star(t)=\frac{m(t)}{\bar v_i+\bar v_j}.
+  \label{eq:validity-interval}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Since $\bar\Delta_k=a_k+\kappa_k+h$, condition \eqref{eq:temporal-admission} is
+equivalent to $m(t)\ge(\bar v_i+\bar v_j)\,h$, and $\bar v_i+\bar v_j>0$.
+\end{proof}
+
+If $h^\star(t)<0$, the pair cannot be admitted at time $t$ on these estimates.
+Otherwise, the admitted state carries an explicit expiry time $t+h^\star(t)$,
+after which the consumer must refresh it or invoke $R_e$.  The validity interval
+that the gaps call for is thus computed by the consumer from fields carried on
+the interface, not asserted by the producer.
+
+\emph{Inference placement.}  \Cref{prop:temporal-admission} also prices the
+choice between an on-board and a remote estimate of the same peer.  Suppose
+robot $r_i$ can use either an on-board estimate of $p_j$, with error bound
+$\varepsilon^{\mathrm L}$ and stamped age $a^{\mathrm L}=t-\hat t^{\mathrm L}$
+on its own clock, or a remote estimate fused from more sensors, with error bound
+$\varepsilon^{\mathrm R}$, stamped age $a^{\mathrm R}$, and clock-error bound
+$\kappa^{\mathrm R}$.  The peer term in \eqref{eq:temporal-admission} is
+$\varepsilon+\bar v_j(a+h+\kappa)$, so the on-board estimate consumes no more
+of the separation margin than the remote one whenever
+\begin{equation}
+  \varepsilon^{\mathrm L}-\varepsilon^{\mathrm R}
+  \ \le\ \bar v_j\bigl(a^{\mathrm R}+\kappa^{\mathrm R}-a^{\mathrm L}\bigr).
+  \label{eq:placement}
+\end{equation}
+A remote estimate is worth its latency only if its accuracy advantage exceeds
+the distance the peer can travel during the additional age and clock
+uncertainty.  For example, with $\bar v_j=1.5$\,m/s, an additional
+$120$\,ms of age, and a $10$\,ms clock-error bound, the remote estimate must be
+at least $0.195$\,m more accurate.  The required advantage grows linearly with
+peer speed, which is why on-board inference matters most for fast interactions,
+whereas remote inference remains attractive for slow, wide-area decisions such
+as task allocation \cite{kehoe2015cloud}.
+
+\input{tables/command_trace}
+
+\subsection{Recovery and Lineage}
+
+A \false{} or a required \unknown{} invokes $R_e$: request clarification or
+fresh data, re-estimate, replan, degrade, isolate, stop, or escalate.  The
+rejection record names the failed predicate, the time, the evidence, and the
+responsible interface.  A repaired result receives new lineage and does not
+silently replace the rejected claim (\cref{fig:lifecycle}).
+
+\input{figures/contract_lifecycle}
+
+\subsection{Failure Attribution}
+\label{sec:attribution}
+
+The same physical outcome can have several origins.  A collision may begin with
+an incorrect semantic relation, a biased prediction, a missing physical
+constraint, stale peer state, or a hardware fault.  Conversely, downstream
+checks can turn the same originating fault into a rejection, a degraded mission,
+or a safe stop.  The taxonomy in \cref{tab:attribution} therefore records the
+origin, the contract concern, the first observation, the effect, and the
+recovery authority as separate fields; the first observation is the earliest
+interface at which evidence of the fault can become available.
+
+\subsection{Worked Command Trace}
+\label{sec:trace}
+
+Consider the instruction \emph{``Use two robots to inspect sector~B while
+keeping the corridor clear.''}  \Cref{tab:command-trace} follows the command
+from resolved roles and constraints to trajectories, runtime state, safety
+intervention, and completion evidence.  Each row lists the information that the
+next validator requires in addition to the nominal output.  The trace is a
+reference representation rather than a universal ROS message definition;
+thresholds and recovery policies remain scenario-specific.

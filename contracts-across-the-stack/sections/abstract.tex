@@ -1,27 +1,25 @@
 \begin{abstract}
-Multi-robot systems connect mission planning to physical action through
-software, communication, and runtime safety mechanisms.  Existing contract and
-assurance techniques address different parts of this path, so information needed
-to judge an upstream result may be lost before another component or robot uses
-it.  This paper presents a focused survey of contract-based and
-runtime-assurance approaches relevant to multi-robot execution.  I organize the
-literature into six areas of concern: mission intent, component behavior,
-dynamical interaction, distributed state, runtime authority, and embodied
-execution.  I compare each class's mechanism, evidence, and scope.  Five
-integration gaps recur within the reviewed corpus: semantic and physical
-validity; temporal validity of distributed state; uncertainty, provenance, and
-evidence; implementation and lifecycle compatibility; and intervention and
-recovery authority.  I synthesize these observations into an edge-contract
-reference framework.  It distinguishes interfaces within a robot from those
-between robots and associates an admitted transfer with a typed payload,
-assumptions, guarantees, validators, evidence, and recovery behavior.  A failure
-taxonomy separately records fault origin, first observation, downstream effect,
-and recovery authority.  The framework unifies obligations drawn from the
-survey; it is neither a new contract calculus nor a validated reliability
-mechanism.
+A robot may receive a plan, prediction, or state update that was valid when it
+was produced but is no longer safe to use.  What should travel with that result
+so the receiving component can check it?  In this note, I review contract-based
+and runtime-assurance approaches with that question in mind.  I organize the
+review by what each approach protects and identify five recurring interface
+gaps: meaning and physical validity; timing; uncertainty and evidence;
+implementation and lifecycle compatibility; and recovery authority.  Public
+failure reports from the ROS~2 navigation stack illustrate the compatibility
+and lifecycle gap.
+
+I then propose an interface-contract framework that records the payload,
+metadata, assumptions, guarantees, checks, evidence, and recovery rule for a
+transfer.  Required checks must pass before the receiver uses the result;
+missing evidence does not count as a pass.  A worked collision-avoidance
+condition shows how state age, clock error, and estimation error consume the
+available margin, and when a local estimate can be preferable to a more
+accurate remote one.  A command trace and failure taxonomy show how the fields
+fit together.  The central finding is that validity depends on more than the
+payload: the receiver also needs the timing, assumptions, and evidence behind
+it.  The framework turns those dependencies into explicit interface checks.
 \end{abstract}
 
-\begin{IEEEkeywords}
-Multi-robot systems, contract-based design, assume--guarantee reasoning,
-distributed execution, runtime verification, runtime assurance.
-\end{IEEEkeywords}
+\noindent\textbf{Keywords:} Multi-robot systems, assume--guarantee contracts,
+runtime assurance, runtime verification, ROS~2, age of information.
