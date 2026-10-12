@@ -4,6 +4,8 @@ Manuscript sources for:
 
 > M. A. Farooq, "Contracts Across the Multi-Robot Execution Stack: A Cross-Layer Review and Reference Framework," manuscript in preparation.
 
+**Read the paper:** [contracts-across-the-stack.pdf](contracts-across-the-stack.pdf)
+
 ## Summary
 
 **Question.** Planners, learned predictors, middleware, and runtime safety mechanisms each guarantee something under their own assumptions. When one component's guarantee becomes another component's assumption, what must the interface carry for the consumer to decide whether the result is still valid?

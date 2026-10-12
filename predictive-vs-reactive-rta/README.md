@@ -4,6 +4,8 @@ Manuscript, simulators, tests, result records, and figure pipeline for:
 
 > M. A. Farooq, "When Does Predicting Failure Help? A Boundary Analysis of Predictive versus Reactive Runtime Assurance for Multi-Robot Coordination," manuscript in preparation.
 
+**Read the paper:** [predictive-vs-reactive-rta.pdf](predictive-vs-reactive-rta.pdf)
+
 ## Summary
 
 **Question.** A predictive runtime-assurance trigger fires when the projected time to margin expiry falls below a horizon. A reactive trigger can also act early by using a larger fixed margin. When does prediction offer something a tuned fixed margin cannot?

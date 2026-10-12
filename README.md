@@ -6,8 +6,8 @@ The work began with on-board prediction: running inference on the robot, close t
 
 | Directory | Paper | Central question |
 | --- | --- | --- |
-| [`contracts-across-the-stack/`](contracts-across-the-stack/) | *Contracts Across the Multi-Robot Execution Stack: A Cross-Layer Review and Reference Framework* | Which obligations are lost when one component's guarantee becomes another's assumption, and what must an interface carry to keep them checkable? |
-| [`predictive-vs-reactive-rta/`](predictive-vs-reactive-rta/) | *When Does Predicting Failure Help? A Boundary Analysis of Predictive versus Reactive Runtime Assurance for Multi-Robot Coordination* | When does a predictive runtime-assurance trigger outperform a tuned fixed-margin reactive trigger? |
+| [`contracts-across-the-stack/`](contracts-across-the-stack/) | [*Contracts Across the Multi-Robot Execution Stack: A Cross-Layer Review and Reference Framework*](contracts-across-the-stack/contracts-across-the-stack.pdf) (PDF) | Which obligations are lost when one component's guarantee becomes another's assumption, and what must an interface carry to keep them checkable? |
+| [`predictive-vs-reactive-rta/`](predictive-vs-reactive-rta/) | [*When Does Predicting Failure Help? A Boundary Analysis of Predictive versus Reactive Runtime Assurance for Multi-Robot Coordination*](predictive-vs-reactive-rta/predictive-vs-reactive-rta.pdf) (PDF) | When does a predictive runtime-assurance trigger outperform a tuned fixed-margin reactive trigger? |
 
 The papers meet at timing. The first derives an admission margin in which the age of peer state, clock error, and estimation error consume a safety margin, which quantifies when on-board inference is preferable to a more accurate remote estimate. The second shows that observation age consumes the lead that prediction buys one for one. Both papers are manuscripts in preparation.
 
