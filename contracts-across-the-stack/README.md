@@ -4,6 +4,8 @@ My notes on what robot components need to pass along with their results:
 
 > M. A. Farukh, "Contracts Across the Multi-Robot Execution Stack: A Cross-Layer Review and Reference Framework".
 
+**Read the research note:** [contracts-across-the-stack.pdf](contracts-across-the-stack.pdf)
+
 ## The question and approach
 
 **Question.** A planner, predictor, and controller each work with different assumptions. When one passes a result to another, how can the receiver check that it is still valid?

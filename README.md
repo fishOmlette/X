@@ -4,8 +4,8 @@ I started by asking where a robot should run its predictions: on board, close to
 
 | Directory | Research note | Central question |
 | --- | --- | --- |
-| [`contracts-across-the-stack/`](contracts-across-the-stack/) | *Contracts Across the Multi-Robot Execution Stack: A Cross-Layer Review and Reference Framework* | What needs to travel with a result so the next component can check whether it is still valid? |
-| [`predictive-vs-reactive-rta/`](predictive-vs-reactive-rta/) | *When Does Predicting Failure Help? A Boundary Analysis of Predictive versus Reactive Runtime Assurance for Multi-Robot Coordination* | When does prediction help more than a well-tuned fixed threshold? |
+| [`contracts-across-the-stack/`](contracts-across-the-stack/) | [*Contracts Across the Multi-Robot Execution Stack: A Cross-Layer Review and Reference Framework*](contracts-across-the-stack/contracts-across-the-stack.pdf) (PDF) | What needs to travel with a result so the next component can check whether it is still valid? |
+| [`predictive-vs-reactive-rta/`](predictive-vs-reactive-rta/) | [*When Does Predicting Failure Help? A Boundary Analysis of Predictive versus Reactive Runtime Assurance for Multi-Robot Coordination*](predictive-vs-reactive-rta/predictive-vs-reactive-rta.pdf) (PDF) | When does prediction help more than a well-tuned fixed threshold? |
 
 Timing connects the two notes. In the first, I work out how old data, clock error, and estimation error use up the available safety margin. This gives a way to compare a fresh on-board estimate with a more accurate but older remote one. In the second, I find that observation delay uses up predictive lead one for one, and test when adapting the trigger reduces unnecessary waiting.
 

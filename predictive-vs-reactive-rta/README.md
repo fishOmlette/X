@@ -4,6 +4,8 @@ My timing analysis and simulation experiments on when prediction helps:
 
 > M. A. Farukh, "When Does Predicting Failure Help? A Boundary Analysis of Predictive versus Reactive Runtime Assurance for Multi-Robot Coordination".
 
+**Read the research note:** [predictive-vs-reactive-rta.pdf](predictive-vs-reactive-rta.pdf)
+
 ## The question and approach
 
 **Question.** Prediction can tell a robot to act before its safety margin runs out. A fixed threshold can also make it act early. When does prediction add something beyond choosing a more conservative threshold?
